@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/engam/AndroidStudioProjects/Waiting/app/src/main/res/layout/activity_main.xml" value="0.19882246376811594" />
+        <entry key="..\:/Users/engam/AndroidStudioProjects/Waiting/app/src/main/res/layout/fragment_client.xml" value="0.19882246376811594" />
+        <entry key="..\:/Users/engam/AndroidStudioProjects/Waiting/app/src/main/res/layout/fragment_create_service.xml" value="0.19882246376811594" />
+        <entry key="..\:/Users/engam/AndroidStudioProjects/Waiting/app/src/main/res/layout/fragment_delete_account.xml" value="0.19882246376811594" />
+        <entry key="..\:/Users/engam/AndroidStudioProjects/Waiting/app/src/main/res/layout/fragment_home.xml" value="0.19882246376811594" />
+        <entry key="..\:/Users/engam/AndroidStudioProjects/Waiting/app/src/main/res/layout/fragment_login.xml" value="0.19882246376811594" />
+        <entry key="..\:/Users/engam/AndroidStudioProjects/Waiting/app/src/main/res/layout/fragment_q_rcode.xml" value="0.19882246376811594" />
+        <entry key="..\:/Users/engam/AndroidStudioProjects/Waiting/app/src/main/res/layout/fragment_reset_password.xml" value="0.19882246376811594" />
+        <entry key="..\:/Users/engam/AndroidStudioProjects/Waiting/app/src/main/res/layout/fragment_service.xml" value="0.19882246376811594" />
+        <entry key="..\:/Users/engam/AndroidStudioProjects/Waiting/app/src/main/res/layout/fragment_signup.xml" value="0.19882246376811594" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
