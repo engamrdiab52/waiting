@@ -71,4 +71,5 @@
     <string name="name_of_service">name of service…</string>
     <string name="period_of_each_service">period of each service in minuets</string>
     <string name="save">SAVE</string>
+    <string name="generate_qr_code">Generate QR Code</string>
 </resources>

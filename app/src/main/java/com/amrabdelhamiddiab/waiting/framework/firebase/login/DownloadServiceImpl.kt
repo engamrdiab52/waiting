@@ -25,25 +25,3 @@ class DownloadServiceImpl @Inject constructor(
         }
     }
 }
-
-/*     return try {
-              val userId: String? = FirebaseAuth.getInstance().currentUser?.uid
-              val snapshot = userId?.let { databaseReference.child("services").child(it).get().await() }
-              snapshot?.children?.forEach {
-                  val item = it.getValue(Service::class.java)
-                  item?.let { it1 -> _listOfFavorites.add(it1) }
-              }
-              listOfFavorites
-
-          } catch (e: Exception) {
-              Log.d(TAG, "DownloadFavoritesImpl  :  " + e.message.toString())
-              emptyList()
-          }*/
-
-/* userId?.let {
-       databaseReference.child("services").child(it).get().addOnSuccessListener {
-           Log.d(TAG, it.value.toString())
-       }.addOnFailureListener {
-           Log.d(TAG, it.message.toString())
-       }
-   }*/

@@ -67,9 +67,6 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-alpha01")
     implementation 'androidx.lifecycle:lifecycle-common:2.5.0'
     implementation 'androidx.lifecycle:lifecycle-runtime:2.5.0'
-    //Navigation
-    implementation 'androidx.navigation:navigation-fragment:2.5.0'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.5.0'
     //Hilt
     kapt "com.google.dagger:hilt-android-compiler:2.42"
     implementation "com.google.dagger:hilt-android:2.42"
@@ -86,6 +83,8 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.13.1'
     // Core EasyValidator
     implementation "com.wajahatkarim:easyvalidation-core:1.0.4"
+    //QR Code Generator
+    implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
