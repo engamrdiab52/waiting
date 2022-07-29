@@ -122,7 +122,6 @@
             app:destination="@id/scanQrCodeFragment"
             app:launchSingleTop="true"
             app:popUpTo="@id/homeFragment"
-            app:popUpToInclusive="true"
             />
     </fragment>
     <fragment

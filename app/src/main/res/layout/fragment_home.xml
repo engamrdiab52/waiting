@@ -12,37 +12,61 @@
         android:layout_height="match_parent"
         tools:context=".presentation.loginflow.home.HomeFragment">
 
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/button_client"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/home_screen"
-            android:textSize="30sp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"
+            android:layout_marginEnd="32dp"
+            android:alpha="0.8"
+            android:paddingStart="16dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="16dp"
+            android:text="@string/client"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#303F9F"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:typeface="serif"
+            app:layout_constraintBottom_toTopOf="@+id/button_service"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="#303F9F"
+            app:strokeWidth="4dp" />
 
         <Button
             android:id="@+id/button_service"
-            android:layout_width="wrap_content"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="216dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:alpha="0.8"
+            android:paddingStart="16dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="16dp"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#303F9F"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:typeface="serif"
             android:text="@string/service"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <Button
-            android:id="@+id/button_client"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="138dp"
-            android:text="@string/client"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+            app:layout_constraintTop_toBottomOf="@+id/button_client"
+            app:strokeColor="#303F9F"
+            app:strokeWidth="4dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
