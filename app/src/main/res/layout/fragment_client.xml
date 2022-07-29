@@ -14,16 +14,67 @@
         tools:context=".presentation.loginflow.client.clientFragment">
 
         <!-- TODO: Update blank fragment layout -->
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Client"
-            android:textSize="30sp"
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    tools:text="ksdan;navl"
+                    android:textSize="30sp" />
+                <Button
+                    android:layout_marginTop="40dp"
+                    android:id="@+id/button"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/scan_qr_code"
+                    android:textSize="20sp" />
+                <TextView
+                    android:id="@+id/textView_category"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:gravity="center"
+                    tools:text="TextView"
+                    android:textSize="30sp" />
+
+                <TextView
+                    android:id="@+id/textView_name_of_service"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp"
+                    android:gravity="center"
+                    tools:text="TextView"
+                    android:textSize="30sp" />
+
+                <TextView
+                    android:id="@+id/textView_period_per_each_service"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="27dp"
+                    android:gravity="center"
+                    tools:text="TextView"
+                    android:textSize="30sp"
+                    />
+
+            </LinearLayout>
+
+        </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

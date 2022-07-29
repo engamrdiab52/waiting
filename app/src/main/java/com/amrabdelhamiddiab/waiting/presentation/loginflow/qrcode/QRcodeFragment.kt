@@ -23,6 +23,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentQRcodeBinding
@@ -76,6 +77,7 @@ class QRcodeFragment : Fragment() {
         binding.buttonGenerateQr.setOnClickListener {
             binding.imageView.setImageBitmap(bitmap)
         }
+
         askForExternalStoragePermission()
         val userId = viewModel.retrieveUserIdFromPreferences()
         if ( userId.isNotEmpty()){

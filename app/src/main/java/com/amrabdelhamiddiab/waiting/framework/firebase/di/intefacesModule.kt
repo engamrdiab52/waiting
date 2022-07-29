@@ -6,6 +6,7 @@ import com.amrabdelhamiddiab.core.data.IUploadService
 import com.amrabdelhamiddiab.core.data.login.*
 import com.amrabdelhamiddiab.waiting.framework.firebase.login.*
 import com.amrabdelhamiddiab.waiting.framework.utilis.PreferenceManager
+import com.google.firebase.database.ValueEventListener
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -39,5 +40,8 @@ abstract class intefacesModule {
     abstract fun bindUploadService(uploadServiceImpl: UploadServiceImpl): IUploadService
 
     @Binds
-    abstract fun bindDownloadService(DownloadServiceImpl: DownloadServiceImpl): IDownloadService
+    abstract fun bindDownloadService(downloadServiceImpl: DownloadServiceImpl): IDownloadService
+
+    @Binds
+    abstract fun bindValueEventListener(notifyOrderChangerImpl: NotifyOrderChangerImpl): ValueEventListener
 }

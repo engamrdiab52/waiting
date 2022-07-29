@@ -12,6 +12,7 @@ class PreferenceManager @Inject constructor(@ApplicationContext context: Context
         const val USER_LOGGED_IN = "userLoggedIn"
         const val USER_SERVICE = "userService"
         const val USER_ID = "userIdForService"
+        const val CLIENT_ORDER ="orderOfClient"
     }
 
     private val PREFS_NAME = "PHARMACYPreferences"
@@ -40,6 +41,14 @@ class PreferenceManager @Inject constructor(@ApplicationContext context: Context
 
     override fun fetchUserId(): String {
         return preferences[USER_ID] ?: ""
+    }
+
+    override fun saveOrderClient(orderString: String) {
+        preferences[CLIENT_ORDER] = orderString
+    }
+
+    override fun loadOrderClient(): String {
+        return preferences[CLIENT_ORDER] ?: ""
     }
 
     override fun clearPrefs() {

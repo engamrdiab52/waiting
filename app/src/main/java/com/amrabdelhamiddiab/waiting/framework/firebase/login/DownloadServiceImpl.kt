@@ -13,11 +13,11 @@ class DownloadServiceImpl @Inject constructor(
     private val databaseReference: DatabaseReference,
     private val firebaseAuth: FirebaseAuth
 ) : IDownloadService {
-    override suspend fun downloadService(): Service? {
+    override suspend fun downloadService(userId: String): Service? {
         return try {
-            val userId: String? = firebaseAuth.currentUser?.uid
+          //  val userId: String? = firebaseAuth.currentUser?.uid
             val service =
-                userId?.let { databaseReference.child("services").child(it).get().await() }
+                userId.let { databaseReference.child("services").child(it).get().await() }
             service?.getValue(Service::class.java)
         } catch (e: Exception) {
             Log.d(TAG, e.message.toString())

@@ -43,6 +43,16 @@ class serviceFragment : Fragment() {
         binding.buttonQrcode.setOnClickListener {
             findNavController().navigate(R.id.action_serviceFragment_to_QRcodeFragment)
         }
+
+        binding.buttonIncreaseOrder.setOnClickListener {
+            // use viewmodel to increse value to be uploaded
+            val value =binding.editTextCurrentServingOrder.text.toString().toLong()
+            viewModel.changeOrderValueV(value)
+        }
+       // binding.editTextCurrentServingOrder.
+        binding.buttonEditService.setOnClickListener {
+            findNavController().navigate(R.id.action_serviceFragment_to_createServiceFragment)
+        }
         return binding.root
     }
 

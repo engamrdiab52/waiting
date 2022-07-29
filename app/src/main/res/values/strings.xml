@@ -72,4 +72,6 @@
     <string name="period_of_each_service">period of each service in minuets</string>
     <string name="save">SAVE</string>
     <string name="generate_qr_code">Generate QR Code</string>
+    <string name="scan_qr_code">Scan QR Code</string>
+    <string name="enter_current_serving_number">Enter Current Serving number</string>
 </resources>

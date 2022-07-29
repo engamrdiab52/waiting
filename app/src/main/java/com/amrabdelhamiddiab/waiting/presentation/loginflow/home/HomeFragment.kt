@@ -17,14 +17,15 @@ class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
     private val viewModel by viewModels<HomeViewModel>()
-   // private lateinit var preferenceHelper: IPreferenceHelper
+
+    // private lateinit var preferenceHelper: IPreferenceHelper
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
 
-      //  preferenceHelper = PreferenceManager(requireActivity().applicationContext)
+        //  preferenceHelper = PreferenceManager(requireActivity().applicationContext)
         if (viewModel.getUserStateFromPreferences()) {
             findNavController().navigate(R.id.action_homeFragment_to_serviceFragment)
         }
@@ -32,7 +33,12 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.action_homeFragment_to_nested_graph_login)
         }
         binding.buttonClient.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_clientFragment)
+            if (viewModel.loadClientOrder() != null){
+                findNavController().navigate(R.id.action_homeFragment_to_clientFragment)
+            }else {
+                findNavController().navigate(R.id.action_homeFragment_to_scanQrCodeFragment)
+            }
+
         }
 
 

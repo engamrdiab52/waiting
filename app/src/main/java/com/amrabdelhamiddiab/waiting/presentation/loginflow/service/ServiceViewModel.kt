@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amrabdelhamiddiab.core.data.IPreferenceHelper
+import com.amrabdelhamiddiab.core.domain.Order
 import com.amrabdelhamiddiab.core.domain.Service
 import com.amrabdelhamiddiab.core.usecases.login.DownloadService
 import com.amrabdelhamiddiab.core.usecases.login.SignOutUser
@@ -21,11 +22,14 @@ class ServiceViewModel @Inject constructor(
     private val preHelper: IPreferenceHelper,
     private val gson: Gson,
     private val downloadService: DownloadService,
-    private val databaseReference: DatabaseReference
+    private val databaseReference: DatabaseReference,
 ) : ViewModel() {
     //
     private val _downloading = SingleLiveEvent<Boolean>()
     val downloading: LiveData<Boolean> get() = _downloading
+
+    private val _orderValueChanged = SingleLiveEvent<Boolean>()
+    val orderValueChanged: LiveData<Boolean> get() = _orderValueChanged
 
     private val _service = SingleLiveEvent<Service?>()
     val service: LiveData<Service?> get() = _service
@@ -68,10 +72,17 @@ class ServiceViewModel @Inject constructor(
 
     fun downloadServiceV() {
         viewModelScope.launch(Dispatchers.IO) {
-            _downloading.postValue(true)
-            _service.postValue(downloadService())
-            _downloading.postValue(false)
+            val userId = preHelper.fetchUserId()
+            _service.postValue(downloadService(userId))
 
+        }
+    }
+
+    fun changeOrderValueV(value: Long) {
+        val order = Order(value)
+        val userId = preHelper.fetchUserId()
+        if (userId.isNotEmpty()) {
+            databaseReference.child("orders").child(userId).setValue(order)
         }
     }
 }

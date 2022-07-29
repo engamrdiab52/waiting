@@ -4,14 +4,15 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/engam/AndroidStudioProjects/Waiting/app/src/main/res/layout/activity_main.xml" value="0.19882246376811594" />
-        <entry key="..\:/Users/engam/AndroidStudioProjects/Waiting/app/src/main/res/layout/fragment_client.xml" value="0.19882246376811594" />
-        <entry key="..\:/Users/engam/AndroidStudioProjects/Waiting/app/src/main/res/layout/fragment_create_service.xml" value="0.19882246376811594" />
+        <entry key="..\:/Users/engam/AndroidStudioProjects/Waiting/app/src/main/res/layout/fragment_client.xml" value="0.1" />
+        <entry key="..\:/Users/engam/AndroidStudioProjects/Waiting/app/src/main/res/layout/fragment_create_service.xml" value="0.1" />
         <entry key="..\:/Users/engam/AndroidStudioProjects/Waiting/app/src/main/res/layout/fragment_delete_account.xml" value="0.19882246376811594" />
         <entry key="..\:/Users/engam/AndroidStudioProjects/Waiting/app/src/main/res/layout/fragment_home.xml" value="0.19882246376811594" />
         <entry key="..\:/Users/engam/AndroidStudioProjects/Waiting/app/src/main/res/layout/fragment_login.xml" value="0.19882246376811594" />
         <entry key="..\:/Users/engam/AndroidStudioProjects/Waiting/app/src/main/res/layout/fragment_q_rcode.xml" value="0.19882246376811594" />
         <entry key="..\:/Users/engam/AndroidStudioProjects/Waiting/app/src/main/res/layout/fragment_reset_password.xml" value="0.19882246376811594" />
-        <entry key="..\:/Users/engam/AndroidStudioProjects/Waiting/app/src/main/res/layout/fragment_service.xml" value="0.19882246376811594" />
+        <entry key="..\:/Users/engam/AndroidStudioProjects/Waiting/app/src/main/res/layout/fragment_scan_qr_code.xml" value="0.19882246376811594" />
+        <entry key="..\:/Users/engam/AndroidStudioProjects/Waiting/app/src/main/res/layout/fragment_service.xml" value="0.1" />
         <entry key="..\:/Users/engam/AndroidStudioProjects/Waiting/app/src/main/res/layout/fragment_signup.xml" value="0.19882246376811594" />
       </map>
     </option>

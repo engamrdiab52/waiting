@@ -4,9 +4,6 @@ import com.amrabdelhamiddiab.core.data.IDownloadService
 import com.amrabdelhamiddiab.core.data.IUploadService
 import com.amrabdelhamiddiab.core.data.login.*
 import com.amrabdelhamiddiab.core.usecases.login.*
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides

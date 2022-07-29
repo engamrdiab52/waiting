@@ -59,6 +59,8 @@ class LoginFragment : Fragment() {
                     Log.d(TAG,"*******" +viewModel.downloadUserId()!!)
                 }
               //  viewModel.removeServiceFromPreferences()
+
+                // here we go to create service
                 findNavController().navigate(R.id.action_global_createServiceFragment)
             } else {
                 if (checkInternetConnection(requireContext())) {
