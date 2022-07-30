@@ -74,4 +74,11 @@
     <string name="generate_qr_code">Generate QR Code</string>
     <string name="scan_qr_code">Scan QR Code</string>
     <string name="enter_current_serving_number">Enter Current Serving number</string>
+    <string name="end_visit">End Visit</string>
+    <string name="edit">Edit Your Order</string>
+    <string name="edit_your_order_here">Edit Your Order here</string>
+    <string name="add_my_number">Add My Number</string>
+    <string name="done">DONE</string>
+    <string name="period_of_time_for_eatch_visitor">period of time for eatch visitor</string>
+    <string name="you_will_wait_for_about">You will wait for about</string>
 </resources>

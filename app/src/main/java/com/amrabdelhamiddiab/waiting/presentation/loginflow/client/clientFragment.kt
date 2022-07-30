@@ -35,7 +35,9 @@ class clientFragment : Fragment() {
         viewModel.service.observe(viewLifecycleOwner) {
             binding.textViewCategory.text = it?.category ?: ""
             binding.textViewNameOfService.text = it?.name_of_service ?: ""
-            binding.textViewPeriodPerEachService.text = it?.period_per_each_service.toString()
+            val text = it?.period_per_each_service ?: "--"
+            binding.textViewPeiodForEachVisitor.text = "about $text minuets for each visit"
+         //   binding.textViewPeriodPerEachService.text = it?.period_per_each_service.toString()
         }
 
         Log.d(TAG, "..............clientFragment valled...............")
@@ -43,11 +45,11 @@ class clientFragment : Fragment() {
         viewModel.notifyWhenOrderChange(userId)
 
         viewModel.orderValue.observe(viewLifecycleOwner) {
-            binding.textView.text = it?.order.toString()
+            binding.textViewOrder.text = it?.order.toString()
 
           //  it?.let { it1 -> viewModel.saveOrderInPreferences(it1) }
         }
-        binding.button.setOnClickListener {
+        binding.buttonScanQrCode.setOnClickListener {
             findNavController().navigate(R.id.action_clientFragment_to_scanQrCodeFragment)
         }
         return binding.root
