@@ -79,6 +79,11 @@
     <string name="edit_your_order_here">Edit Your Order here</string>
     <string name="add_my_number">Add My Number</string>
     <string name="done">DONE</string>
+    <string name="ok">OK</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
     <string name="period_of_time_for_eatch_visitor">period of time for eatch visitor</string>
     <string name="you_will_wait_for_about">You will wait for about</string>
+    <string name="are_you_sure">Are You Sure You Want To End Your Visit</string>
+    <string name="_0">0</string>
 </resources>

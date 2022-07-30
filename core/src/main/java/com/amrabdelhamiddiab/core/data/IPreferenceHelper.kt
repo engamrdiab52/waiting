@@ -10,4 +10,7 @@ interface IPreferenceHelper {
     fun fetchUserId(): String
     fun saveOrderClient(orderString: String)
     fun loadOrderClient(): String
+
+    fun saveMyNumberInPreferences(myNumber: Int)
+    fun loadMyNumberFromPreferences(): Int
 }

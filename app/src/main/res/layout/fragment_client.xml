@@ -17,7 +17,7 @@
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="32dp"
             android:orientation="horizontal"
             android:padding="8dp"
             android:weightSum="2"
@@ -26,9 +26,11 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_view_add_my_number"
                 android:layout_width="0dp"
                 android:layout_height="200dp"
                 android:layout_marginEnd="4dp"
+                android:clickable="true"
                 android:layout_weight="1"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp"
@@ -50,57 +52,58 @@
                         android:visibility="visible" />
 
                     <TextView
+                        android:id="@+id/text_view_my_number"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="bottom|center"
                         android:paddingBottom="8dp"
+                        android:text="@string/_0"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textColor="#303F9F"
                         android:textSize="90sp"
-                        android:visibility="visible"
-                        tools:text="189" />
+                        android:visibility="visible" />
 
-                <!--    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:visibility="gone">
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/text_layout_edit_order"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    <!--    <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:gravity="bottom"
-                            android:padding="0dp"
-                            app:errorEnabled="true"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/edit_text_edit_order"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/text_layout_edit_order"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:focusable="true"
-                                android:inputType="number"
+                                android:layout_height="match_parent"
+                                android:gravity="bottom"
                                 android:padding="0dp"
-                                android:hint="؟؟"
-                                android:textColor="#303F9F"
-                                android:gravity="center"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                                android:textSize="80sp" />
+                                app:errorEnabled="true"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
-                            <Button
-                                android:id="@+id/button_done"
-                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/done"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                                android:textColor="#303F9F" />
-                        </com.google.android.material.textfield.TextInputLayout>
-                    </LinearLayout>-->
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/edit_text_edit_order"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:focusable="true"
+                                    android:inputType="number"
+                                    android:padding="0dp"
+                                    android:hint="؟؟"
+                                    android:textColor="#303F9F"
+                                    android:gravity="center"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                                    android:textSize="80sp" />
+
+                                <Button
+                                    android:id="@+id/button_done"
+                                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/done"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                                    android:textColor="#303F9F" />
+                            </com.google.android.material.textfield.TextInputLayout>
+                        </LinearLayout>-->
 
                 </FrameLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -167,7 +170,7 @@
                 android:layout_marginEnd="4dp"
                 android:layout_weight="1"
                 android:alpha="0.8"
-                android:enabled="false"
+                android:enabled="true"
                 android:gravity="center"
                 android:text="@string/scan_qr_code"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -185,14 +188,16 @@
                 android:layout_marginStart="4dp"
                 android:layout_weight="1"
                 android:alpha="0.8"
-                android:text="@string/add_my_number"
                 android:maxLines="1"
+                android:text="@string/add_my_number"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textColor="#303F9F"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:typeface="serif"
+                android:visibility="visible"
                 app:strokeWidth="1dp" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -206,21 +211,22 @@
 
             <TextView
                 android:id="@+id/text_view_peiod_for_each_visitor"
-                android:padding="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#303F9F"
+                android:padding="8dp"
+                android:text="@string/period_of_time_for_eatch_visitor"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:text="@string/period_of_time_for_eatch_visitor"/>
+                android:textColor="#303F9F" />
             <!--You will wait for about-->
             <TextView
                 android:id="@+id/text_view_waiting_time"
-                android:padding="8dp"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#303F9F"
+                android:padding="8dp"
+                android:text="@string/you_will_wait_for_about"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:text="@string/you_will_wait_for_about"/>
+                android:textColor="#303F9F" />
         </LinearLayout>
 
         <TextView
@@ -258,5 +264,24 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
+        <Button
+            android:id="@+id/button_end_visit"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:layout_weight="1"
+            android:alpha="0.8"
+            android:text="@string/end_visit"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#FF0000"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:typeface="serif"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_name_of_service"
+            app:strokeWidth="1dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

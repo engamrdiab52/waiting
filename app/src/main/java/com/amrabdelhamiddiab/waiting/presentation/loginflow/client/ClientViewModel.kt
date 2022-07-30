@@ -33,6 +33,9 @@ class ClientViewModel @Inject constructor(
     private val _orderValue = SingleLiveEvent<Order?>()
     val orderValue: LiveData<Order?> get() = _orderValue
 
+    private val _myNumber = SingleLiveEvent<Int>()
+    val myNumber: LiveData<Int> get() = _myNumber
+
     private val _service = SingleLiveEvent<Service?>()
     val service: LiveData<Service?> get() = _service
 
@@ -71,6 +74,18 @@ class ClientViewModel @Inject constructor(
                 with(prefeHelper) { saveOrderClient(orderClientString) }
             }
 
+    }
+    fun retrieveOrderFromPreferences() {
+        val number = if (prefeHelper.loadMyNumberFromPreferences() == -1){
+            0
+        }else
+        {
+            prefeHelper.loadMyNumberFromPreferences()
+        }
+       _myNumber.value = number
+    }
+    fun saveMyNumberInPreferences(myNumber: Int){
+        prefeHelper.saveMyNumberInPreferences(myNumber)
     }
 
     fun retrieveUserIdFromPreferences(): String {
