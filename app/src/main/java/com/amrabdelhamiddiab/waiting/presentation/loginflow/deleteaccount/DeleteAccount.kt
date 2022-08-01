@@ -34,7 +34,7 @@ class DeleteAccount : Fragment() {
             if (checkInternetConnection(requireContext())) {
                 try {
                     FirebaseAuth.getInstance().currentUser?.delete()
-                    preferenceHelper.setUserLoggedIn(false)
+                    preferenceHelper.setUserServiceLoggedIn(false)
                     findNavController().navigate(R.id.nested_graph_login)
                     Log.d(MainActivity.TAG, FirebaseAuth.getInstance().currentUser.toString())
 

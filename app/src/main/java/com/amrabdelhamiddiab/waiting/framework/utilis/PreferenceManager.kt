@@ -9,54 +9,83 @@ import javax.inject.Inject
 class PreferenceManager @Inject constructor(@ApplicationContext context: Context) :
     IPreferenceHelper {
     companion object {
+        //SERVICE
         const val USER_LOGGED_IN = "userLoggedIn"
-        const val USER_SERVICE = "userService"
-        const val USER_ID = "userIdForService"
+        const val USER_SERVICE_FOR_SERVICE = "userServiceForService"
+        const val USER_ID_FOR_SERVICE = "userIdForService"
+        const val SERVICE_ORDER = "service_order"
+        //CLIENT
+        const val USER_ID_FOR_CLIENT = "userIdForClient"
         const val CLIENT_ORDER ="orderOfClient"
         const val MY_NUMBER = "myNumber"
+        const val SERVICE_FOR_CLIENT = "serviceForClient"
     }
 
     private val PREFS_NAME = "PHARMACYPreferences"
     private var preferences: SharedPreferences =
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
-    override fun setUserLoggedIn(loggedIn: Boolean) {
+    override fun setUserServiceLoggedIn(loggedIn: Boolean) {
         preferences[USER_LOGGED_IN] = loggedIn
     }
 
-    override fun getUserLoggedIn(): Boolean {
+    override fun getUserServiceLoggedIn(): Boolean {
         return preferences[USER_LOGGED_IN] ?: false
     }
 
-    override fun saveService(serviceString: String) {
-        preferences[USER_SERVICE] = serviceString
+    override fun saveServiceForService(serviceString: String) {
+        preferences[USER_SERVICE_FOR_SERVICE] = serviceString
     }
 
-    override fun loadService(): String {
-        return preferences[USER_SERVICE] ?: ""
+    override fun loadServiceForService(): String {
+        return preferences[USER_SERVICE_FOR_SERVICE] ?: ""
     }
 
-    override fun saveUserId(userId: String) {
-       preferences[USER_ID] = userId
+    override fun saveUserIdForClient(userId: String) {
+       preferences[USER_ID_FOR_CLIENT] = userId
     }
 
-    override fun fetchUserId(): String {
-        return preferences[USER_ID] ?: ""
+    override fun fetchUserIdForClient(): String {
+        return preferences[USER_ID_FOR_CLIENT] ?: ""
     }
 
-    override fun saveOrderClient(orderString: String) {
+    override fun saveOrderForClient(orderString: String) {
         preferences[CLIENT_ORDER] = orderString
     }
 
-    override fun loadOrderClient(): String {
+    override fun loadOrderForClient(): String {
         return preferences[CLIENT_ORDER] ?: ""
     }
 
-    override fun saveMyNumberInPreferences(myNumber: Int) {
+    override fun saveUserIdForService(userId: String) {
+        preferences[USER_ID_FOR_SERVICE] = userId
+    }
+
+    override fun fetchUserIdForService(): String {
+        return preferences[USER_ID_FOR_SERVICE] ?: ""
+    }
+
+    override fun saveOrderForService(orderString: String) {
+        preferences[SERVICE_ORDER] = orderString
+    }
+
+    override fun loadOrderForService(): String {
+        return preferences[SERVICE_ORDER] ?: ""
+    }
+
+    override fun saveServiceForClient(serviceString: String) {
+        preferences[SERVICE_FOR_CLIENT] = serviceString
+    }
+
+    override fun loadServiceForClient(): String {
+        return preferences[SERVICE_FOR_CLIENT] ?: ""
+    }
+
+    override fun saveClientNumberInPreferences(myNumber: Int) {
         preferences[MY_NUMBER] = myNumber
     }
 
-    override fun loadMyNumberFromPreferences(): Int {
+    override fun loadClientNumberFromPreferences(): Int {
         return preferences[MY_NUMBER] ?: 0
     }
 

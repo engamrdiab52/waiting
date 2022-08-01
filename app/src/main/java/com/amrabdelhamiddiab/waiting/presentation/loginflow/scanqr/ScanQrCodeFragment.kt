@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
@@ -23,6 +24,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
+import com.afollestad.materialdialogs.MaterialDialog
+import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentScanQrCodeBinding
 import com.amrabdelhamiddiab.waiting.framework.utilis.MyImageAnalyzer
@@ -48,12 +51,8 @@ class ScanQrCodeFragment : Fragment() {
             ActivityResultContracts.RequestPermission()
         ) { isGranted ->
             if (isGranted) {
-                // Do if the permission is granted
-                Toast.makeText(requireContext(), "permission Already granted", Toast.LENGTH_LONG)
-                    .show()
+            // ??
             } else {
-                // Do otherwise
-                //   Toast.makeText(requireContext(), "permission Denied", Toast.LENGTH_LONG).show()
                 showPermissionDeniedDialog()
             }
         }
@@ -65,6 +64,7 @@ class ScanQrCodeFragment : Fragment() {
             bindPreview(cameraProvider)
         }, ContextCompat.getMainExecutor(requireContext()))
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -72,17 +72,38 @@ class ScanQrCodeFragment : Fragment() {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_scan_qr_code, container, false)
         // Inflate the layout for this fragment
+        Log.d(TAG, "ScanQrCodeFragment called...................................")
         analyzer = MyImageAnalyzer(
             requireContext(),
             viewModel,
-            findNavController()
+            findNavController(),
+
         )
         startScanQrCode()
-        viewModel.navigateOrder.observe(viewLifecycleOwner){
+        viewModel.navigateOrder.observe(viewLifecycleOwner) {
 
             findNavController().navigate(R.id.action_scanQrCodeFragment_to_clientFragment)
 
         }
+        viewModel.userId.observe(viewLifecycleOwner){
+            if (it != null) {
+                viewModel.downloadServiceV(it)
+            }else{
+                Toast.makeText(requireContext(), "Error in userId Text", Toast.LENGTH_SHORT).show()
+            }
+        }
+        viewModel.service.observe(viewLifecycleOwner){
+            if (it != null){
+                viewModel.saveUserIdInPreferences(viewModel.userId.value!!)
+                viewModel.navigateToClientFragment()
+            }else {
+                Toast.makeText(requireContext(), "Wrong QR CODE", Toast.LENGTH_SHORT).show()
+                Log.d(TAG,".............................................Error in Service Text" )
+             //   displayDialogFakeQrCode()
+                findNavController().navigate(R.id.action_scanQrCodeFragment_to_homeFragment)
+            }
+        }
+
         return binding.root
     }
 
@@ -136,4 +157,19 @@ class ScanQrCodeFragment : Fragment() {
     private fun askForCameraPermission() {
         permissionLauncher.launch(Manifest.permission.CAMERA)
     }
+
+    private fun displayDialogFakeQrCode() {
+        MaterialDialog(requireActivity().applicationContext).show {
+            cancelOnTouchOutside(true)
+            title(R.string.qrcode_fake_title)
+            message(R.string.qrcode_fake_message)
+            positiveButton(R.string.ok) {
+               // findNavController().navigate(R.id.action_clientFragment_to_homeFragment)
+            }
+            negativeButton(R.string.no) {
+
+            }
+        }
+    }
+
 }

@@ -53,23 +53,29 @@ class clientFragment : Fragment() {
 
         }
         viewModel.service.observe(viewLifecycleOwner) {
-            binding.textViewCategory.text = it?.category ?: ""
-            binding.textViewNameOfService.text = it?.name_of_service ?: ""
-            val text = it?.period_per_each_service ?: "--"
-            binding.textViewPeiodForEachVisitor.text = "about $text minuets for each visit"
-            //   binding.textViewPeriodPerEachService.text = it?.period_per_each_service.toString()
-            binding.textViewWaitingTime.text = "you will wait about "
+            if (it != null){
+                binding.textViewCategory.text = it.category
+                binding.textViewNameOfService.text = it.name_of_service
+                val text = it.period_per_each_service
+                binding.textViewPeiodForEachVisitor.text = "about $text minuets for each visit"
+                Log.d(TAG,"323232323232323.................... $it")
+            }else {
+                displayDialogWrongQrcode()
+                Log.d(TAG,"323232323232323.................... Service is NUll")
+            }
+
+
         }
-
-
-        Log.d(TAG, "..............clientFragment valled...............")
         val userId = viewModel.retrieveUserIdFromPreferences()
         viewModel.notifyWhenOrderChange(userId)
 
         viewModel.orderValue.observe(viewLifecycleOwner) {
+            if (it == null){
+                binding.textViewOrder.text = "0"
+            }
             binding.textViewOrder.text = it?.order.toString()
+
             orderNumber = it?.order?.toInt() ?: 0
-            Log.d(TAG, orderNumber.toString())
             //  it?.let { it1 -> viewModel.saveOrderInPreferences(it1) }
         }
         binding.buttonScanQrCode.setOnClickListener {
@@ -107,6 +113,7 @@ class clientFragment : Fragment() {
             message(R.string.are_you_sure)
             positiveButton(R.string.yes) {
                 viewModel.saveMyNumberInPreferences(0)
+              //  viewModel.resetUserIdForClientInPreferences()
                 findNavController().navigate(R.id.action_clientFragment_to_homeFragment)
             }
             negativeButton(R.string.no) {
@@ -114,5 +121,16 @@ class clientFragment : Fragment() {
             }
         }
     }
+    private fun displayDialogWrongQrcode() {
+        MaterialDialog(requireContext()).show {
+            title(R.string.qrcode_fake_title)
+            message(R.string.qrcode_fake_message)
+            positiveButton(R.string.yes) {
+                findNavController().navigate(R.id.action_clientFragment_to_homeFragment)
+            }
+            negativeButton(R.string.no) {
 
+            }
+        }
+    }
 }

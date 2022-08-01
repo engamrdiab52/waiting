@@ -217,16 +217,6 @@
                 android:text="@string/period_of_time_for_eatch_visitor"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                 android:textColor="#303F9F" />
-            <!--You will wait for about-->
-            <TextView
-                android:id="@+id/text_view_waiting_time"
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="@string/you_will_wait_for_about"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="#303F9F" />
         </LinearLayout>
 
         <TextView

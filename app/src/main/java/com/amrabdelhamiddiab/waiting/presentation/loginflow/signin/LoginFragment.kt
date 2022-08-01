@@ -50,18 +50,26 @@ class LoginFragment : Fragment() {
                 viewModel.removeUserFromPreferences()
             }
         }
+        viewModel.service.observe(viewLifecycleOwner) {
+            if (it != null) {
+                viewModel.saveServiceInPreferences(it)
+                findNavController().navigate(R.id.action_global_serviceFragment)
+            } else {
+                findNavController().navigate(R.id.action_global_createServiceFragment)
+            }
+        }
         viewModel.emailVerified.observe(viewLifecycleOwner) {
             if (it == true) {
               //  preferenceHelper.setUserLoggedIn(true)
+                val userId = viewModel.downloadUserId()
                 viewModel.putUserInPreferences()
-                if (viewModel.downloadUserId() != null){
-                    viewModel.saveUserIdInPreferences(viewModel.downloadUserId()!!)
-                    Log.d(TAG,"*******" +viewModel.downloadUserId()!!)
-                }
-              //  viewModel.removeServiceFromPreferences()
-
+                viewModel.saveUserIdInPreferences(userId)
+                Log.d(TAG,"*******" +userId)
+                //  viewModel.removeServiceFromPreferences()
                 // here we go to create service
-                findNavController().navigate(R.id.action_global_createServiceFragment)
+                if (userId.isNotEmpty()) {
+                    viewModel.downloadServiceV(userId)
+                }
             } else {
                 if (checkInternetConnection(requireContext())) {
                     Toast.makeText(requireContext(), "Please Verify your Email", Toast.LENGTH_SHORT)

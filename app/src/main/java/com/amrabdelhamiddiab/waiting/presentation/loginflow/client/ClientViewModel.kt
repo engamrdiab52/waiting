@@ -48,12 +48,10 @@ class ClientViewModel @Inject constructor(
 
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             val item = dataSnapshot.getValue(Order::class.java)
-            Log.d(TAG, item.toString())
             _orderValue.postValue(item)
             if (item != null) {
                 saveOrderInPreferences(item)
             }
-            Log.d(TAG, "1111111111111111111111onDataChange called1111111111111111111111")
         }
     }
 
@@ -71,30 +69,33 @@ class ClientViewModel @Inject constructor(
     fun saveOrderInPreferences(order: Order){
             val orderClientString: String? = gson.toJson(order)
             if (orderClientString != null) {
-                with(prefeHelper) { saveOrderClient(orderClientString) }
+                with(prefeHelper) { saveOrderForClient(orderClientString) }
             }
-
     }
     fun retrieveOrderFromPreferences() {
-        val number = if (prefeHelper.loadMyNumberFromPreferences() == -1){
+        val number = if (prefeHelper.loadClientNumberFromPreferences() == -1){
             0
         }else
         {
-            prefeHelper.loadMyNumberFromPreferences()
+            prefeHelper.loadClientNumberFromPreferences()
         }
        _myNumber.value = number
     }
     fun saveMyNumberInPreferences(myNumber: Int){
-        prefeHelper.saveMyNumberInPreferences(myNumber)
+        prefeHelper.saveClientNumberInPreferences(myNumber)
     }
 
     fun retrieveUserIdFromPreferences(): String {
-        return prefeHelper.fetchUserId()
+        return prefeHelper.fetchUserIdForClient()
     }
+   /* fun resetUserIdForClientInPreferences(){
+        prefeHelper.saveUserIdForClient("-1001")
+    }*/
+
 
     fun downloadServiceV() {
         viewModelScope.launch(Dispatchers.IO) {
-            val userId = prefeHelper.fetchUserId()
+            val userId = prefeHelper.fetchUserIdForClient()
             _service.postValue(downloadService(userId))
 
         }

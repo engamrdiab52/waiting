@@ -6,9 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.amrabdelhamiddiab.core.data.IPreferenceHelper
 import com.amrabdelhamiddiab.core.domain.Order
 import com.amrabdelhamiddiab.core.domain.Service
-import com.amrabdelhamiddiab.core.usecases.login.DownloadService
-import com.amrabdelhamiddiab.core.usecases.login.SignOutUser
+import com.amrabdelhamiddiab.core.usecases.login.*
 import com.amrabdelhamiddiab.waiting.framework.utilis.SingleLiveEvent
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,17 +19,30 @@ import javax.inject.Inject
 @HiltViewModel
 class ServiceViewModel @Inject constructor(
     private val signOutUser: SignOutUser,
-    private val preHelper: IPreferenceHelper,
+    private val iPreferenceHelper: IPreferenceHelper,
     private val gson: Gson,
     private val downloadService: DownloadService,
     private val databaseReference: DatabaseReference,
+    private val deleteAccount: DeleteAccount,
+    private val deleteService: DeleteService,
+    private val deleteCurrentOrder: DeleteCurrentOrder,
+    private val auth: FirebaseAuth,
+    private val changeOrderValue: ChangeOrderValue,
+    private val downloadOrder: DownloadOrder
 ) : ViewModel() {
     //
     private val _downloading = SingleLiveEvent<Boolean>()
     val downloading: LiveData<Boolean> get() = _downloading
 
+    private val _accountDeleted = SingleLiveEvent<Boolean>()
+    val accountDeleted: LiveData<Boolean> get() = _accountDeleted
+
     private val _orderValueChanged = SingleLiveEvent<Boolean>()
     val orderValueChanged: LiveData<Boolean> get() = _orderValueChanged
+
+    private val _orderValue = SingleLiveEvent<Order>()
+    val orderValue: LiveData<Order> get() = _orderValue
+
 
     private val _service = SingleLiveEvent<Service?>()
     val service: LiveData<Service?> get() = _service
@@ -41,14 +54,14 @@ class ServiceViewModel @Inject constructor(
     }
 
     fun removeUserFromPreferences() {
-        preHelper.setUserLoggedIn(false)
+        iPreferenceHelper.setUserServiceLoggedIn(false)
     }
 
     fun saveServiceInPreferences(service: Service?) {
         if (service != null) {
             val userServiceString: String? = gson.toJson(service)
             if (userServiceString != null) {
-                with(preHelper) { saveService(userServiceString) }
+                with(iPreferenceHelper) { saveServiceForService(userServiceString) }
             }
         }
     }
@@ -57,12 +70,12 @@ class ServiceViewModel @Inject constructor(
         val service = Service("", "", "", 0)
         val userServiceString: String? = gson.toJson(service)
         if (userServiceString != null) {
-            with(preHelper) { saveService(userServiceString) }
+            with(iPreferenceHelper) { saveServiceForService(userServiceString) }
         }
     }
 
     fun loadServiceFromPreferences(): Service? {
-        val serviceString: String = preHelper.loadService()
+        val serviceString: String = iPreferenceHelper.loadServiceForService()
         return if (serviceString.isNotEmpty()) {
             gson.fromJson(serviceString, Service::class.java)
         } else {
@@ -72,17 +85,43 @@ class ServiceViewModel @Inject constructor(
 
     fun downloadServiceV() {
         viewModelScope.launch(Dispatchers.IO) {
-            val userId = preHelper.fetchUserId()
+            val userId = iPreferenceHelper.fetchUserIdForClient()
             _service.postValue(downloadService(userId))
+
+        }
+    }
+    fun downloadOrderV() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val userId = iPreferenceHelper.fetchUserIdForClient()
+            _orderValue.postValue(downloadOrder(userId))
 
         }
     }
 
     fun changeOrderValueV(value: Long) {
         val order = Order(value)
-        val userId = preHelper.fetchUserId()
+        val userId = iPreferenceHelper.fetchUserIdForClient()
         if (userId.isNotEmpty()) {
-            databaseReference.child("orders").child(userId).setValue(order)
+            viewModelScope.launch {
+                changeOrderValue(userId, order)
+            }
+
         }
+    }
+
+    fun deleteAccountV() {
+        viewModelScope.launch(Dispatchers.IO) {
+            auth.currentUser?.let { deleteService(it.uid) }
+            auth.currentUser?.let { deleteCurrentOrder(it.uid) }
+            deleteAccount()
+        }
+    }
+
+    fun saveCurrentOrderOfService(currentOrder: String) {
+        iPreferenceHelper.saveOrderForService(currentOrder)
+    }
+
+    fun retrieveCurrentOrderOfService(): String {
+        return iPreferenceHelper.loadOrderForService()
     }
 }

@@ -24,7 +24,8 @@ class LoginFlowViewModel @Inject constructor(
     private val emailVerifiedState: EmailVerifiedState,
     private val preHelper: IPreferenceHelper,
     private val gson: Gson,
-    private val firebaseAuth: FirebaseAuth
+    private val firebaseAuth: FirebaseAuth,
+    private val downloadService: DownloadService
 
 ) : ViewModel() {
 
@@ -45,6 +46,9 @@ class LoginFlowViewModel @Inject constructor(
 
     private val _downloading = SingleLiveEvent<Boolean>()
     val downloading: LiveData<Boolean> get() = _downloading
+
+    private val _service = SingleLiveEvent<Service?>()
+    val service: LiveData<Service?> get() = _service
 
     fun signIn(email: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -84,22 +88,37 @@ class LoginFlowViewModel @Inject constructor(
         }
     }
     fun removeUserFromPreferences(){
-        preHelper.setUserLoggedIn(false)
+        preHelper.setUserServiceLoggedIn(false)
     }
     fun putUserInPreferences(){
-        preHelper.setUserLoggedIn(true)
+        preHelper.setUserServiceLoggedIn(true)
     }
     fun removeServiceFromPreferences(){
         val service = Service("", "", "", 0)
         val userServiceString :String? = gson.toJson(service)
         if (userServiceString != null) {
-            with(preHelper) { saveService(userServiceString) }
+            with(preHelper) { saveServiceForService(userServiceString) }
         }
     }
     fun saveUserIdInPreferences(userId: String){
-        preHelper.saveUserId(userId)
+        preHelper.saveUserIdForClient(userId)
     }
-    fun downloadUserId(): String? {
-        return firebaseAuth.currentUser?.uid
+    fun downloadUserId(): String {
+
+        return firebaseAuth.currentUser?.uid ?: ""
+    }
+
+    fun downloadServiceV(userId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _service.postValue(downloadService(userId))
+        }
+    }
+    fun saveServiceInPreferences(service: Service?) {
+        if (service != null) {
+            val userServiceString: String? = gson.toJson(service)
+            if (userServiceString != null) {
+                with(preHelper) { saveServiceForService(userServiceString) }
+            }
+        }
     }
 }

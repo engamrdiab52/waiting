@@ -25,17 +25,41 @@ class HomeFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
 
-        //  preferenceHelper = PreferenceManager(requireActivity().applicationContext)
-        if (viewModel.getUserStateFromPreferences()) {
-            findNavController().navigate(R.id.action_homeFragment_to_serviceFragment)
+        viewModel.userId.observe(viewLifecycleOwner) {
+            if (it.isNullOrEmpty()) {
+                findNavController().navigate(R.id.action_homeFragment_to_nested_graph_login)
+            } else {
+                viewModel.downloadServiceV(it)
+            }
+        }
+        viewModel.service.observe(viewLifecycleOwner) {
+            if (it != null) {
+                viewModel.saveServiceInPreferences(it)
+              //  viewModel.downloadOrderForService(it)
+                viewModel.downloadOrderForService()
+                findNavController().navigate(R.id.action_homeFragment_to_serviceFragment)
+            } else {
+                findNavController().navigate(R.id.action_homeFragment_to_createServiceFragment)
+            }
+        }
+        viewModel.orderValue.observe(viewLifecycleOwner){
+            val orderValueForService = it.order.toString()
+            viewModel.saveOrderForServiceInPreferences(orderValueForService)
         }
         binding.buttonService.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_nested_graph_login)
+
+            if (!viewModel.retrieveUserStateFromPreferences()) {
+                findNavController().navigate(R.id.action_homeFragment_to_nested_graph_login)
+            }else {
+                viewModel.getUserIdFromPreferences()
+            }
+
+
         }
         binding.buttonClient.setOnClickListener {
-            if (viewModel.loadClientOrder() != null){
+            if (viewModel.loadClientOrder() != null) {
                 findNavController().navigate(R.id.action_homeFragment_to_clientFragment)
-            }else {
+            } else {
                 findNavController().navigate(R.id.action_homeFragment_to_scanQrCodeFragment)
             }
 

@@ -13,7 +13,7 @@ class QrCodeViewModel @Inject constructor(
 
 
     fun retrieveUserIdFromPreferences(): String {
-        return preHelper.fetchUserId()
+        return preHelper.fetchUserIdForClient()
     }
 
 }

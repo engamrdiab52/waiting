@@ -21,7 +21,7 @@ class DownloadServiceImpl @Inject constructor(
             service?.getValue(Service::class.java)
         } catch (e: Exception) {
             Log.d(TAG, e.message.toString())
-            Service("", "", "", 0)
+            null
         }
     }
 }

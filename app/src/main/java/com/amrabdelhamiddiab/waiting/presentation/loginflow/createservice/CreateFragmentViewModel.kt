@@ -28,7 +28,7 @@ class CreateFragmentViewModel @Inject constructor(
         if (service != null) {
             val userServiceString: String? = gson.toJson(service)
             if (userServiceString != null) {
-                with(preHelper) { saveService(userServiceString) }
+                with(preHelper) { saveServiceForService(userServiceString) }
             }
         }
     }

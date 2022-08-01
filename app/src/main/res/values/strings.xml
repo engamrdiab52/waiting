@@ -71,7 +71,7 @@
     <string name="name_of_service">name of service…</string>
     <string name="period_of_each_service">period of each service in minuets</string>
     <string name="save">SAVE</string>
-    <string name="generate_qr_code">Generate QR Code</string>
+    <string name="generate_qr_code">QR Code</string>
     <string name="scan_qr_code">Scan QR Code</string>
     <string name="enter_current_serving_number">Enter Current Serving number</string>
     <string name="end_visit">End Visit</string>
@@ -85,5 +85,18 @@
     <string name="period_of_time_for_eatch_visitor">period of time for eatch visitor</string>
     <string name="you_will_wait_for_about">You will wait for about</string>
     <string name="are_you_sure">Are You Sure You Want To End Your Visit</string>
+    <string name="dialog_logout_message">Are You Sure You Want To Log Out</string>
+    <string name="dialog_delete_account_message">Are You Sure You Want To Delete Your Account</string>
     <string name="_0">0</string>
+    <string name="edit_order">Edit Current</string>
+    <string name="reset">Reset Current</string>
+    <string name="edit_service">Edit Service</string>
+    <string name="current_number">Current Number</string>
+    <string name="increment">Increment</string>
+    <string name="decrement">Decrement</string>
+    <string name="qrcode_fake_title">QR CODE IS FAKE</string>
+    <string name="qrcode_fake_message">Please Ask the Service Provider TO login again to the app and regenerate the QR code</string>
+
+    <string name="dialog_logout_title">LOG OUT</string>
+    <string name="dialog_delete_account_title">DELETE ACCOUNT</string>
 </resources>

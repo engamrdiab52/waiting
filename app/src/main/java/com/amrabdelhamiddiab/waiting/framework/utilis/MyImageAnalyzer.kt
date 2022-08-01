@@ -2,7 +2,6 @@ package com.amrabdelhamiddiab.waiting.framework.utilis
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.widget.Toast
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import androidx.navigation.NavController
@@ -42,16 +41,15 @@ class MyImageAnalyzer(
         for (barcode in barcodes) {
             when (barcode.valueType) {
                 Barcode.TYPE_TEXT -> {
-                    Toast.makeText(context, barcode.displayValue, Toast.LENGTH_SHORT).show()
-                    //   barcode.displayValue?.let { Log.d(TAG, it) }
-                    //   navController.navigate(nav)
-                    /*     preview.visibility = View.GONE
-                         linearLayout.visibility = View.VISIBLE*/
-                    // textView.text = barcode.displayValue
-                    scanQrViewModel.saveUserIdInPreferences(barcode.displayValue.toString())
+                    //    Toast.makeText(context, barcode.displayValue, Toast.LENGTH_SHORT).show()
+                    // HERE I HAVE TO CHECK IF IT A VALID USER id
+                  //  scanQrViewModel.downloadServiceV(barcode.displayValue.toString())
+                    scanQrViewModel.checkThisString(barcode.displayValue.toString())
+
+               //     scanQrViewModel.saveUserIdInPreferences(barcode.displayValue.toString())
                     //here i want to navigate
                     // navController.navigate(R.id.clientFragment)
-                    scanQrViewModel.navigateToClientFragment()
+                 //   scanQrViewModel.navigateToClientFragment()
                     //HERE I WANT TO SAVE IT IN PREFRENCES
                     // val userId = order?.order
                     //  order?.order = barcode.displayValue!!.toLong()

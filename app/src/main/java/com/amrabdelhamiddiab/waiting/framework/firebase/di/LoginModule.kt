@@ -98,6 +98,54 @@ class LoginModule {
         return RepositoryDownloadService(iDownloadService)
     }
 
+    @Provides
+    fun provideRepositoryDeleteAccount(iDeleteAccount: IDeleteAccount): RepositoryDeleteAccount {
+        return RepositoryDeleteAccount((iDeleteAccount))
+    }
 
+    @Provides
+    fun provideDeleteAccount(repositoryDeleteAccount: RepositoryDeleteAccount): DeleteAccount {
+        return DeleteAccount(repositoryDeleteAccount)
 
+    }
+
+    @Provides
+    fun provideRepositoryDeleteService(iDeleteService: IDeleteService): RepositoryDeleteService {
+        return RepositoryDeleteService(iDeleteService)
+    }
+
+    @Provides
+    fun provideDeleteService(repositoryDeleteService: RepositoryDeleteService): DeleteService {
+        return DeleteService(repositoryDeleteService)
+    }
+
+    @Provides
+    fun provideRepositoryDeleteCurrentOrder(iDeleteCurrentOrder: IDeleteCurrentOrder): RepositoryDeleteCurrentOrder {
+        return RepositoryDeleteCurrentOrder(iDeleteCurrentOrder)
+    }
+
+    @Provides
+    fun provideDeleteCurrentOrder(repositoryDeleteCurrentOrder: RepositoryDeleteCurrentOrder): DeleteCurrentOrder {
+        return DeleteCurrentOrder(repositoryDeleteCurrentOrder)
+    }
+
+    @Provides
+    fun provideRepositoryChangeOrderValue(iChangeOrderValue: IChangeOrderValue): RepositoryChangeOrderValue {
+        return RepositoryChangeOrderValue(iChangeOrderValue)
+    }
+
+    @Provides
+    fun provideChangeOrderValue(repositoryChangeOrderValue: RepositoryChangeOrderValue): ChangeOrderValue {
+        return ChangeOrderValue(repositoryChangeOrderValue)
+    }
+
+    @Provides
+    fun provideRepositoryDownloadOrder(iDownloadOrder: IDownloadOrder): RepositoryDownloadOrder {
+        return RepositoryDownloadOrder(iDownloadOrder)
+    }
+
+    @Provides
+    fun provideDownloadOrder(repositoryDownloadOrder: RepositoryDownloadOrder): DownloadOrder {
+        return DownloadOrder(repositoryDownloadOrder)
+    }
 }

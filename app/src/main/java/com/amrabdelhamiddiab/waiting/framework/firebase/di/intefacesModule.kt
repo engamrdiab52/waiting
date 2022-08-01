@@ -44,4 +44,20 @@ abstract class intefacesModule {
 
     @Binds
     abstract fun bindValueEventListener(notifyOrderChangerImpl: NotifyOrderChangerImpl): ValueEventListener
+
+    @Binds
+    abstract fun bindDeleteAccount(deleteAccountImpl: DeleteAccountImpl): IDeleteAccount
+
+    @Binds
+    abstract fun bindDeleteService(deleteServiceImpl: DeleteServiceImpl): IDeleteService
+
+    @Binds
+    abstract fun bindDeleteCurrentOrder(deleteCurrentOrderImpl: DeleteCurrentOrderImpl): IDeleteCurrentOrder
+
+    @Binds
+    abstract fun bindChangeOrderValue(changeOrderValueImpl: ChangeOrderValueImpl) : IChangeOrderValue
+
+    @Binds
+    abstract fun bindDownloadOrder(downloadOrderImpl: DownloadOrderImpl): IDownloadOrder
+
 }

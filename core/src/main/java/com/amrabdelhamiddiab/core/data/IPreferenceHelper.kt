@@ -1,16 +1,35 @@
 package com.amrabdelhamiddiab.core.data
 
 interface IPreferenceHelper {
-    fun setUserLoggedIn(loggedIn: Boolean)
-    fun getUserLoggedIn(): Boolean
-    fun clearPrefs()
-    fun saveService(serviceString: String)
-    fun loadService(): String
-    fun saveUserId(userId: String)
-    fun fetchUserId(): String
-    fun saveOrderClient(orderString: String)
-    fun loadOrderClient(): String
+    //SERVICE
 
-    fun saveMyNumberInPreferences(myNumber: Int)
-    fun loadMyNumberFromPreferences(): Int
+    //USER logged in
+    fun setUserServiceLoggedIn(loggedIn: Boolean)
+    fun getUserServiceLoggedIn(): Boolean
+    //save Service For Service
+    fun saveServiceForService(serviceString: String)
+    fun loadServiceForService(): String
+    //USER ID
+    fun saveUserIdForService(userId: String)
+    fun fetchUserIdForService(): String
+    //ORDER
+    fun saveOrderForService(orderString: String)
+    fun loadOrderForService(): String
+
+    //CLIENT
+
+    //SAVE service for client
+    fun saveServiceForClient(serviceString: String)
+    fun loadServiceForClient(): String
+    //ORDER
+    fun saveOrderForClient(orderString: String)
+    fun loadOrderForClient(): String
+    //USER ID for downloading
+    fun saveUserIdForClient(userId: String)
+    fun fetchUserIdForClient(): String
+    //client number
+    fun saveClientNumberInPreferences(myNumber: Int)
+    fun loadClientNumberFromPreferences(): Int
+
+    fun clearPrefs()
 }
