@@ -70,4 +70,7 @@ class HomeViewModel @Inject constructor(
             null
         }
     }
+    fun getClientInAVisit(): Boolean{
+      return  preHelper.getIfClientInAVisit()
+    }
 }

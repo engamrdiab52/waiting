@@ -45,7 +45,7 @@ class SignupFragment : Fragment() {
 
         viewModel.emailVerificationSent.observe(viewLifecycleOwner) {
             if (it == true) {
-                Toast.makeText(requireContext(), "Email sent successfully", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), "Please Verify Your Email", Toast.LENGTH_LONG)
                     .show()
                 findNavController().navigate(R.id.action_signupFragment_to_loginFragment)
             } else {

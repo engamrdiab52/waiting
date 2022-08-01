@@ -15,6 +15,7 @@ import com.afollestad.materialdialogs.input.input
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentServiceBinding
+import com.amrabdelhamiddiab.waiting.framework.utilis.checkInternetConnection
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -45,17 +46,34 @@ class serviceFragment : Fragment() {
             Log.d(TAG, "INCREMENT")
         }
         binding.buttonServiceDecreaseOrder.setOnClickListener {
-            Log.d(TAG, "DECREMENT")
+
+            if (checkInternetConnection(requireActivity().applicationContext)) {
+                Log.d(TAG, "DECREMENT")
+            }else {
+                displayNoInternerConnection()
+            }
+
+
         }
 
         //********************************************************************************
 
         binding.buttonLogout.setOnClickListener {
-            displayDialogLogOut()
+            if (checkInternetConnection(requireActivity().applicationContext)) {
+                displayDialogLogOut()
+            }else {
+                displayNoInternerConnection()
+            }
+
         }
         //********************************************************************************
         binding.buttonServiceDeleteAccount.setOnClickListener {
-            displayDialogDeleteAccount()
+            if (checkInternetConnection(requireActivity().applicationContext)) {
+                displayDialogDeleteAccount()
+            }else {
+                displayNoInternerConnection()
+            }
+
         }
         //*******************************************************************************
         binding.buttonQrcode.setOnClickListener {
@@ -63,16 +81,34 @@ class serviceFragment : Fragment() {
         }
         //*******************************************************************************
         binding.buttonEditService.setOnClickListener {
-            findNavController().navigate(R.id.action_serviceFragment_to_createServiceFragment)
+
+            if (checkInternetConnection(requireActivity().applicationContext)) {
+                findNavController().navigate(R.id.action_serviceFragment_to_createServiceFragment)
+            }else {
+                displayNoInternerConnection()
+            }
+
         }
         //*******************************************************************************
         binding.buttonServiceEditOrder.setOnClickListener {
-            displayDialog()
+            if (checkInternetConnection(requireActivity().applicationContext)) {
+                displayDialog()
+            }else {
+                displayNoInternerConnection()
+            }
+
         }
         binding.buttonServiceResetOrder.setOnClickListener {
-            viewModel.saveCurrentOrderOfService("0")
-            binding.textViewCurrentNumber.text = "0"
-            viewModel.changeOrderValueV(0L)
+
+            if (checkInternetConnection(requireActivity().applicationContext)) {
+                viewModel.saveCurrentOrderOfService("0")
+                binding.textViewCurrentNumber.text = "0"
+                viewModel.changeOrderValueV(0L)
+            }else {
+                displayNoInternerConnection()
+            }
+
+
         }
         //***********************************************************************************
 
@@ -87,6 +123,8 @@ class serviceFragment : Fragment() {
                 viewModel.deleteAccountV()
                 viewModel.removeServiceFromPreferences()
                 viewModel.removeUserFromPreferences()
+                // remove order from preferences
+                viewModel.saveCurrentOrderOfService("0")
                 findNavController().navigate(R.id.action_serviceFragment_to_homeFragment)
             }
             negativeButton(R.string.no) {
@@ -126,5 +164,11 @@ class serviceFragment : Fragment() {
             }
         }
     }
-
+    private fun displayNoInternerConnection() {
+        MaterialDialog(requireContext()).show {
+            cancelOnTouchOutside(true)
+            title(R.string.no_internet_title)
+            message(R.string.no_internet_message)
+        }
+    }
 }

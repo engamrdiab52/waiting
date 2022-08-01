@@ -52,7 +52,13 @@ class ScanQrViewModel @Inject constructor(
             _service.postValue(downloadService(userId))
         }
     }
+    //to check it in fragment
     fun checkThisString(string: String){
         _userId.value = string
+    }
+
+    fun sayIfClientIsInAVisit(inAVisit: Boolean){
+        prefeHelper.setIfClientInAVisit(inAVisit)
+
     }
 }

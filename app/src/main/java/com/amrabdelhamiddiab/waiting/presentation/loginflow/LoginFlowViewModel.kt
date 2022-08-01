@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amrabdelhamiddiab.core.data.IPreferenceHelper
+import com.amrabdelhamiddiab.core.domain.Order
 import com.amrabdelhamiddiab.core.domain.Service
 import com.amrabdelhamiddiab.core.usecases.login.*
 import com.amrabdelhamiddiab.waiting.framework.utilis.SingleLiveEvent
@@ -18,19 +19,23 @@ import javax.inject.Inject
 class LoginFlowViewModel @Inject constructor(
     private val signUpUser: SignUpUser,
     private val signInUser: SignInUser,
-    private val signOutUser: SignOutUser,
     private val sendEmailVerification: SendEmailVerification,
     private val resetUserPassword: ResetUserPassword,
     private val emailVerifiedState: EmailVerifiedState,
     private val preHelper: IPreferenceHelper,
     private val gson: Gson,
     private val firebaseAuth: FirebaseAuth,
-    private val downloadService: DownloadService
+    private val downloadService: DownloadService,
+    private val downloadOrder: DownloadOrder
 
 ) : ViewModel() {
 
     private val _passwordChanged = SingleLiveEvent<Boolean?>()
     val passwordChanged: LiveData<Boolean?> get() = _passwordChanged
+
+
+    private val _orderValue = SingleLiveEvent<Order?>()
+    val orderValue: LiveData<Order?> get() = _orderValue
 
     private val _emailVerificationSent = SingleLiveEvent<Boolean?>()
     val emailVerificationSent: LiveData<Boolean?> get() = _emailVerificationSent
@@ -108,11 +113,23 @@ class LoginFlowViewModel @Inject constructor(
         return firebaseAuth.currentUser?.uid ?: ""
     }
 
-    fun downloadServiceV(userId: String) {
+    fun downloadServiceV() {
         viewModelScope.launch(Dispatchers.IO) {
-            _service.postValue(downloadService(userId))
+            _service.postValue(firebaseAuth.currentUser?.let { downloadService(it.uid) })
         }
     }
+
+    fun downloadOrderForService(){
+
+        viewModelScope.launch {
+            _orderValue.postValue(firebaseAuth.currentUser?.let { downloadOrder(it.uid) })
+        }
+    }
+
+    fun saveCurrentOrderOfService(currentOrder: String) {
+        preHelper.saveOrderForService(currentOrder)
+    }
+
     fun saveServiceInPreferences(service: Service?) {
         if (service != null) {
             val userServiceString: String? = gson.toJson(service)

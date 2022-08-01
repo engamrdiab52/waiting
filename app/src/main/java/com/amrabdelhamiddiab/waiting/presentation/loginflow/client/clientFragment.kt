@@ -17,6 +17,7 @@ import com.amrabdelhamiddiab.core.domain.Order
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentClientBinding
+import com.amrabdelhamiddiab.waiting.framework.utilis.checkInternetConnection
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,41 +37,53 @@ class clientFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_client, container, false)
+        val userId = viewModel.retrieveUserIdFromPreferences()
+        viewModel.notifyWhenOrderChange(userId)
         viewModel.downloadServiceV()
-        viewModel.retrieveOrderFromPreferences()
+        viewModel.retrieveClientNumberFromPreferences()
         binding.cardViewAddMyNumber.setOnClickListener {
-            displayDialog()
+            if (checkInternetConnection(requireActivity().applicationContext)) {
+                displayDialog()
+            } else {
+                displayNoInternerConnection()
+            }
         }
         binding.buttonEndVisit.setOnClickListener {
-            displayDialogAreYouSure()
-
+            if (checkInternetConnection(requireActivity().applicationContext)) {
+                displayDialogAreYouSure()
+            } else {
+                displayNoInternerConnection()
+            }
         }
         binding.buttonAddMyNumber.setOnClickListener {
-            displayDialog()
+            if (checkInternetConnection(requireActivity().applicationContext)) {
+                displayDialog()
+            } else {
+                displayNoInternerConnection()
+            }
         }
         viewModel.myNumber.observe(viewLifecycleOwner) {
             binding.textViewMyNumber.text = it.toString()
 
         }
         viewModel.service.observe(viewLifecycleOwner) {
-            if (it != null){
+            if (it != null) {
                 binding.textViewCategory.text = it.category
                 binding.textViewNameOfService.text = it.name_of_service
                 val text = it.period_per_each_service
                 binding.textViewPeiodForEachVisitor.text = "about $text minuets for each visit"
-                Log.d(TAG,"323232323232323.................... $it")
-            }else {
+                Log.d(TAG, "323232323232323.................... $it")
+            } else {
                 displayDialogWrongQrcode()
-                Log.d(TAG,"323232323232323.................... Service is NUll")
+                Log.d(TAG, "323232323232323.................... Service is NUll")
             }
 
 
         }
-        val userId = viewModel.retrieveUserIdFromPreferences()
-        viewModel.notifyWhenOrderChange(userId)
+
 
         viewModel.orderValue.observe(viewLifecycleOwner) {
-            if (it == null){
+            if (it == null) {
                 binding.textViewOrder.text = "0"
             }
             binding.textViewOrder.text = it?.order.toString()
@@ -79,10 +92,14 @@ class clientFragment : Fragment() {
             //  it?.let { it1 -> viewModel.saveOrderInPreferences(it1) }
         }
         binding.buttonScanQrCode.setOnClickListener {
-            Log.d(TAG, "buttonScanQrCode called")
-            viewModel.saveMyNumberInPreferences(0)
-            findNavController().navigate(R.id.action_clientFragment_to_scanQrCodeFragment)
+            if (checkInternetConnection(requireActivity().applicationContext)) {
+                Log.d(TAG, "buttonScanQrCode called")
+                viewModel.saveMyNumberInPreferences(0)
+                findNavController().navigate(R.id.action_clientFragment_to_scanQrCodeFragment)
 
+            } else {
+                displayNoInternerConnection()
+            }
         }
         return binding.root
     }
@@ -113,7 +130,7 @@ class clientFragment : Fragment() {
             message(R.string.are_you_sure)
             positiveButton(R.string.yes) {
                 viewModel.saveMyNumberInPreferences(0)
-              //  viewModel.resetUserIdForClientInPreferences()
+                viewModel.sayIfClientIsInAVisit(false)
                 findNavController().navigate(R.id.action_clientFragment_to_homeFragment)
             }
             negativeButton(R.string.no) {
@@ -121,6 +138,7 @@ class clientFragment : Fragment() {
             }
         }
     }
+
     private fun displayDialogWrongQrcode() {
         MaterialDialog(requireContext()).show {
             title(R.string.qrcode_fake_title)
@@ -131,6 +149,14 @@ class clientFragment : Fragment() {
             negativeButton(R.string.no) {
 
             }
+        }
+    }
+
+    private fun displayNoInternerConnection() {
+        MaterialDialog(requireContext()).show {
+            cancelOnTouchOutside(true)
+            title(R.string.no_internet_title)
+            message(R.string.no_internet_message)
         }
     }
 }

@@ -24,7 +24,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
-import com.afollestad.materialdialogs.MaterialDialog
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentScanQrCodeBinding
@@ -87,19 +86,20 @@ class ScanQrCodeFragment : Fragment() {
         }
         viewModel.userId.observe(viewLifecycleOwner){
             if (it != null) {
+                //to check if it real user id before save it
                 viewModel.downloadServiceV(it)
             }else{
-                Toast.makeText(requireContext(), "Error in userId Text", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Error when taking the QR code", Toast.LENGTH_SHORT).show()
             }
         }
         viewModel.service.observe(viewLifecycleOwner){
             if (it != null){
+                // here we are sure it os right QR CODE and userId with us, let's save it in preferences
+                viewModel.sayIfClientIsInAVisit(true)
                 viewModel.saveUserIdInPreferences(viewModel.userId.value!!)
                 viewModel.navigateToClientFragment()
             }else {
                 Toast.makeText(requireContext(), "Wrong QR CODE", Toast.LENGTH_SHORT).show()
-                Log.d(TAG,".............................................Error in Service Text" )
-             //   displayDialogFakeQrCode()
                 findNavController().navigate(R.id.action_scanQrCodeFragment_to_homeFragment)
             }
         }
@@ -156,20 +156,6 @@ class ScanQrCodeFragment : Fragment() {
 
     private fun askForCameraPermission() {
         permissionLauncher.launch(Manifest.permission.CAMERA)
-    }
-
-    private fun displayDialogFakeQrCode() {
-        MaterialDialog(requireActivity().applicationContext).show {
-            cancelOnTouchOutside(true)
-            title(R.string.qrcode_fake_title)
-            message(R.string.qrcode_fake_message)
-            positiveButton(R.string.ok) {
-               // findNavController().navigate(R.id.action_clientFragment_to_homeFragment)
-            }
-            negativeButton(R.string.no) {
-
-            }
-        }
     }
 
 }

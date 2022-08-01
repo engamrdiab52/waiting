@@ -14,11 +14,13 @@ class PreferenceManager @Inject constructor(@ApplicationContext context: Context
         const val USER_SERVICE_FOR_SERVICE = "userServiceForService"
         const val USER_ID_FOR_SERVICE = "userIdForService"
         const val SERVICE_ORDER = "service_order"
+
         //CLIENT
         const val USER_ID_FOR_CLIENT = "userIdForClient"
-        const val CLIENT_ORDER ="orderOfClient"
+        const val CLIENT_ORDER = "orderOfClient"
         const val MY_NUMBER = "myNumber"
         const val SERVICE_FOR_CLIENT = "serviceForClient"
+        const val CLIENT_IN_A_VISIT = "clientInAVisit"
     }
 
     private val PREFS_NAME = "PHARMACYPreferences"
@@ -42,7 +44,7 @@ class PreferenceManager @Inject constructor(@ApplicationContext context: Context
     }
 
     override fun saveUserIdForClient(userId: String) {
-       preferences[USER_ID_FOR_CLIENT] = userId
+        preferences[USER_ID_FOR_CLIENT] = userId
     }
 
     override fun fetchUserIdForClient(): String {
@@ -89,6 +91,13 @@ class PreferenceManager @Inject constructor(@ApplicationContext context: Context
         return preferences[MY_NUMBER] ?: 0
     }
 
+    override fun setIfClientInAVisit(inAVisit: Boolean) {
+        preferences[CLIENT_IN_A_VISIT] = inAVisit
+    }
+
+    override fun getIfClientInAVisit(): Boolean {
+        return preferences[CLIENT_IN_A_VISIT] ?: false
+    }
 
     override fun clearPrefs() {
         preferences.edit().clear().apply()

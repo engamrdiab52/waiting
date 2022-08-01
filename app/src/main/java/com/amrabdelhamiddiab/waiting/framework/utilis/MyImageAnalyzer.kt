@@ -41,18 +41,8 @@ class MyImageAnalyzer(
         for (barcode in barcodes) {
             when (barcode.valueType) {
                 Barcode.TYPE_TEXT -> {
-                    //    Toast.makeText(context, barcode.displayValue, Toast.LENGTH_SHORT).show()
-                    // HERE I HAVE TO CHECK IF IT A VALID USER id
-                  //  scanQrViewModel.downloadServiceV(barcode.displayValue.toString())
+                    //first time to get the userId for client, but i need to check if it right
                     scanQrViewModel.checkThisString(barcode.displayValue.toString())
-
-               //     scanQrViewModel.saveUserIdInPreferences(barcode.displayValue.toString())
-                    //here i want to navigate
-                    // navController.navigate(R.id.clientFragment)
-                 //   scanQrViewModel.navigateToClientFragment()
-                    //HERE I WANT TO SAVE IT IN PREFRENCES
-                    // val userId = order?.order
-                    //  order?.order = barcode.displayValue!!.toLong()
 
                 }
             }

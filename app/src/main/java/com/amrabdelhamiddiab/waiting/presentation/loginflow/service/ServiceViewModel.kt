@@ -9,7 +9,6 @@ import com.amrabdelhamiddiab.core.domain.Service
 import com.amrabdelhamiddiab.core.usecases.login.*
 import com.amrabdelhamiddiab.waiting.framework.utilis.SingleLiveEvent
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -22,7 +21,6 @@ class ServiceViewModel @Inject constructor(
     private val iPreferenceHelper: IPreferenceHelper,
     private val gson: Gson,
     private val downloadService: DownloadService,
-    private val databaseReference: DatabaseReference,
     private val deleteAccount: DeleteAccount,
     private val deleteService: DeleteService,
     private val deleteCurrentOrder: DeleteCurrentOrder,
@@ -30,15 +28,6 @@ class ServiceViewModel @Inject constructor(
     private val changeOrderValue: ChangeOrderValue,
     private val downloadOrder: DownloadOrder
 ) : ViewModel() {
-    //
-    private val _downloading = SingleLiveEvent<Boolean>()
-    val downloading: LiveData<Boolean> get() = _downloading
-
-    private val _accountDeleted = SingleLiveEvent<Boolean>()
-    val accountDeleted: LiveData<Boolean> get() = _accountDeleted
-
-    private val _orderValueChanged = SingleLiveEvent<Boolean>()
-    val orderValueChanged: LiveData<Boolean> get() = _orderValueChanged
 
     private val _orderValue = SingleLiveEvent<Order>()
     val orderValue: LiveData<Order> get() = _orderValue

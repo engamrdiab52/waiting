@@ -58,21 +58,26 @@ class LoginFragment : Fragment() {
                 findNavController().navigate(R.id.action_global_createServiceFragment)
             }
         }
+        viewModel.orderValue.observe(viewLifecycleOwner){
+            if (it != null){
+                viewModel.saveCurrentOrderOfService(it.order.toString())
+                viewModel.downloadServiceV()
+            }
+        }
         viewModel.emailVerified.observe(viewLifecycleOwner) {
             if (it == true) {
               //  preferenceHelper.setUserLoggedIn(true)
                 val userId = viewModel.downloadUserId()
                 viewModel.putUserInPreferences()
                 viewModel.saveUserIdInPreferences(userId)
-                Log.d(TAG,"*******" +userId)
                 //  viewModel.removeServiceFromPreferences()
                 // here we go to create service
                 if (userId.isNotEmpty()) {
-                    viewModel.downloadServiceV(userId)
+                    viewModel.downloadOrderForService()
                 }
             } else {
                 if (checkInternetConnection(requireContext())) {
-                    Toast.makeText(requireContext(), "Please Verify your Email", Toast.LENGTH_SHORT)
+                    Toast.makeText(requireContext(), "Please Verify your Email", Toast.LENGTH_LONG)
                         .show()
                     Log.d(TAG, "Please Verify your Email")
                 } else {
@@ -137,5 +142,4 @@ class LoginFragment : Fragment() {
             binding.textLayoutLoginPassword.error = null
         }.check()
     }
-
 }

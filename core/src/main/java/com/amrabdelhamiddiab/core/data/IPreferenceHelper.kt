@@ -30,6 +30,8 @@ interface IPreferenceHelper {
     //client number
     fun saveClientNumberInPreferences(myNumber: Int)
     fun loadClientNumberFromPreferences(): Int
-
+    //in an visit
+    fun setIfClientInAVisit(inAVisit: Boolean)
+    fun getIfClientInAVisit() : Boolean
     fun clearPrefs()
 }

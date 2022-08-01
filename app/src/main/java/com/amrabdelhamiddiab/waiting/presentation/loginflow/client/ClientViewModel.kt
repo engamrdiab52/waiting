@@ -22,7 +22,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ClientViewModel @Inject constructor(
-    private val valueEventListener: ValueEventListener,
     private val databaseReference: DatabaseReference,
     private val prefeHelper: IPreferenceHelper,
     private val gson: Gson,
@@ -43,7 +42,7 @@ class ClientViewModel @Inject constructor(
         override fun onCancelled(error: DatabaseError) {
             // error
             Log.d(TAG, error.message)
-            _orderValue.postValue(null)
+            _orderValue.postValue(Order(0L))
         }
 
         override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -58,41 +57,45 @@ class ClientViewModel @Inject constructor(
 
     fun notifyWhenOrderChange(userId: String) {
         //    val userId = prefeHelper.fetchUserId()
-       // val userId = "C8UkQhcYCRRzqqtCFf5MtDqR9Cq2"
+        // val userId = "C8UkQhcYCRRzqqtCFf5MtDqR9Cq2"
         if (userId.isNotEmpty()) {
             databaseReference.child("orders").child(userId)
                 .addValueEventListener(orderListener)
         }
-        Log.d(TAG,"22222222222222222222222222notifyWhenOrderChange222222222222222222222222222")
+        Log.d(TAG, "22222222222222222222222222notifyWhenOrderChange222222222222222222222222222")
     }
 
-    fun saveOrderInPreferences(order: Order){
-            val orderClientString: String? = gson.toJson(order)
-            if (orderClientString != null) {
-                with(prefeHelper) { saveOrderForClient(orderClientString) }
-            }
+    fun saveOrderInPreferences(order: Order) {
+        val orderClientString: String? = gson.toJson(order)
+        if (orderClientString != null) {
+            with(prefeHelper) { saveOrderForClient(orderClientString) }
+        }
     }
-    fun retrieveOrderFromPreferences() {
-        val number = if (prefeHelper.loadClientNumberFromPreferences() == -1){
+
+    fun retrieveClientNumberFromPreferences() {
+        val number = if (prefeHelper.loadClientNumberFromPreferences() == -1) {
             0
-        }else
-        {
+        } else {
             prefeHelper.loadClientNumberFromPreferences()
         }
-       _myNumber.value = number
+        _myNumber.value = number
     }
-    fun saveMyNumberInPreferences(myNumber: Int){
+
+    fun saveMyNumberInPreferences(myNumber: Int) {
         prefeHelper.saveClientNumberInPreferences(myNumber)
     }
 
     fun retrieveUserIdFromPreferences(): String {
         return prefeHelper.fetchUserIdForClient()
     }
-   /* fun resetUserIdForClientInPreferences(){
-        prefeHelper.saveUserIdForClient("-1001")
-    }*/
+    /* fun resetUserIdForClientInPreferences(){
+         prefeHelper.saveUserIdForClient("-1001")
+     }*/
 
+    fun sayIfClientIsInAVisit(inAVisit: Boolean){
+        prefeHelper.setIfClientInAVisit(inAVisit)
 
+    }
     fun downloadServiceV() {
         viewModelScope.launch(Dispatchers.IO) {
             val userId = prefeHelper.fetchUserIdForClient()
