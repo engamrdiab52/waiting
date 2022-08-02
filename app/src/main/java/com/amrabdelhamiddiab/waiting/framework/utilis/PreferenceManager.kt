@@ -9,12 +9,6 @@ import javax.inject.Inject
 class PreferenceManager @Inject constructor(@ApplicationContext context: Context) :
     IPreferenceHelper {
     companion object {
-        //SERVICE
-        const val USER_LOGGED_IN = "userLoggedIn"
-        const val USER_SERVICE_FOR_SERVICE = "userServiceForService"
-        const val USER_ID_FOR_SERVICE = "userIdForService"
-        const val SERVICE_ORDER = "service_order"
-
         //CLIENT
         const val USER_ID_FOR_CLIENT = "userIdForClient"
         const val CLIENT_ORDER = "orderOfClient"
@@ -27,21 +21,6 @@ class PreferenceManager @Inject constructor(@ApplicationContext context: Context
     private var preferences: SharedPreferences =
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
-    override fun setUserServiceLoggedIn(loggedIn: Boolean) {
-        preferences[USER_LOGGED_IN] = loggedIn
-    }
-
-    override fun getUserServiceLoggedIn(): Boolean {
-        return preferences[USER_LOGGED_IN] ?: false
-    }
-
-    override fun saveServiceForService(serviceString: String) {
-        preferences[USER_SERVICE_FOR_SERVICE] = serviceString
-    }
-
-    override fun loadServiceForService(): String {
-        return preferences[USER_SERVICE_FOR_SERVICE] ?: ""
-    }
 
     override fun saveUserIdForClient(userId: String) {
         preferences[USER_ID_FOR_CLIENT] = userId
@@ -59,21 +38,6 @@ class PreferenceManager @Inject constructor(@ApplicationContext context: Context
         return preferences[CLIENT_ORDER] ?: ""
     }
 
-    override fun saveUserIdForService(userId: String) {
-        preferences[USER_ID_FOR_SERVICE] = userId
-    }
-
-    override fun fetchUserIdForService(): String {
-        return preferences[USER_ID_FOR_SERVICE] ?: ""
-    }
-
-    override fun saveOrderForService(orderString: String) {
-        preferences[SERVICE_ORDER] = orderString
-    }
-
-    override fun loadOrderForService(): String {
-        return preferences[SERVICE_ORDER] ?: ""
-    }
 
     override fun saveServiceForClient(serviceString: String) {
         preferences[SERVICE_FOR_CLIENT] = serviceString

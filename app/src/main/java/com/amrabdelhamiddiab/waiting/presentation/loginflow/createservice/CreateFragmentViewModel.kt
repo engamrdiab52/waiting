@@ -22,28 +22,14 @@ class CreateFragmentViewModel @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val changeOrderValue: ChangeOrderValue
 ) : ViewModel() {
-    fun fetchUserId(): String? {
-        return firebaseAuth.currentUser?.uid
-    }
-    fun saveServiceInPreferences(service: Service?) {
-        if (service != null) {
-            val userServiceString: String? = gson.toJson(service)
-            if (userServiceString != null) {
-                with(preHelper) { saveServiceForService(userServiceString) }
-            }
-        }
-    }
-    fun uploadServiceV(userId: String, service: Service?){
-        if (service != null) {
-         //   val userId1 = firebaseAuth.currentUser?.uid
+    fun uploadServiceV( service: Service){
             viewModelScope.launch(Dispatchers.IO){
-                uploadService(userId, service)
-            }
+                uploadService(firebaseAuth.currentUser!!.uid, service)
             }
         }
-    fun uploadOrderValueFirstTime(userId: String){
+    fun uploadOrderValueFirstTime(){
         viewModelScope.launch {
-            changeOrderValue(userId, Order(0L))
+            changeOrderValue(firebaseAuth.currentUser!!.uid, Order(0L))
         }
     }
 

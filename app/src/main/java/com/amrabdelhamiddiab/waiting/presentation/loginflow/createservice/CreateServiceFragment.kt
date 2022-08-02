@@ -1,7 +1,6 @@
 package com.amrabdelhamiddiab.waiting.presentation.loginflow.createservice
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.amrabdelhamiddiab.core.domain.Service
-import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentCreateServiceBinding
 import com.amrabdelhamiddiab.waiting.framework.utilis.checkInternetConnection
@@ -34,31 +32,21 @@ class CreateServiceFragment : Fragment() {
                 val category: String = binding.editTextCategory.text.toString()
                 val serviceName = binding.editTextNameOfService.text.toString()
                 val text = binding.editTextPeriodOfEachService.text.toString()
-                val timePeriod: Int = if (text.isEmpty()) {
-                    0
-                } else {
-                    text.toInt()
-                }
+                val timePeriod: Int =text.toInt()
                 val service = Service(category, serviceName, "", timePeriod)
-                viewModel.saveServiceInPreferences(service)
-                val userId = viewModel.fetchUserId()
-                if (userId != null) {
-                    viewModel.uploadServiceV(userId, service)
-                    viewModel.uploadOrderValueFirstTime(userId)
-                }
+                viewModel.uploadServiceV(service)
+                viewModel.uploadOrderValueFirstTime()
+              //  viewModel.saveServiceInPreferences(service)
                 binding.editTextCategory.text?.clear()
                 binding.editTextNameOfService.text?.clear()
                 binding.editTextPeriodOfEachService.text?.clear()
-                Log.d(TAG, service.toString())
                 findNavController().navigate(R.id.action_createServiceFragment_to_serviceFragment)
             } else {
                 displayNoInternerConnection()
             }
         }
-        // Inflate the layout for this fragment
         return binding.root
     }
-
     private fun displayNoInternerConnection() {
         MaterialDialog(requireContext()).show {
             cancelOnTouchOutside(true)

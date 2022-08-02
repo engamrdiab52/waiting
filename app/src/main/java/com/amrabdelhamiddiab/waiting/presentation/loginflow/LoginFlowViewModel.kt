@@ -92,27 +92,6 @@ class LoginFlowViewModel @Inject constructor(
             _emailVerified.postValue(emailVerifiedState())
         }
     }
-    fun removeUserFromPreferences(){
-        preHelper.setUserServiceLoggedIn(false)
-    }
-    fun putUserInPreferences(){
-        preHelper.setUserServiceLoggedIn(true)
-    }
-    fun removeServiceFromPreferences(){
-        val service = Service("", "", "", 0)
-        val userServiceString :String? = gson.toJson(service)
-        if (userServiceString != null) {
-            with(preHelper) { saveServiceForService(userServiceString) }
-        }
-    }
-    fun saveUserIdInPreferences(userId: String){
-        preHelper.saveUserIdForClient(userId)
-    }
-    fun downloadUserId(): String {
-
-        return firebaseAuth.currentUser?.uid ?: ""
-    }
-
     fun downloadServiceV() {
         viewModelScope.launch(Dispatchers.IO) {
             _service.postValue(firebaseAuth.currentUser?.let { downloadService(it.uid) })
@@ -120,22 +99,9 @@ class LoginFlowViewModel @Inject constructor(
     }
 
     fun downloadOrderForService(){
-
         viewModelScope.launch {
             _orderValue.postValue(firebaseAuth.currentUser?.let { downloadOrder(it.uid) })
         }
     }
 
-    fun saveCurrentOrderOfService(currentOrder: String) {
-        preHelper.saveOrderForService(currentOrder)
-    }
-
-    fun saveServiceInPreferences(service: Service?) {
-        if (service != null) {
-            val userServiceString: String? = gson.toJson(service)
-            if (userServiceString != null) {
-                with(preHelper) { saveServiceForService(userServiceString) }
-            }
-        }
-    }
 }

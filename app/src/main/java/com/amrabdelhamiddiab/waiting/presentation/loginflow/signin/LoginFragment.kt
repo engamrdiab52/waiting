@@ -25,15 +25,12 @@ class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
     private var validPassword: Boolean = false
     private var validEmail: Boolean = false
-   // private lateinit var preferenceHelper: IPreferenceHelper
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
-        //i need to inject preference helper not create it
-      //  preferenceHelper = PreferenceManager(requireActivity().applicationContext)
         viewModel.downloading.observe(viewLifecycleOwner) {
             if (it) {
                 binding.loadingIndecatorLogin.visibility = View.VISIBLE
@@ -46,35 +43,18 @@ class LoginFragment : Fragment() {
                 Log.d(TAG, "userSigned in but we still don't know if he verified email")
                 viewModel.isEmailVerified()
                 Log.d(TAG, "EMAIL VERIFIED")
-            } else {
-                viewModel.removeUserFromPreferences()
             }
         }
         viewModel.service.observe(viewLifecycleOwner) {
             if (it != null) {
-                viewModel.saveServiceInPreferences(it)
                 findNavController().navigate(R.id.action_global_serviceFragment)
             } else {
                 findNavController().navigate(R.id.action_global_createServiceFragment)
             }
         }
-        viewModel.orderValue.observe(viewLifecycleOwner){
-            if (it != null){
-                viewModel.saveCurrentOrderOfService(it.order.toString())
-                viewModel.downloadServiceV()
-            }
-        }
         viewModel.emailVerified.observe(viewLifecycleOwner) {
             if (it == true) {
-              //  preferenceHelper.setUserLoggedIn(true)
-                val userId = viewModel.downloadUserId()
-                viewModel.putUserInPreferences()
-                viewModel.saveUserIdInPreferences(userId)
-                //  viewModel.removeServiceFromPreferences()
-                // here we go to create service
-                if (userId.isNotEmpty()) {
-                    viewModel.downloadOrderForService()
-                }
+                viewModel.downloadServiceV()
             } else {
                 if (checkInternetConnection(requireContext())) {
                     Toast.makeText(requireContext(), "Please Verify your Email", Toast.LENGTH_LONG)
@@ -106,7 +86,6 @@ class LoginFragment : Fragment() {
                 }
 
             } else {
-                //may use singleLiveEvent
                 Toast.makeText(requireContext(), "** INVALID CREDENTIALS **", Toast.LENGTH_LONG)
                     .show()
             }

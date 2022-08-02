@@ -39,7 +39,7 @@ class clientFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_client, container, false)
         val userId = viewModel.retrieveUserIdFromPreferences()
         viewModel.notifyWhenOrderChange(userId)
-        viewModel.downloadServiceV()
+        viewModel.downloadServiceV(userId)
         viewModel.retrieveClientNumberFromPreferences()
         binding.cardViewAddMyNumber.setOnClickListener {
             if (checkInternetConnection(requireActivity().applicationContext)) {
@@ -72,10 +72,8 @@ class clientFragment : Fragment() {
                 binding.textViewNameOfService.text = it.name_of_service
                 val text = it.period_per_each_service
                 binding.textViewPeiodForEachVisitor.text = "about $text minuets for each visit"
-                Log.d(TAG, "323232323232323.................... $it")
             } else {
                 displayDialogWrongQrcode()
-                Log.d(TAG, "323232323232323.................... Service is NUll")
             }
 
 

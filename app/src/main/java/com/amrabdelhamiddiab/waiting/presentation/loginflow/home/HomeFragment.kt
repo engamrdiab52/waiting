@@ -24,61 +24,38 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-           binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
-           viewModel.userId.observe(viewLifecycleOwner) {
-               if (it.isNullOrEmpty()) {
-                   findNavController().navigate(R.id.action_homeFragment_to_nested_graph_login)
-               } else {
-                   viewModel.downloadServiceV(it)
-               }
-           }
-           viewModel.service.observe(viewLifecycleOwner) {
-               if (it != null) {
-                   viewModel.saveServiceInPreferences(it)
-                   //  viewModel.downloadOrderForService(it)
-                   viewModel.downloadOrderForService()
-                   findNavController().navigate(R.id.action_homeFragment_to_serviceFragment)
-               } else {
-                   findNavController().navigate(R.id.action_homeFragment_to_createServiceFragment)
-               }
-           }
-           viewModel.orderValue.observe(viewLifecycleOwner) {
-               val orderValueForService = it.order.toString()
-               viewModel.saveOrderForServiceInPreferences(orderValueForService)
-           }
-           binding.buttonService.setOnClickListener {
-               if (checkInternetConnection(requireActivity().applicationContext)) {
-                   if (!viewModel.retrieveUserStateFromPreferences()) {
-                       findNavController().navigate(R.id.action_homeFragment_to_nested_graph_login)
-                   } else {
-                       viewModel.getUserIdFromPreferences()
-                   }
-
-               }else {
-                   displayNoInternerConnection()
-               }
-           }
-           binding.buttonClient.setOnClickListener {
-               if (checkInternetConnection(requireActivity().applicationContext)) {
-                   if (viewModel.getClientInAVisit()) {
-                       findNavController().navigate(R.id.action_homeFragment_to_clientFragment)
-                   } else {
-                       findNavController().navigate(R.id.action_homeFragment_to_scanQrCodeFragment)
-                   }
-               }else {
-                   displayNoInternerConnection()
-               }
-
-
-
-           }
-           return binding.root
-
-
-
-
-        // Inflate the layout for this fragment
-
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
+       //**************************************
+        viewModel.service.observe(viewLifecycleOwner) {
+            if (it != null) {
+                findNavController().navigate(R.id.action_homeFragment_to_serviceFragment)
+            } else {
+                findNavController().navigate(R.id.action_homeFragment_to_createServiceFragment)
+            }
+        }
+        binding.buttonService.setOnClickListener {
+            if (checkInternetConnection(requireActivity().applicationContext)) {
+                if (viewModel.userLoggedIn() == null) {
+                    findNavController().navigate(R.id.action_homeFragment_to_nested_graph_login)
+                } else {
+                    viewModel.downloadServiceV()
+                }
+            } else {
+                displayNoInternerConnection()
+            }
+        }
+        binding.buttonClient.setOnClickListener {
+            if (checkInternetConnection(requireActivity().applicationContext)) {
+                if (viewModel.getClientInAVisit()) {
+                    findNavController().navigate(R.id.action_homeFragment_to_clientFragment)
+                } else {
+                    findNavController().navigate(R.id.action_homeFragment_to_scanQrCodeFragment)
+                }
+            } else {
+                displayNoInternerConnection()
+            }
+        }
+        return binding.root
     }
     private fun displayNoInternerConnection() {
         MaterialDialog(requireContext()).show {
@@ -88,8 +65,3 @@ class HomeFragment : Fragment() {
         }
     }
 }
-/*
-if (checkInternetConnection(requireActivity().applicationContext)) {
-}else {
-    displayNoInternerConnection()
-}*/

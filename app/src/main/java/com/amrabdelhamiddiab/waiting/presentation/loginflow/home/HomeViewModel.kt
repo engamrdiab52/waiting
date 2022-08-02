@@ -4,12 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amrabdelhamiddiab.core.data.IPreferenceHelper
-import com.amrabdelhamiddiab.core.domain.Order
 import com.amrabdelhamiddiab.core.domain.Service
-import com.amrabdelhamiddiab.core.usecases.login.DownloadOrder
 import com.amrabdelhamiddiab.core.usecases.login.DownloadService
 import com.amrabdelhamiddiab.waiting.framework.utilis.SingleLiveEvent
-import com.google.gson.Gson
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,9 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val preHelper: IPreferenceHelper,
-    private val gson: Gson,
     private val downloadService: DownloadService,
-    private val downloadOrder: DownloadOrder
+    private val auth: FirebaseAuth,
 
 ) : ViewModel() {
     private val _userId = SingleLiveEvent<String>()
@@ -30,47 +28,17 @@ class HomeViewModel @Inject constructor(
     private val _service = SingleLiveEvent<Service?>()
     val service: LiveData<Service?> get() = _service
 
-    private val _orderValue = SingleLiveEvent<Order>()
-    val orderValue: LiveData<Order> get() = _orderValue
-
-
-    fun retrieveUserStateFromPreferences(): Boolean {
-        return preHelper.getUserServiceLoggedIn()
-    }
-    fun getUserIdFromPreferences() {
-        _userId.value = preHelper.fetchUserIdForClient()
-    }
-    fun downloadServiceV(userId: String) {
+    fun downloadServiceV() {
         viewModelScope.launch(Dispatchers.IO) {
-            _service.postValue(downloadService(userId))
+            _service.postValue(downloadService(auth.currentUser!!.uid))
         }
     }
-    fun downloadOrderForService(){
-        viewModelScope.launch {
-            val userId = preHelper.fetchUserIdForService()
-            _orderValue.postValue(downloadOrder(userId))
-        }
+
+    fun getClientInAVisit(): Boolean {
+        return preHelper.getIfClientInAVisit()
     }
-    fun saveOrderForServiceInPreferences(oderString: String){
-        preHelper.saveOrderForService(oderString)
-    }
-    fun saveServiceInPreferences(service: Service?) {
-        if (service != null) {
-            val userServiceString: String? = gson.toJson(service)
-            if (userServiceString != null) {
-                with(preHelper) { saveServiceForService(userServiceString) }
-            }
-        }
-    }
-    fun loadClientOrder(): Order? {
-        val orderString =  preHelper.loadOrderForClient()
-        return if (orderString.isNotEmpty()) {
-            gson.fromJson(orderString, Order::class.java)
-        } else {
-            null
-        }
-    }
-    fun getClientInAVisit(): Boolean{
-      return  preHelper.getIfClientInAVisit()
+
+    fun userLoggedIn(): FirebaseUser? {
+        return auth.currentUser
     }
 }

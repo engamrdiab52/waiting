@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -27,33 +28,36 @@ class serviceFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_service, container, false)
+        viewModel.downloadServiceV()
+        viewModel.downloadOrderV()
         viewModel.service.observe(viewLifecycleOwner) {
             binding.textViewCategory.text = it?.category ?: ""
             binding.textViewNameOfService.text = it?.name_of_service ?: ""
             binding.textViewPeriodPerEachService.text = it?.period_per_each_service.toString()
         }
         viewModel.orderValue.observe(viewLifecycleOwner) {
-            binding.textViewCurrentNumber.text = it.order.toString()
-        }
-
-        val service = viewModel.loadServiceFromPreferences()
-        val order = viewModel.retrieveCurrentOrderOfService()
-        binding.textViewCurrentNumber.text = order.ifEmpty { "0" }
-        binding.textViewCategory.text = service?.category ?: ""
-        binding.textViewNameOfService.text = service?.name_of_service ?: ""
-        binding.textViewPeriodPerEachService.text = service?.period_per_each_service.toString()
-        binding.buttonServiceIncrementOrder.setOnClickListener {
-            Log.d(TAG, "INCREMENT")
-        }
-        binding.buttonServiceDecreaseOrder.setOnClickListener {
-
-            if (checkInternetConnection(requireActivity().applicationContext)) {
-                Log.d(TAG, "DECREMENT")
-            }else {
-                displayNoInternerConnection()
+            if (it != null) {
+                binding.textViewCurrentNumber.text = it.order.toString()
+            } else {
+                binding.textViewCurrentNumber.text = "0"
             }
 
+        }
 
+
+        binding.buttonServiceIncrementOrder.setOnClickListener {
+            if (checkInternetConnection(requireActivity().applicationContext)) {
+                Toast.makeText(requireContext(), "Increment", Toast.LENGTH_SHORT).show()
+            } else {
+                displayNoInternerConnection()
+            }
+        }
+        binding.buttonServiceDecreaseOrder.setOnClickListener {
+            if (checkInternetConnection(requireActivity().applicationContext)) {
+                Toast.makeText(requireContext(), "Decrement", Toast.LENGTH_SHORT).show()
+            } else {
+                displayNoInternerConnection()
+            }
         }
 
         //********************************************************************************
@@ -61,7 +65,7 @@ class serviceFragment : Fragment() {
         binding.buttonLogout.setOnClickListener {
             if (checkInternetConnection(requireActivity().applicationContext)) {
                 displayDialogLogOut()
-            }else {
+            } else {
                 displayNoInternerConnection()
             }
 
@@ -70,7 +74,7 @@ class serviceFragment : Fragment() {
         binding.buttonServiceDeleteAccount.setOnClickListener {
             if (checkInternetConnection(requireActivity().applicationContext)) {
                 displayDialogDeleteAccount()
-            }else {
+            } else {
                 displayNoInternerConnection()
             }
 
@@ -84,7 +88,7 @@ class serviceFragment : Fragment() {
 
             if (checkInternetConnection(requireActivity().applicationContext)) {
                 findNavController().navigate(R.id.action_serviceFragment_to_createServiceFragment)
-            }else {
+            } else {
                 displayNoInternerConnection()
             }
 
@@ -93,18 +97,16 @@ class serviceFragment : Fragment() {
         binding.buttonServiceEditOrder.setOnClickListener {
             if (checkInternetConnection(requireActivity().applicationContext)) {
                 displayDialog()
-            }else {
+            } else {
                 displayNoInternerConnection()
             }
 
         }
         binding.buttonServiceResetOrder.setOnClickListener {
-
             if (checkInternetConnection(requireActivity().applicationContext)) {
-                viewModel.saveCurrentOrderOfService("0")
                 binding.textViewCurrentNumber.text = "0"
                 viewModel.changeOrderValueV(0L)
-            }else {
+            } else {
                 displayNoInternerConnection()
             }
 
@@ -119,16 +121,9 @@ class serviceFragment : Fragment() {
         MaterialDialog(requireContext()).show {
             title(R.string.dialog_delete_account_title)
             message(R.string.dialog_delete_account_message)
-            positiveButton(R.string.yes) {
+            positiveButton(R.string.ok) {
                 viewModel.deleteAccountV()
-                viewModel.removeServiceFromPreferences()
-                viewModel.removeUserFromPreferences()
-                // remove order from preferences
-                viewModel.saveCurrentOrderOfService("0")
                 findNavController().navigate(R.id.action_serviceFragment_to_homeFragment)
-            }
-            negativeButton(R.string.no) {
-
             }
         }
     }
@@ -141,7 +136,6 @@ class serviceFragment : Fragment() {
                 maxLength = 3,
                 inputType = InputType.TYPE_CLASS_NUMBER
             ) { _, currentNumber ->
-                viewModel.saveCurrentOrderOfService(currentNumber.toString())
                 binding.textViewCurrentNumber.text = currentNumber.toString()
                 viewModel.changeOrderValueV(currentNumber.toString().toLong())
             }
@@ -154,9 +148,8 @@ class serviceFragment : Fragment() {
             title(R.string.dialog_logout_title)
             message(R.string.dialog_logout_message)
             positiveButton(R.string.yes) {
-                viewModel.removeServiceFromPreferences()
+                Log.d(TAG, "Logged out ")
                 viewModel.signOut()
-                viewModel.removeUserFromPreferences()
                 findNavController().navigate(R.id.action_serviceFragment_to_homeFragment)
             }
             negativeButton(R.string.no) {
@@ -164,6 +157,7 @@ class serviceFragment : Fragment() {
             }
         }
     }
+
     private fun displayNoInternerConnection() {
         MaterialDialog(requireContext()).show {
             cancelOnTouchOutside(true)

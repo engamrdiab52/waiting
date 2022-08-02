@@ -96,9 +96,8 @@ class ClientViewModel @Inject constructor(
         prefeHelper.setIfClientInAVisit(inAVisit)
 
     }
-    fun downloadServiceV() {
+    fun downloadServiceV(userId: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val userId = prefeHelper.fetchUserIdForClient()
             _service.postValue(downloadService(userId))
 
         }
