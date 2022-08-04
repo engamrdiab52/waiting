@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -47,14 +46,18 @@ class serviceFragment : Fragment() {
 
         binding.buttonServiceIncrementOrder.setOnClickListener {
             if (checkInternetConnection(requireActivity().applicationContext)) {
-                Toast.makeText(requireContext(), "Increment", Toast.LENGTH_SHORT).show()
+                val currentOrderValueFromTextView = binding.textViewCurrentNumber.text.toString()
+                viewModel.incrementCurrentOrderValue(currentOrderValueFromTextView)
+                Log.d(TAG, "increment ${binding.textViewCurrentNumber.text}")
             } else {
                 displayNoInternerConnection()
             }
         }
         binding.buttonServiceDecreaseOrder.setOnClickListener {
             if (checkInternetConnection(requireActivity().applicationContext)) {
-                Toast.makeText(requireContext(), "Decrement", Toast.LENGTH_SHORT).show()
+                val currentOrderValueFromTextView = binding.textViewCurrentNumber.text.toString()
+                viewModel.decrementCurrentOrderValue(currentOrderValueFromTextView)
+                Log.d(TAG, "increment ${binding.textViewCurrentNumber.text}")
             } else {
                 displayNoInternerConnection()
             }

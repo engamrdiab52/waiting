@@ -55,7 +55,24 @@ class ServiceViewModel @Inject constructor(
         val order = Order(value)
             viewModelScope.launch {
                 changeOrderValue(auth.currentUser!!.uid, order)
+
             }
+    }
+
+    fun incrementCurrentOrderValue(value: String) {
+        val order = Order(value.toLong()+1)
+        viewModelScope.launch {
+            changeOrderValue(auth.currentUser!!.uid, order)
+            _orderValue.postValue(downloadOrder(auth.currentUser!!.uid))
+        }
+    }
+
+    fun decrementCurrentOrderValue(value: String) {
+        val order = Order(value.toLong() -1)
+        viewModelScope.launch {
+            changeOrderValue(auth.currentUser!!.uid, order)
+            _orderValue.postValue(downloadOrder(auth.currentUser!!.uid))
+        }
     }
 
     fun deleteAccountV() {
