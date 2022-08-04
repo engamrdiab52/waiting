@@ -5,63 +5,74 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Build
 import android.util.Log
-import android.widget.RemoteViews
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import kotlin.random.Random
 
-const val channelId = "notification_channel"
+const val CHANNEL_ID = "notification_channel"
 const val channelName = "com.amrabdelhamiddiab.waiting"
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
-    //generate the notification
+    companion object {
+        var PHARMACYPreferences: SharedPreferences? = null
 
-    //attach the created notification to the custom layout
-
-    //show the notification
-
-    override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        if (remoteMessage.notification != null) {
-            Log.d(TAG, "onMessageReceived ...........................called")
-          //  generateNotification(remoteMessage.notification!!.title, remoteMessage.notification!!.body)
-        }
+        var token: String?
+            get() {
+                return PHARMACYPreferences?.getString("token", "")
+            }
+            set(value) {
+                PHARMACYPreferences?.edit()?.putString("token", value)?.apply()
+            }
     }
 
-    private fun getRemoteView(title: String, message: String): RemoteViews {
-        val remoteView = RemoteViews("com.amrabdelhamiddiab.waiting", R.layout.notification_layout)
-        remoteView.setTextViewText(R.id.notification_title, title)
-        remoteView.setTextViewText(R.id.notification_message, message)
-        remoteView.setImageViewResource(R.id.notification_logo, R.drawable.waiting_logo)
-        return remoteView
+    override fun onNewToken(newToken: String) {
+        super.onNewToken(newToken)
+        token = newToken
+        Log.d(TAG,"3333333333333333333333" + token.toString())
     }
 
-    private fun generateNotification(title: String?, message: String?) {
-        val intent = Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT)
+    override fun onMessageReceived(message: RemoteMessage) {
+        super.onMessageReceived(message)
 
-        //Channel ID, Channel Name
-        var builder: NotificationCompat.Builder =
-            NotificationCompat.Builder(applicationContext, channelId)
-                .setSmallIcon(R.drawable.waiting_logo)
-                .setAutoCancel(true)
-                .setVibrate(longArrayOf(1000, 1000, 1000, 1000))
-                .setOnlyAlertOnce(true)
-                .setContentIntent(pendingIntent)
-        builder = builder.setContent(title?.let { message?.let { it1 -> getRemoteView(it, it1) } })
+        val intent = Intent(this, MainActivity::class.java)
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationID = Random.nextInt()
 
-        val notificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationChannel =
-                NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
-            notificationManager.createNotificationChannel(notificationChannel)
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel(notificationManager)
         }
 
-        notificationManager.notify(0, builder.build())
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setContentTitle(message.data["title"])
+            .setContentText(message.data["message"])
+            .setSmallIcon(R.drawable.ic_android_black_24dp)
+            .setAutoCancel(true)
+            .setContentIntent(pendingIntent)
+            .build()
+        notificationManager.notify(notificationID, notification)
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createNotificationChannel(notificationManager: NotificationManager) {
+        val channelName = "channelName"
+        val channel = NotificationChannel(CHANNEL_ID, channelName,
+            NotificationManager.IMPORTANCE_HIGH
+        ).apply {
+            description = "My channel description"
+            enableLights(true)
+            lightColor = Color.GREEN
+        }
+        notificationManager.createNotificationChannel(channel)
+    }
 }

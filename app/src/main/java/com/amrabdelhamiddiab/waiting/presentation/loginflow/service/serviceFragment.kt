@@ -12,11 +12,19 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
+import com.amrabdelhamiddiab.core.domain.NotificationData
+import com.amrabdelhamiddiab.core.domain.PushNotification
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
+import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TOPIC
 import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentServiceBinding
+import com.amrabdelhamiddiab.waiting.framework.firebase.fcm.FcmService
 import com.amrabdelhamiddiab.waiting.framework.utilis.checkInternetConnection
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class serviceFragment : Fragment() {
@@ -49,6 +57,16 @@ class serviceFragment : Fragment() {
                 val currentOrderValueFromTextView = binding.textViewCurrentNumber.text.toString()
                 viewModel.incrementCurrentOrderValue(currentOrderValueFromTextView)
                 Log.d(TAG, "increment ${binding.textViewCurrentNumber.text}")
+
+                PushNotification(
+                    NotificationData(
+                        binding.textViewCurrentNumber.text.toString(),
+                        "you are the after next"
+                    ), TOPIC
+                ).also {
+                    sendNotification(it)
+                }
+
             } else {
                 displayNoInternerConnection()
             }
@@ -119,6 +137,20 @@ class serviceFragment : Fragment() {
 
         return binding.root
     }
+
+    private fun sendNotification(notification: PushNotification) =
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = FcmService.create().postNotification(notification)
+                if (response.isSuccessful) {
+                    Log.d(TAG, "Response: ${Gson().toJson(response.body())}")
+                } else {
+                    Log.e(TAG, response.errorBody().toString())
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, e.toString())
+            }
+        }
 
     private fun displayDialogDeleteAccount() {
         MaterialDialog(requireContext()).show {
