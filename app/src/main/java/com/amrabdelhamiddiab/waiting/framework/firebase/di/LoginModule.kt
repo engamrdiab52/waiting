@@ -148,4 +148,16 @@ class LoginModule {
     fun provideDownloadOrder(repositoryDownloadOrder: RepositoryDownloadOrder): DownloadOrder {
         return DownloadOrder(repositoryDownloadOrder)
     }
+
+
+    @Provides
+    fun provideRepositoryUploadClientToken(iUploadClientToken: IUploadClientToken): RepositoryUploadClientToken {
+        return RepositoryUploadClientToken(iUploadClientToken)
+    }
+
+    @Provides
+    fun provideUploadClientToken(repositoryUploadClientToken: RepositoryUploadClientToken): UploadClientToken {
+        return UploadClientToken(repositoryUploadClientToken)
+    }
+
 }

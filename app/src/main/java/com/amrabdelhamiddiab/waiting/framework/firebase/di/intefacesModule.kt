@@ -60,4 +60,7 @@ abstract class intefacesModule {
     @Binds
     abstract fun bindDownloadOrder(downloadOrderImpl: DownloadOrderImpl): IDownloadOrder
 
+    @Binds
+    abstract fun bindUploadClientToken(uploadClientTokenImpl: UploadClientTokenImpl) :IUploadClientToken
+
 }

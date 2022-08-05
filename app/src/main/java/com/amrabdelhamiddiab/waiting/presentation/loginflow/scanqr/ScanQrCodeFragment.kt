@@ -25,6 +25,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
+import com.amrabdelhamiddiab.waiting.MyFirebaseMessagingService
 import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentScanQrCodeBinding
 import com.amrabdelhamiddiab.waiting.framework.utilis.MyImageAnalyzer
@@ -94,9 +95,11 @@ class ScanQrCodeFragment : Fragment() {
         }
         viewModel.service.observe(viewLifecycleOwner){
             if (it != null){
+                val userId = viewModel.userId.value!!
                 // here we are sure it os right QR CODE and userId with us, let's save it in preferences
+                viewModel.uploadMyClientToken(userId, MyFirebaseMessagingService.token.toString())
                 viewModel.sayIfClientIsInAVisit(true)
-                viewModel.saveUserIdInPreferences(viewModel.userId.value!!)
+                viewModel.saveUserIdInPreferences(userId)
                 viewModel.navigateToClientFragment()
             }else {
                 Toast.makeText(requireContext(), "Wrong QR CODE", Toast.LENGTH_SHORT).show()
