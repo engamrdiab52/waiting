@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -18,23 +19,37 @@ import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TOPIC
 import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentServiceBinding
-import com.amrabdelhamiddiab.waiting.framework.firebase.fcm.FcmService
 import com.amrabdelhamiddiab.waiting.framework.utilis.checkInternetConnection
-import com.google.gson.Gson
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.ktx.messaging
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class serviceFragment : Fragment() {
     private lateinit var binding: FragmentServiceBinding
     private val viewModel by viewModels<ServiceViewModel>()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_service, container, false)
+        //    FirebaseMessaging.getInstance().subscribeToTopic()
+        val uidString = "/" + viewModel.uid + "/"
+        Log.d(TAG, uidString + "2222222222222222222222222222222222222")
+        Firebase.messaging.subscribeToTopic("/RNXacBHJQRPtPZX0UA0BvFeAOev2/")
+            .addOnCompleteListener { task ->
+                var msg = "Subscribed"
+                if (!task.isSuccessful) {
+                    msg = "Subscribe failed"
+                }
+                Log.d(TAG, msg)
+                Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
+            }
         viewModel.downloadServiceV()
         viewModel.downloadOrderV()
         viewModel.service.observe(viewLifecycleOwner) {
@@ -64,7 +79,7 @@ class serviceFragment : Fragment() {
                         "you are the after next"
                     ), TOPIC
                 ).also {
-                    sendNotification(it)
+                    viewModel.sendNotification(it)
                 }
 
             } else {
@@ -137,20 +152,6 @@ class serviceFragment : Fragment() {
 
         return binding.root
     }
-
-    private fun sendNotification(notification: PushNotification) =
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response = FcmService.create().postNotification(notification)
-                if (response.isSuccessful) {
-                    Log.d(TAG, "Response: ${Gson().toJson(response.body())}")
-                } else {
-                    Log.e(TAG, response.errorBody().toString())
-                }
-            } catch (e: Exception) {
-                Log.e(TAG, e.toString())
-            }
-        }
 
     private fun displayDialogDeleteAccount() {
         MaterialDialog(requireContext()).show {

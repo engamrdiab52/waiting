@@ -88,9 +88,6 @@ class ClientViewModel @Inject constructor(
     fun retrieveUserIdFromPreferences(): String {
         return prefeHelper.fetchUserIdForClient()
     }
-    /* fun resetUserIdForClientInPreferences(){
-         prefeHelper.saveUserIdForClient("-1001")
-     }*/
 
     fun sayIfClientIsInAVisit(inAVisit: Boolean){
         prefeHelper.setIfClientInAVisit(inAVisit)

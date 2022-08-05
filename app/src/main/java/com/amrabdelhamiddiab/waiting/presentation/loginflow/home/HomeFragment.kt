@@ -25,6 +25,8 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
+      //  FirebaseMessaging.getInstance().subscribeToTopic(viewModel.userLoggedIn()!!.uid)
+
        //**************************************
         viewModel.service.observe(viewLifecycleOwner) {
             if (it != null) {
