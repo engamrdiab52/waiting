@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -16,12 +15,9 @@ import com.afollestad.materialdialogs.input.input
 import com.amrabdelhamiddiab.core.domain.NotificationData
 import com.amrabdelhamiddiab.core.domain.PushNotification
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
-import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TOPIC
 import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentServiceBinding
 import com.amrabdelhamiddiab.waiting.framework.utilis.checkInternetConnection
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.ktx.messaging
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -41,7 +37,7 @@ class serviceFragment : Fragment() {
         //    FirebaseMessaging.getInstance().subscribeToTopic()
         val uidString = "/" + viewModel.uid + "/"
         Log.d(TAG, uidString + "2222222222222222222222222222222222222")
-        Firebase.messaging.subscribeToTopic("/RNXacBHJQRPtPZX0UA0BvFeAOev2/")
+/*        Firebase.messaging.subscribeToTopic("/RNXacBHJQRPtPZX0UA0BvFeAOev2/")
             .addOnCompleteListener { task ->
                 var msg = "Subscribed"
                 if (!task.isSuccessful) {
@@ -49,7 +45,7 @@ class serviceFragment : Fragment() {
                 }
                 Log.d(TAG, msg)
                 Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
-            }
+            }*/
         viewModel.downloadServiceV()
         viewModel.downloadOrderV()
         viewModel.service.observe(viewLifecycleOwner) {
@@ -77,7 +73,7 @@ class serviceFragment : Fragment() {
                     NotificationData(
                         binding.textViewCurrentNumber.text.toString(),
                         "you are the after next"
-                    ), TOPIC
+                    ), "dPgBP0evQc6c3EnKs03OCB:APA91bFhAPyf8sr1Y0vh_TQIZwneySd_3d2pIoEj-Fqtf9mx2Wx0whq45ZoKXGTAdVV0N9exyy-VTsYW9KwEexSeE1PPjVAIMdL5l26tHeSkaGSmgtYGXEHIzTfL6a2WidZR9SJhCqC1"
                 ).also {
                     viewModel.sendNotification(it)
                 }

@@ -3,8 +3,6 @@ package com.amrabdelhamiddiab.waiting
 import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.ktx.messaging
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -16,7 +14,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Firebase.messaging.isAutoInitEnabled = true
+       // Firebase.messaging.isAutoInitEnabled = true
         MyFirebaseMessagingService.sharedPref = getSharedPreferences("sharedPrefToken", Context.MODE_PRIVATE)
 
     //    FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
