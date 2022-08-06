@@ -34,6 +34,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 
+
 @AndroidEntryPoint
 class QRcodeFragment : Fragment() {
 
@@ -79,7 +80,7 @@ class QRcodeFragment : Fragment() {
         }
 
         askForExternalStoragePermission()
-        val userId = viewModel.retrieveUserIdFromPreferences()
+        val userId = viewModel.userId
         if ( userId.isNotEmpty()){
             val encoder = BarcodeEncoder()
             bitmap = encoder.encodeBitmap(userId, BarcodeFormat.QR_CODE, 400, 400)

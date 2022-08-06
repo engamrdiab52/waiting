@@ -160,4 +160,14 @@ class LoginModule {
         return UploadClientToken(repositoryUploadClientToken)
     }
 
+    @Provides
+    fun provideDownloadToken(repositoryDownloadToken: RepositoryDownloadToken): DownloadToken {
+        return DownloadToken(repositoryDownloadToken)
+    }
+
+    @Provides
+    fun provideRepositoryDownloadToken(iDownloadToken: IDownloadToken): RepositoryDownloadToken {
+        return RepositoryDownloadToken(iDownloadToken)
+    }
+
 }

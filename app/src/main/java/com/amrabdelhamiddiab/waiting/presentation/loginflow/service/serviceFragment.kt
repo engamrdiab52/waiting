@@ -61,22 +61,30 @@ class serviceFragment : Fragment() {
             }
 
         }
+        viewModel.tokenDownloaded.observe(viewLifecycleOwner) {
+            if (it != null){
+                Log.d(TAG, "tokenDownloaded................TRUE")
+                PushNotification(
+                    NotificationData(
+                        binding.textViewCurrentNumber.text.toString(),
+                        "you are the after next"
+                    ),
+                    it.token.toString()
+                ).also { pushNotification ->
+                    viewModel.sendNotification(pushNotification)
+                }
+            }else {
+                Log.d(TAG, "tokenDownloaded................false")
+            }
 
+        }
 
         binding.buttonServiceIncrementOrder.setOnClickListener {
             if (checkInternetConnection(requireActivity().applicationContext)) {
                 val currentOrderValueFromTextView = binding.textViewCurrentNumber.text.toString()
                 viewModel.incrementCurrentOrderValue(currentOrderValueFromTextView)
                 Log.d(TAG, "increment ${binding.textViewCurrentNumber.text}")
-
-                PushNotification(
-                    NotificationData(
-                        binding.textViewCurrentNumber.text.toString(),
-                        "you are the after next"
-                    ), "dPgBP0evQc6c3EnKs03OCB:APA91bFhAPyf8sr1Y0vh_TQIZwneySd_3d2pIoEj-Fqtf9mx2Wx0whq45ZoKXGTAdVV0N9exyy-VTsYW9KwEexSeE1PPjVAIMdL5l26tHeSkaGSmgtYGXEHIzTfL6a2WidZR9SJhCqC1"
-                ).also {
-                    viewModel.sendNotification(it)
-                }
+                viewModel.downloadTokenV()
 
             } else {
                 displayNoInternerConnection()

@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import com.amrabdelhamiddiab.core.data.login.IUploadClientToken
+import com.amrabdelhamiddiab.core.domain.Token
 import com.amrabdelhamiddiab.waiting.MainActivity
 import com.amrabdelhamiddiab.waiting.framework.utilis.checkInternetConnection
 import com.google.firebase.database.DatabaseReference
@@ -16,7 +17,7 @@ class UploadClientTokenImpl @Inject constructor(
     @ApplicationContext private val context: Context
 ) :
     IUploadClientToken {
-    override suspend fun uploadTokenValue(userId: String, token: String): Boolean {
+    override suspend fun uploadTokenValue(userId: String, token: Token): Boolean {
         return if (checkInternetConnection(context)) {
             try {
                 databaseReference.child("tokens").child(userId).setValue(token).await()

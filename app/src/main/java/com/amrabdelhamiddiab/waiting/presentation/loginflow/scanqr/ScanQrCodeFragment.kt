@@ -24,6 +24,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
+import com.amrabdelhamiddiab.core.domain.Token
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.MyFirebaseMessagingService
 import com.amrabdelhamiddiab.waiting.R
@@ -97,7 +98,7 @@ class ScanQrCodeFragment : Fragment() {
             if (it != null){
                 val userId = viewModel.userId.value!!
                 // here we are sure it os right QR CODE and userId with us, let's save it in preferences
-                viewModel.uploadMyClientToken(userId, MyFirebaseMessagingService.token.toString())
+                viewModel.uploadMyClientToken(userId,Token(MyFirebaseMessagingService.token.toString()) )
                 viewModel.sayIfClientIsInAVisit(true)
                 viewModel.saveUserIdInPreferences(userId)
                 viewModel.navigateToClientFragment()

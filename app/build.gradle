@@ -52,11 +52,11 @@ dependencies {
     //Gson
     implementation 'com.google.code.gson:gson:2.9.0'
     //Firebase
-    implementation 'com.google.firebase:firebase-auth-ktx:21.0.6'
+    implementation 'com.google.firebase:firebase-auth-ktx:21.0.7'
     implementation 'com.google.firebase:firebase-storage-ktx:20.0.1'
     implementation 'com.google.firebase:firebase-common-ktx:20.1.1'
     implementation 'com.google.firebase:firebase-database-ktx:20.0.5'
-    implementation 'com.google.firebase:firebase-messaging-ktx:23.0.6'
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.0.7'
     implementation 'com.google.firebase:firebase-core:21.1.0'
     // Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1"
@@ -68,11 +68,11 @@ dependencies {
     // activity, fragment
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-alpha01"
     //ViewModels delegation extensions for activity
-    implementation 'androidx.activity:activity-ktx:1.5.0'
+    implementation 'androidx.activity:activity-ktx:1.5.1'
     //LifeCycle
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-alpha01")
-    implementation 'androidx.lifecycle:lifecycle-common:2.5.0'
-    implementation 'androidx.lifecycle:lifecycle-runtime:2.5.0'
+    implementation 'androidx.lifecycle:lifecycle-common:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime:2.5.1'
 
     //Hilt
     kapt "com.google.dagger:hilt-android-compiler:2.42"
@@ -81,8 +81,8 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")
 
     // Kotlin  navigation
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.0'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.5.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.1'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.1'
     //  - livedata
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.0-alpha01"
     //Glide
@@ -95,18 +95,18 @@ dependencies {
     //QR Code Generator
     implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
     // CameraX core library using the camera2 implementation
-    def camerax_version = "1.2.0-alpha03"
+    def camerax_version = "1.2.0-alpha04"
     // The following line is optional, as the core library is included indirectly by camera-camera2
-    implementation("androidx.camera:camera-core:${camerax_version}")
-    implementation("androidx.camera:camera-camera2:${camerax_version}")
+    implementation("androidx.camera:camera-core:1.2.0-alpha04")
+    implementation("androidx.camera:camera-camera2:1.2.0-alpha04")
     // If you want to additionally use the CameraX Lifecycle library
-    implementation("androidx.camera:camera-lifecycle:${camerax_version}")
+    implementation("androidx.camera:camera-lifecycle:1.2.0-alpha04")
     // If you want to additionally use the CameraX View class
-    implementation("androidx.camera:camera-view:${camerax_version}")
+    implementation("androidx.camera:camera-view:1.2.0-alpha04")
     // If you want to additionally add CameraX ML Kit Vision Integration
-    implementation("androidx.camera:camera-mlkit-vision:${camerax_version}")
+    implementation("androidx.camera:camera-mlkit-vision:1.2.0-alpha04")
     // If you want to additionally use the CameraX Extensions library
-    implementation("androidx.camera:camera-extensions:${camerax_version}")
+    implementation("androidx.camera:camera-extensions:1.2.0-alpha04")
     // Dialog
     implementation 'com.afollestad.material-dialogs:core:3.3.0'
     implementation 'com.afollestad.material-dialogs:input:3.3.0'

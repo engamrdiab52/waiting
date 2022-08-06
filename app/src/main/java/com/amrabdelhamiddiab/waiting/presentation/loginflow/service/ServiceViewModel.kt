@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.amrabdelhamiddiab.core.domain.Order
 import com.amrabdelhamiddiab.core.domain.PushNotification
 import com.amrabdelhamiddiab.core.domain.Service
+import com.amrabdelhamiddiab.core.domain.Token
 import com.amrabdelhamiddiab.core.usecases.login.*
 import com.amrabdelhamiddiab.waiting.MainActivity
 import com.amrabdelhamiddiab.waiting.framework.firebase.fcm.FcmService
@@ -29,7 +30,8 @@ class ServiceViewModel @Inject constructor(
     private val changeOrderValue: ChangeOrderValue,
     private val downloadOrder: DownloadOrder,
     private val fcmService: FcmService,
-    private val gson: Gson
+    private val gson: Gson,
+    private val downloadToken: DownloadToken
 ) : ViewModel() {
 
     private val _orderValue = SingleLiveEvent<Order?>()
@@ -38,6 +40,9 @@ class ServiceViewModel @Inject constructor(
          get() {
            return  auth.currentUser!!.uid
          }
+
+    private val _tokenDownloaded = SingleLiveEvent<Token?>()
+    val tokenDownloaded: LiveData<Token?> get() = _tokenDownloaded
 
     private val _service = SingleLiveEvent<Service?>()
     val service: LiveData<Service?> get() = _service
@@ -58,6 +63,13 @@ class ServiceViewModel @Inject constructor(
     fun downloadOrderV() {
         viewModelScope.launch(Dispatchers.IO) {
             _orderValue.postValue(downloadOrder(auth.currentUser!!.uid))
+
+        }
+    }
+
+    fun downloadTokenV() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _tokenDownloaded.postValue(downloadToken(auth.currentUser!!.uid))
 
         }
     }

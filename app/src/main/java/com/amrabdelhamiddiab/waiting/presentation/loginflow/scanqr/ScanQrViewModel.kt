@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.amrabdelhamiddiab.core.data.IPreferenceHelper
 import com.amrabdelhamiddiab.core.domain.Order
 import com.amrabdelhamiddiab.core.domain.Service
+import com.amrabdelhamiddiab.core.domain.Token
 import com.amrabdelhamiddiab.core.usecases.login.DownloadService
 import com.amrabdelhamiddiab.core.usecases.login.UploadClientToken
 import com.amrabdelhamiddiab.waiting.framework.utilis.SingleLiveEvent
@@ -30,8 +31,8 @@ class ScanQrViewModel @Inject constructor(
     private val _userId = SingleLiveEvent<String?>()
     val userId: LiveData<String?> get() = _userId
 
-    private val _tokenUploaded = SingleLiveEvent<Boolean>()
-    val tokenUploaded: LiveData<Boolean> get() = _tokenUploaded
+    private val _tokenUploaded = SingleLiveEvent<Boolean?>()
+    val tokenUploaded: LiveData<Boolean?> get() = _tokenUploaded
 
 
     private val _navigateOrder = SingleLiveEvent<Boolean>()
@@ -66,7 +67,7 @@ class ScanQrViewModel @Inject constructor(
     fun sayIfClientIsInAVisit(inAVisit: Boolean){
         prefeHelper.setIfClientInAVisit(inAVisit)
     }
-    fun uploadMyClientToken(userId: String , token : String) {
+    fun uploadMyClientToken(userId: String , token : Token) {
 
         viewModelScope.launch(Dispatchers.IO) {
             _tokenUploaded.postValue( uploadClientToken(userId , token))
