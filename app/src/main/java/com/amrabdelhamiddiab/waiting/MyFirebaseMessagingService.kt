@@ -10,16 +10,24 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.media.RingtoneManager
 import android.os.Build
+import android.speech.tts.TextToSpeech
+import android.speech.tts.Voice
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.amrabdelhamiddiab.core.domain.PushNotification
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import java.util.*
 
 
 class MyFirebaseMessagingService  :
-    FirebaseMessagingService() {
+    FirebaseMessagingService(),TextToSpeech.OnInitListener {
+    private  var tts: TextToSpeech? = TextToSpeech(this, this)
+    private val local = Locale("ar")
+    val voiceName = local.toLanguageTag()
+    val voice = Voice(voiceName, local, Voice.QUALITY_HIGH, Voice.LATENCY_HIGH, false, null)
 
     override fun onNewToken(newToken: String) {
         super.onNewToken(newToken)
@@ -31,7 +39,15 @@ class MyFirebaseMessagingService  :
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
+        val notificationData = message.data
+        val toVoice = notificationData["title"] as String
         createNotification(message)
+        createVoice(toVoice)
+    }
+
+    private fun createVoice(toVoice: String) {
+        tts?.voice = voice
+        tts?.speak(toVoice, TextToSpeech.QUEUE_FLUSH, null, "")
     }
 
     //here i can pass the importance dependence on a condition on the value i eil receive from sender (service)
@@ -64,18 +80,16 @@ class MyFirebaseMessagingService  :
             .build()
 
         with(NotificationManagerCompat.from(applicationContext)) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val channel = NotificationChannel(
-                    CHANNEL_ID, CHANNEL_NAME,
-                    NotificationManager.IMPORTANCE_HIGH
-                ).apply {
-                    description = "My channel description"
-                    enableLights(true)
-                    lightColor = Color.GREEN
-                }
-                channel.lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
-                createNotificationChannel(channel)
+            val channel = NotificationChannel(
+                CHANNEL_ID, CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_LOW
+            ).apply {
+                description = "My channel description"
+                enableLights(true)
+                lightColor = Color.GREEN
             }
+            channel.lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
+            createNotificationChannel(channel)
             notify(NOTIFICATION_ID, notification)
         }
        // playNotificationSound(applicationContext)
@@ -106,5 +120,16 @@ class MyFirebaseMessagingService  :
             set(value) {
                 sharedPref?.edit()?.putString("token", value)?.apply()
             }
+    }
+
+    override fun onInit(status: Int) {
+        if (status == TextToSpeech.SUCCESS) {
+            val result = tts?.setLanguage(local)
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Log.e("TTS", "The Language not supported!")
+            } else {
+             Log.d(TAG, "TextToSpeech.Failed")
+            }
+        }
     }
 }
