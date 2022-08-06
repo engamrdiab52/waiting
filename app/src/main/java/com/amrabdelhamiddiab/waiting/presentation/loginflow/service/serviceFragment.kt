@@ -62,18 +62,19 @@ class serviceFragment : Fragment() {
 
         }
         viewModel.tokenDownloaded.observe(viewLifecycleOwner) {
-            if (it != null){
+            if (/*it != null*/ true) {
                 Log.d(TAG, "tokenDownloaded................TRUE")
                 PushNotification(
                     NotificationData(
                         binding.textViewCurrentNumber.text.toString(),
                         "you are the after next"
                     ),
-                    it.token.toString()
+                    /*  it.token*/
+                    "ffOWOI2gQTmVp8p9WreGWX:APA91bEJLDSAn_tdFx8_VpuSVvj-UF1BVU6FHzdNuJxv0FtsLM5CUTGRT3chSuChRXMUMFhuEMtVbcq7af60AYABlX_SOGrXBDbvujuRCYPuCEy_yJX5DMTsGfXNTX7pJC2ucp3fYnVD"
                 ).also { pushNotification ->
                     viewModel.sendNotification(pushNotification)
                 }
-            }else {
+            } else {
                 Log.d(TAG, "tokenDownloaded................false")
             }
 

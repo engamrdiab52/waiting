@@ -9,46 +9,41 @@ import android.content.SharedPreferences
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.media.RingtoneManager
-import android.os.Build
-import android.speech.tts.TextToSpeech
-import android.speech.tts.Voice
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.amrabdelhamiddiab.core.domain.PushNotification
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
+import com.amrabdelhamiddiab.waiting.framework.firebase.login.TtsProviderFactory
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import java.util.*
 
 
-class MyFirebaseMessagingService  :
-    FirebaseMessagingService(),TextToSpeech.OnInitListener {
-    private  var tts: TextToSpeech? = TextToSpeech(this, this)
-    private val local = Locale("ar")
-    val voiceName = local.toLanguageTag()
-    val voice = Voice(voiceName, local, Voice.QUALITY_HIGH, Voice.LATENCY_HIGH, false, null)
+class MyFirebaseMessagingService :
+    FirebaseMessagingService() {
 
     override fun onNewToken(newToken: String) {
         super.onNewToken(newToken)
         token = newToken
-      //  Firebase.messaging.subscribeToTopic(TOPIC)
+        //  Firebase.messaging.subscribeToTopic(TOPIC)
         Log.d(TAG, "3333333333333333333333" + token.toString())
     }
 
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
+        createNotification(message)
         val notificationData = message.data
         val toVoice = notificationData["title"] as String
-        createNotification(message)
-        createVoice(toVoice)
+        val ttsProviderImpl = TtsProviderFactory.instance
+        if (ttsProviderImpl != null) {
+            ttsProviderImpl.init(applicationContext);
+            ttsProviderImpl.say(toVoice)
+        }
+
+
+        //  createVoice(toVoice)
     }
 
-    private fun createVoice(toVoice: String) {
-        tts?.voice = voice
-        tts?.speak(toVoice, TextToSpeech.QUEUE_FLUSH, null, "")
-    }
 
     //here i can pass the importance dependence on a condition on the value i eil receive from sender (service)
     private fun createNotification(message: RemoteMessage) {
@@ -92,7 +87,7 @@ class MyFirebaseMessagingService  :
             createNotificationChannel(channel)
             notify(NOTIFICATION_ID, notification)
         }
-       // playNotificationSound(applicationContext)
+        // playNotificationSound(applicationContext)
     }
 
     private fun playNotificationSound(context: Context) {
@@ -122,14 +117,4 @@ class MyFirebaseMessagingService  :
             }
     }
 
-    override fun onInit(status: Int) {
-        if (status == TextToSpeech.SUCCESS) {
-            val result = tts?.setLanguage(local)
-            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                Log.e("TTS", "The Language not supported!")
-            } else {
-             Log.d(TAG, "TextToSpeech.Failed")
-            }
-        }
-    }
 }
