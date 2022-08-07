@@ -1,5 +1,6 @@
 package com.amrabdelhamiddiab.waiting.presentation.loginflow.service
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
@@ -37,15 +38,6 @@ class serviceFragment : Fragment() {
         //    FirebaseMessaging.getInstance().subscribeToTopic()
         val uidString = "/" + viewModel.uid + "/"
         Log.d(TAG, uidString + "2222222222222222222222222222222222222")
-/*        Firebase.messaging.subscribeToTopic("/RNXacBHJQRPtPZX0UA0BvFeAOev2/")
-            .addOnCompleteListener { task ->
-                var msg = "Subscribed"
-                if (!task.isSuccessful) {
-                    msg = "Subscribe failed"
-                }
-                Log.d(TAG, msg)
-                Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
-            }*/
         viewModel.downloadServiceV()
         viewModel.downloadOrderV()
         viewModel.service.observe(viewLifecycleOwner) {
@@ -62,15 +54,15 @@ class serviceFragment : Fragment() {
 
         }
         viewModel.tokenDownloaded.observe(viewLifecycleOwner) {
-            if (/*it != null*/ true) {
+            if (/*it != null*/true) {
                 Log.d(TAG, "tokenDownloaded................TRUE")
                 PushNotification(
                     NotificationData(
                         binding.textViewCurrentNumber.text.toString(),
                         "you are the after next"
                     ),
-                    /*  it.token*/
-                    "ffOWOI2gQTmVp8p9WreGWX:APA91bEJLDSAn_tdFx8_VpuSVvj-UF1BVU6FHzdNuJxv0FtsLM5CUTGRT3chSuChRXMUMFhuEMtVbcq7af60AYABlX_SOGrXBDbvujuRCYPuCEy_yJX5DMTsGfXNTX7pJC2ucp3fYnVD"
+                     /* it.token*/
+"dd-FwQFhSAqkTm9SuKBAqN:APA91bHwnnbhoxn_APTV0glbwAjpBCimA8R3N109ibg_aB3u9ylqrA_8W3EtakSwkSzktmSdNbCouXx2_Gf1aIyKfWqXXqrl6NskedR6GvOJdWEmU-OHbmhzKISSdgsl46V7NYyPnwpa"
                 ).also { pushNotification ->
                     viewModel.sendNotification(pushNotification)
                 }
@@ -169,6 +161,7 @@ class serviceFragment : Fragment() {
         }
     }
 
+    @SuppressLint("CheckResult")
     private fun displayDialog() {
         MaterialDialog(requireContext()).show {
             input(

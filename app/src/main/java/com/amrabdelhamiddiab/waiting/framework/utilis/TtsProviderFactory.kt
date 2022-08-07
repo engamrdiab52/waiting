@@ -1,11 +1,11 @@
-package com.amrabdelhamiddiab.waiting.framework.firebase.login
+package com.amrabdelhamiddiab.waiting.framework.utilis
 
 import android.content.Context
 
 
 abstract class TtsProviderFactory {
     abstract fun say(sayThis: String?)
-    abstract fun init(context: Context?)
+    abstract fun init(context: Context?, toVoice: String)
     abstract fun shutdown()
 
     companion object {

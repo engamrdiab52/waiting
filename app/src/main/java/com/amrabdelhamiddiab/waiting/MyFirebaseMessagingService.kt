@@ -13,7 +13,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
-import com.amrabdelhamiddiab.waiting.framework.firebase.login.TtsProviderFactory
+import com.amrabdelhamiddiab.waiting.framework.utilis.TtsProviderFactory
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
@@ -34,10 +34,17 @@ class MyFirebaseMessagingService :
         createNotification(message)
         val notificationData = message.data
         val toVoice = notificationData["title"] as String
+        Log.d(TAG, "121212121212121212121........"  + toVoice)
+        // i guarantee here one instance
         val ttsProviderImpl = TtsProviderFactory.instance
         if (ttsProviderImpl != null) {
-            ttsProviderImpl.init(applicationContext);
-            ttsProviderImpl.say(toVoice)
+            Log.d(TAG, "----------------------ttsProviderImpl != null---------------")
+            with(ttsProviderImpl) {
+
+                init(applicationContext, toVoice)
+              //  say(toVoice)
+               // shutdown()
+            }
         }
 
 
