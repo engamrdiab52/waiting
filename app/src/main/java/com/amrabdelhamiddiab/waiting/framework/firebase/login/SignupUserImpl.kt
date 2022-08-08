@@ -20,19 +20,12 @@ class SignupUserImpl @Inject constructor(
     override suspend fun signupUser(email: String, password: String): Boolean {
         return try {
             val authResult = mAuth.createUserWithEmailAndPassword(email, password).await()
-            isUserCreated = authResult.user != null
-            //    mAuth.currentUser?.sendEmailVerification()?.await()
-            //    isEmailVerificationSent = true
-            Log.d(TAG, authResult.toString())
-            Log.d(TAG, "SignUpUserImpl  : email sent")
-            isUserCreated
+            authResult.user != null
         } catch (ex: Exception) {
             withContext(Dispatchers.Main) {
                 Toast.makeText(context, ex.message, Toast.LENGTH_LONG).show()
             }
-            isUserCreated = false
-            //    isEmailVerificationSent = false
-            isUserCreated
+            false
         }
     }
 }
