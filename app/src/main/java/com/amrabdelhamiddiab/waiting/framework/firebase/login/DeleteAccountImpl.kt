@@ -16,15 +16,13 @@ class DeleteAccountImpl @Inject constructor(
     @ApplicationContext private val context: Context
 ) : IDeleteAccount {
     override suspend fun deleteAccount() {
-
         try {
-            mAuth.currentUser?.delete()
-            Log.d(TAG, "Delete current user" + FirebaseAuth.getInstance().currentUser.toString())
+           // here i use assert to throw exception if it null
+            mAuth.currentUser!!.delete()
         } catch (e: Exception) {
             withContext(Dispatchers.Main) {
                 Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
             }
-            Log.d(TAG, " error in mainActivity  " + e.message.toString())
         }
     }
 }

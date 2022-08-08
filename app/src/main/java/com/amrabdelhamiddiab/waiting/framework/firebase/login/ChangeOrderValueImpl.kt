@@ -28,15 +28,10 @@ class ChangeOrderValueImpl @Inject constructor(
                 false
             }
         } else {
-            Toast.makeText(context, "PLEASE CHECK INTERNET CONNECTION", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "please check your internet connection", Toast.LENGTH_LONG).show()
             false
         }
 
 
     }
 }
-
-
-/* return if (checkInternetConnection(context)) {
-
-        }else{}*/

@@ -56,7 +56,9 @@ class HomeFragment : Fragment() {
                 if (viewModel.getClientInAVisit()) {
                     findNavController().navigate(R.id.action_homeFragment_to_clientFragment)
                 } else {
-                    findNavController().navigate(R.id.action_homeFragment_to_scanQrCodeFragment)
+                    //change to scan or pick
+                  //  findNavController().navigate(R.id.action_homeFragment_to_scanQrCodeFragment)
+                    findNavController().navigate(R.id.action_homeFragment_to_scanOrPickQrCode)
                 }
             } else {
                 displayNoInternerConnection()
