@@ -28,6 +28,8 @@ class HomeFragment : Fragment() {
       //  FirebaseMessaging.getInstance().subscribeToTopic(viewModel.userLoggedIn()!!.uid)
 
        //**************************************
+        //Service part
+        //************************
         viewModel.service.observe(viewLifecycleOwner) {
             if (it != null) {
                 findNavController().navigate(R.id.action_homeFragment_to_serviceFragment)
@@ -46,6 +48,9 @@ class HomeFragment : Fragment() {
                 displayNoInternerConnection()
             }
         }
+        //*************************************************
+       // Client PART
+        //*****************************************
         binding.buttonClient.setOnClickListener {
             if (checkInternetConnection(requireActivity().applicationContext)) {
                 if (viewModel.getClientInAVisit()) {
