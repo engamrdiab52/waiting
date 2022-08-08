@@ -56,16 +56,7 @@ class SignupFragment : Fragment() {
         viewModel.userCreated.observe(viewLifecycleOwner) {
             if (it == true) {
                 viewModel.sendVerificationEmail()
-                Log.d(TAG, "trying sending an email")
-            } else {
-                Log.d(TAG, "The account has not been created")
-                Toast.makeText(
-                    requireContext(),
-                    "The account has not been created",
-                    Toast.LENGTH_SHORT
-                ).show()
             }
-
         }
 
         binding.txtViewSignupSignin.setOnClickListener {
