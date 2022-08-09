@@ -24,6 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class serviceFragment : Fragment() {
+    private var passwordForDeleteAccount: String =""
     private lateinit var binding: FragmentServiceBinding
     private val viewModel by viewModels<ServiceViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -156,6 +157,13 @@ class serviceFragment : Fragment() {
                 findNavController().navigate(R.id.action_serviceFragment_to_homeFragment)
             }
         }
+        viewModel.serviceDeleted.observe(viewLifecycleOwner) {
+            if (it == true) {
+                if (passwordForDeleteAccount.isNotEmpty()){
+                    viewModel.deleteAccountV(passwordForDeleteAccount)
+                }
+            }
+        }
         //***********************************************************************************
 
         return binding.root
@@ -172,7 +180,8 @@ class serviceFragment : Fragment() {
                 allowEmpty = false,
                 inputType = InputType.TYPE_CLASS_TEXT
             ) { _, password ->
-                viewModel.deleteAccountV(password.toString())
+                viewModel.deleteServiceV()
+                passwordForDeleteAccount = password.toString()
             }
             //*********************************
             positiveButton(R.string.delete_account) {

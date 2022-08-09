@@ -47,6 +47,9 @@ class ServiceViewModel @Inject constructor(
     private val _userDeleted = SingleLiveEvent<Boolean>()
     val userDeleted: LiveData<Boolean> get() = _userDeleted
 
+    private val _serviceDeleted = SingleLiveEvent<Boolean>()
+    val serviceDeleted: LiveData<Boolean> get() = _serviceDeleted
+
     private val _service = SingleLiveEvent<Service?>()
     val service: LiveData<Service?> get() = _service
 
@@ -120,6 +123,15 @@ class ServiceViewModel @Inject constructor(
         //    auth.currentUser?.let { deleteCurrentOrder(it.uid) }
             _downloading.postValue(true)
             _userDeleted.postValue(deleteAccount(password)!!)
+            _downloading.postValue(false)
+        }
+    }
+    fun deleteServiceV() {
+        viewModelScope.launch(Dispatchers.IO) {
+            //    auth.currentUser?.let { deleteService(it.uid) }
+            //    auth.currentUser?.let { deleteCurrentOrder(it.uid) }
+            _downloading.postValue(true)
+            _serviceDeleted.postValue(deleteService()!!)
             _downloading.postValue(false)
         }
     }
