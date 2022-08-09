@@ -17,26 +17,26 @@ import javax.inject.Inject
 
 class ResetUserPasswordImpl @Inject constructor(
     private val mAuth: FirebaseAuth,
-   @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context
 ) :
     IResetUserPassword {
     override suspend fun resetPassword(email: String): Boolean {
-        return if (checkInternetConnection(context)) {
-            val result = withTimeoutOrNull(3000L) {
-                try {
-                    mAuth.sendPasswordResetEmail(email).await()
-                    true
-                } catch (ex: Exception) {
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(context, ex.message, Toast.LENGTH_LONG).show()
-                    }
-                    false
+        if (checkInternetConnection(context)) {
+            return try {
+                mAuth.sendPasswordResetEmail(email).await()
+                true
+            } catch (ex: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(context, ex.message, Toast.LENGTH_LONG).show()
                 }
+                false
             }
-            result ?: false
         } else {
-            Log.d(TAG, "ResetPasswordImpl : No Network")
-            false
+            withContext(Dispatchers.Main) {
+                Toast.makeText(context, "PLEASE CHECK INTERNET CONNECTION", Toast.LENGTH_LONG)
+                    .show()
+            }
+            return false
         }
     }
 

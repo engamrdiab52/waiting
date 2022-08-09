@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.Toast
 import com.amrabdelhamiddiab.core.data.login.ISendEmailVerification
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
+import com.amrabdelhamiddiab.waiting.framework.utilis.checkInternetConnection
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -17,21 +18,28 @@ class SendEmailVerificationImpl @Inject constructor(
     @ApplicationContext private val context: Context
 ) : ISendEmailVerification {
     override suspend fun sendEmailVerification(): Boolean {
-        return try {
-            val user = mAuth.currentUser
-            if (user != null) {
-                user.sendEmailVerification().await()
-                Log.d(TAG, "SendEmailVerificationImpl :  Email sent")
-                true
-            } else {
-                Log.d(TAG, "SendEmailVerificationImpl  : NO users signed in")
-                false
-            }
-        } catch (ex: Exception) {
+         if (checkInternetConnection(context)) {
+             return try {
+                 val user = mAuth.currentUser
+                 if (user != null) {
+                     user.sendEmailVerification().await()
+                     true
+                 } else {
+                     false
+                 }
+             } catch (ex: Exception) {
+                 withContext(Dispatchers.Main) {
+                     Toast.makeText(context, ex.message, Toast.LENGTH_LONG).show()
+                 }
+                 false
+             }
+        } else {
             withContext(Dispatchers.Main) {
-                Toast.makeText(context, ex.message, Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "PLEASE CHECK INTERNET CONNECTION", Toast.LENGTH_LONG)
+                    .show()
             }
-            false
+           return false
         }
+
     }
 }

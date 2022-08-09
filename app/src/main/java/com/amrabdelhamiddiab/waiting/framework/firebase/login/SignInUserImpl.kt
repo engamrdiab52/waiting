@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.Toast
 import com.amrabdelhamiddiab.core.data.login.ISignInUser
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
+import com.amrabdelhamiddiab.waiting.framework.utilis.checkInternetConnection
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -17,20 +18,23 @@ class SignInUserImpl @Inject constructor(
     @ApplicationContext private val context: Context
 ) : ISignInUser {
     override suspend fun signInUser(email: String, password: String): Boolean {
-        return try {
-            val authResult = mAuth.signInWithEmailAndPassword(email, password).await()
-            if (authResult != null) {
-                Log.d(TAG, mAuth.currentUser?.email.toString())
-                true
-            } else {
-                Log.d(TAG, "user didn't sign in")
+        return if (checkInternetConnection(context)) {
+            try {
+                val authResult = mAuth.signInWithEmailAndPassword(email, password).await()
+                authResult != null
+            } catch (ex: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(context, ex.message, Toast.LENGTH_LONG).show()
+                }
                 false
             }
-        } catch (ex: Exception) {
+        } else {
             withContext(Dispatchers.Main) {
-                Toast.makeText(context, ex.message, Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "PLEASE CHECK INTERNET CONNECTION", Toast.LENGTH_LONG)
+                    .show()
             }
             false
         }
+
     }
 }

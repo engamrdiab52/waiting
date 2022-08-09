@@ -37,17 +37,17 @@ class LoginFlowViewModel @Inject constructor(
     private val _orderValue = SingleLiveEvent<Order?>()
     val orderValue: LiveData<Order?> get() = _orderValue
 
-    private val _emailVerificationSent = SingleLiveEvent<Boolean?>()
-    val emailVerificationSent: LiveData<Boolean?> get() = _emailVerificationSent
+    private val _emailVerificationSent = SingleLiveEvent<Boolean>()
+    val emailVerificationSent: LiveData<Boolean> get() = _emailVerificationSent
 
-    private val _userCreated = SingleLiveEvent<Boolean?>()
-    val userCreated: LiveData<Boolean?> get() = _userCreated
+    private val _userCreated = SingleLiveEvent<Boolean>()
+    val userCreated: LiveData<Boolean> get() = _userCreated
 
     private val _userSignedIn = SingleLiveEvent<Boolean?>()
     val userSignedIn: LiveData<Boolean?> get() = _userSignedIn
 
-    private val _emailVerified = SingleLiveEvent<Boolean?>()
-    val emailVerified: LiveData<Boolean?> get() = _emailVerified
+    private val _emailVerified = SingleLiveEvent<Boolean>()
+    val emailVerified: LiveData<Boolean> get() = _emailVerified
 
     private val _downloading = SingleLiveEvent<Boolean>()
     val downloading: LiveData<Boolean> get() = _downloading
@@ -66,7 +66,7 @@ class LoginFlowViewModel @Inject constructor(
     fun createUser(email: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
             _downloading.postValue(true)
-            _userCreated.postValue(signUpUser(email, password))
+            _userCreated.postValue(signUpUser(email, password)!!)
             _downloading.postValue(false)
         }
     }
@@ -82,14 +82,14 @@ class LoginFlowViewModel @Inject constructor(
     fun sendVerificationEmail() {
         viewModelScope.launch(Dispatchers.IO) {
             _downloading.postValue(true)
-            _emailVerificationSent.postValue(sendEmailVerification())
+            _emailVerificationSent.postValue(sendEmailVerification()!!)
             _downloading.postValue(false)
         }
     }
 
     fun isEmailVerified() {
         viewModelScope.launch(Dispatchers.IO) {
-            _emailVerified.postValue(emailVerifiedState())
+            _emailVerified.postValue(emailVerifiedState()!!)
         }
     }
     fun downloadServiceV() {

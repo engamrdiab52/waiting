@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.Toast
 import com.amrabdelhamiddiab.core.data.login.ISignOutUser
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
+import com.amrabdelhamiddiab.waiting.framework.utilis.checkInternetConnection
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -15,17 +16,24 @@ class SignOutUserImpl @Inject constructor(
     private val mAuth: FirebaseAuth,
     @ApplicationContext private val context: Context
 ) : ISignOutUser {
-    override suspend fun signOutUser() {
-        try {
-            mAuth.signOut()
-            Log.d(TAG, "UserSignedOut...${mAuth.currentUser}")
-        } catch (ex: Exception) {
-            withContext(Dispatchers.Main) {
-                Toast.makeText(context, ex.message, Toast.LENGTH_LONG).show()
+    override suspend fun signOutUser(): Boolean {
+        return if (checkInternetConnection(context)) {
+            try {
+                mAuth.signOut()
+                true
+            } catch (ex: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(context, ex.message, Toast.LENGTH_LONG).show()
+                }
+                false
             }
+        } else {
             withContext(Dispatchers.Main) {
-                Toast.makeText(context, ex.message, Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "PLEASE CHECK INTERNET CONNECTION", Toast.LENGTH_LONG)
+                    .show()
             }
+            false
         }
+
     }
 }

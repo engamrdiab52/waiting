@@ -48,9 +48,6 @@ class SignupFragment : Fragment() {
                 Toast.makeText(requireContext(), "Please Verify Your Email", Toast.LENGTH_LONG)
                     .show()
                 findNavController().navigate(R.id.action_signupFragment_to_loginFragment)
-            } else {
-                Toast.makeText(requireContext(), "Sending was not completed", Toast.LENGTH_SHORT)
-                    .show()
             }
         }
         viewModel.userCreated.observe(viewLifecycleOwner) {
@@ -85,7 +82,7 @@ class SignupFragment : Fragment() {
                     }.check()
             }
         })
-
+//**********
         binding.btnSignupSignup.setOnClickListener {
             binding.txtLayoutSignupPassword.error = errorMessage
             validateNameField()
@@ -94,17 +91,8 @@ class SignupFragment : Fragment() {
             if (validEmail && validUserName && validPassword && validConfirmPassword) {
                 val password = binding.edtTxtSignupPassword.text.toString()
                 val email = binding.edtTxtSignupEmail.text.toString()
-                if (checkInternetConnection(requireContext())) {
-                    viewModel.createUser(email, password)
-                } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "No Network please turn on",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+                viewModel.createUser(email, password)
             } else {
-                //may use singleLiveEvent
                 Toast.makeText(requireContext(), "** INVALID CREDENTIALS **", Toast.LENGTH_LONG)
                     .show()
             }
@@ -112,6 +100,7 @@ class SignupFragment : Fragment() {
         // Inflate the layout for this fragment
         return binding.root
     }
+
     private fun validateNameField() {
         binding.edtTxtSignupName.text.toString().validator().nonEmpty().addErrorCallback {
             binding.txtLayoutSignupName.error = it

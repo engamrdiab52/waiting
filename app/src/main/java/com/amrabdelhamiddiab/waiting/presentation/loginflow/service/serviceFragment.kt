@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -36,6 +37,13 @@ class serviceFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_service, container, false)
         //    FirebaseMessaging.getInstance().subscribeToTopic()
+        viewModel.downloading.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.loadingIndecator.visibility = View.VISIBLE
+            } else {
+                binding.loadingIndecator.visibility = View.GONE
+            }
+        }
         val uidString = "/" + viewModel.uid + "/"
         Log.d(TAG, uidString + "2222222222222222222222222222222222222")
         viewModel.downloadServiceV()
@@ -53,6 +61,13 @@ class serviceFragment : Fragment() {
             }
 
         }
+        //*****************************
+        viewModel.userSignedOut.observe(viewLifecycleOwner) {
+            if (it == true) {
+                findNavController().navigate(R.id.action_serviceFragment_to_homeFragment)
+            }
+        }
+        //*********************************
         viewModel.tokenDownloaded.observe(viewLifecycleOwner) {
             if (it != null) {
                 Log.d(TAG, "tokenDownloaded................TRUE")
@@ -61,7 +76,7 @@ class serviceFragment : Fragment() {
                         binding.textViewCurrentNumber.text.toString(),
                         "you are the after next"
                     ),
-                      it.token
+                    it.token
 
                 ).also { pushNotification ->
                     viewModel.sendNotification(pushNotification)
@@ -96,20 +111,11 @@ class serviceFragment : Fragment() {
         //********************************************************************************
 
         binding.buttonLogout.setOnClickListener {
-            if (checkInternetConnection(requireActivity().applicationContext)) {
-                displayDialogLogOut()
-            } else {
-                displayNoInternerConnection()
-            }
-
+            displayDialogLogOut()
         }
         //********************************************************************************
         binding.buttonServiceDeleteAccount.setOnClickListener {
-            if (checkInternetConnection(requireActivity().applicationContext)) {
                 displayDialogDeleteAccount()
-            } else {
-                displayNoInternerConnection()
-            }
 
         }
         //*******************************************************************************
@@ -145,6 +151,11 @@ class serviceFragment : Fragment() {
 
 
         }
+        viewModel.userDeleted.observe(viewLifecycleOwner){
+            if (it == true){
+                findNavController().navigate(R.id.action_serviceFragment_to_homeFragment)
+            }
+        }
         //***********************************************************************************
 
         return binding.root
@@ -154,9 +165,21 @@ class serviceFragment : Fragment() {
         MaterialDialog(requireContext()).show {
             title(R.string.dialog_delete_account_title)
             message(R.string.dialog_delete_account_message)
-            positiveButton(R.string.ok) {
-                viewModel.deleteAccountV()
-                findNavController().navigate(R.id.action_serviceFragment_to_homeFragment)
+            //******************************
+
+            val input = input(
+                hint = "Enter Your Password here",
+                allowEmpty = false,
+                inputType = InputType.TYPE_CLASS_TEXT
+            ) { _, password ->
+                viewModel.deleteAccountV(password.toString())
+            }
+            //*********************************
+            positiveButton(R.string.delete_account) {
+
+            }
+            negativeButton(R.string.cancel) {
+                it.dismiss()
             }
         }
     }
@@ -184,10 +207,9 @@ class serviceFragment : Fragment() {
             positiveButton(R.string.yes) {
                 Log.d(TAG, "Logged out ")
                 viewModel.signOut()
-                findNavController().navigate(R.id.action_serviceFragment_to_homeFragment)
             }
             negativeButton(R.string.no) {
-
+                it.dismiss()
             }
         }
     }

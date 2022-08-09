@@ -25,9 +25,9 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
-      //  FirebaseMessaging.getInstance().subscribeToTopic(viewModel.userLoggedIn()!!.uid)
+        //  FirebaseMessaging.getInstance().subscribeToTopic(viewModel.userLoggedIn()!!.uid)
 
-       //**************************************
+        //**************************************
         //Service part
         //************************
         viewModel.service.observe(viewLifecycleOwner) {
@@ -37,19 +37,22 @@ class HomeFragment : Fragment() {
                 findNavController().navigate(R.id.action_homeFragment_to_createServiceFragment)
             }
         }
+        viewModel.emailVerified.observe(viewLifecycleOwner) {
+            if (it) {
+                viewModel.downloadServiceV()
+            } else {
+                findNavController().navigate(R.id.action_homeFragment_to_nested_graph_login)
+            }
+        }
         binding.buttonService.setOnClickListener {
             if (checkInternetConnection(requireActivity().applicationContext)) {
-                if (viewModel.userLoggedIn() == null) {
-                    findNavController().navigate(R.id.action_homeFragment_to_nested_graph_login)
-                } else {
-                    viewModel.downloadServiceV()
-                }
+                viewModel.userLoggedIn()
             } else {
                 displayNoInternerConnection()
             }
         }
         //*************************************************
-       // Client PART
+        // Client PART
         //*****************************************
         binding.buttonClient.setOnClickListener {
             if (checkInternetConnection(requireActivity().applicationContext)) {
@@ -57,7 +60,7 @@ class HomeFragment : Fragment() {
                     findNavController().navigate(R.id.action_homeFragment_to_clientFragment)
                 } else {
                     //change to scan or pick
-                  //  findNavController().navigate(R.id.action_homeFragment_to_scanQrCodeFragment)
+                    //  findNavController().navigate(R.id.action_homeFragment_to_scanQrCodeFragment)
                     findNavController().navigate(R.id.action_homeFragment_to_scanOrPickQrCode)
                 }
             } else {
@@ -66,6 +69,7 @@ class HomeFragment : Fragment() {
         }
         return binding.root
     }
+
     private fun displayNoInternerConnection() {
         MaterialDialog(requireContext()).show {
             cancelOnTouchOutside(true)

@@ -36,22 +36,38 @@ class ServiceViewModel @Inject constructor(
 
     private val _orderValue = SingleLiveEvent<Order?>()
     val orderValue: LiveData<Order?> get() = _orderValue
-     val uid :String
-         get() {
-           return  auth.currentUser!!.uid
-         }
+    val uid: String
+        get() {
+            return auth.currentUser!!.uid
+        }
 
     private val _tokenDownloaded = SingleLiveEvent<Token?>()
     val tokenDownloaded: LiveData<Token?> get() = _tokenDownloaded
 
+    private val _userDeleted = SingleLiveEvent<Boolean>()
+    val userDeleted: LiveData<Boolean> get() = _userDeleted
+
     private val _service = SingleLiveEvent<Service?>()
     val service: LiveData<Service?> get() = _service
 
+    //********************************
+    //ok
+    private val _downloading = SingleLiveEvent<Boolean>()
+    val downloading: LiveData<Boolean> get() = _downloading
+
+    private val _userSignedOut = SingleLiveEvent<Boolean?>()
+    val userSignedOut: LiveData<Boolean?> get() = _userSignedOut
+    //************************************
+    //*************************
+    //ok
     fun signOut() {
         viewModelScope.launch(Dispatchers.IO) {
-            signOutUser()
+            _downloading.postValue(true)
+            _userSignedOut.postValue(signOutUser())
+            _downloading.postValue(false)
         }
     }
+    //******************************
 
     fun downloadServiceV() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -98,11 +114,13 @@ class ServiceViewModel @Inject constructor(
         }
     }
 
-    fun deleteAccountV() {
+    fun deleteAccountV(password: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            auth.currentUser?.let { deleteService(it.uid) }
-            auth.currentUser?.let { deleteCurrentOrder(it.uid) }
-            deleteAccount()
+        //    auth.currentUser?.let { deleteService(it.uid) }
+        //    auth.currentUser?.let { deleteCurrentOrder(it.uid) }
+            _downloading.postValue(true)
+            _userDeleted.postValue(deleteAccount(password)!!)
+            _downloading.postValue(false)
         }
     }
 

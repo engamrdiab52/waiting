@@ -42,36 +42,13 @@ class ResetPasswordFragment : Fragment() {
                 Toast.makeText(requireContext(), "Email sent successfully", Toast.LENGTH_SHORT)
                     .show()
                 findNavController().navigate(R.id.action_resetPasswordFragment_to_loginFragment)
-            } else {
-                if (checkInternetConnection(requireContext())) {
-                    Toast.makeText(
-                        requireContext(),
-                        "something Wrong try later",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "No Network please turn on",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
             }
-
         }
         binding.btnSendVerificationEmail.setOnClickListener {
             validateEmailField()
             if (validEmail) {
                 val email = binding.editTextEmailResetPassword.text.toString()
-                if (checkInternetConnection(requireContext())) {
-                    viewModel.resetPassword(email)
-                } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "No Network please turn on",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+                viewModel.resetPassword(email)
             } else {
                 Toast.makeText(requireContext(), "** INVALID CREDENTIALS **", Toast.LENGTH_LONG)
                     .show()
@@ -80,6 +57,7 @@ class ResetPasswordFragment : Fragment() {
         // Inflate the layout for this fragment
         return binding.root
     }
+
     private fun validateEmailField() {
         binding.editTextEmailResetPassword.validator().nonEmpty().validEmail().addErrorCallback {
             validEmail = false

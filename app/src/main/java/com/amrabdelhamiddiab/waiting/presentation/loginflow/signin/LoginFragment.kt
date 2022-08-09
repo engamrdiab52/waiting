@@ -40,9 +40,7 @@ class LoginFragment : Fragment() {
         }
         viewModel.userSignedIn.observe(viewLifecycleOwner) {
             if (it == true) {
-                Log.d(TAG, "userSigned in but we still don't know if he verified email")
                 viewModel.isEmailVerified()
-                Log.d(TAG, "EMAIL VERIFIED")
             }
         }
         viewModel.service.observe(viewLifecycleOwner) {
@@ -55,18 +53,6 @@ class LoginFragment : Fragment() {
         viewModel.emailVerified.observe(viewLifecycleOwner) {
             if (it == true) {
                 viewModel.downloadServiceV()
-            } else {
-                if (checkInternetConnection(requireContext())) {
-                    Toast.makeText(requireContext(), "Please Verify your Email", Toast.LENGTH_LONG)
-                        .show()
-                    Log.d(TAG, "Please Verify your Email")
-                } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "No Network please turn on",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
             }
         }
         binding.buttonLogin.setOnClickListener {
@@ -75,16 +61,7 @@ class LoginFragment : Fragment() {
             if (validEmail && validPassword) {
                 val email = binding.editTextLoginEmail.text.toString()
                 val password = binding.editTextLoginPassword.text.toString()
-                if (checkInternetConnection(requireContext())) {
-                    viewModel.signIn(email, password)
-                } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "No Network please turn on",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-
+                viewModel.signIn(email, password)
             } else {
                 Toast.makeText(requireContext(), "** INVALID CREDENTIALS **", Toast.LENGTH_LONG)
                     .show()
@@ -101,6 +78,7 @@ class LoginFragment : Fragment() {
         // Inflate the layout for this fragment
         return binding.root
     }
+
     private fun validateEmailField() {
         binding.editTextLoginEmail.validator().nonEmpty().validEmail().addErrorCallback {
             validEmail = false
@@ -111,6 +89,7 @@ class LoginFragment : Fragment() {
             binding.textLayoutLoginEmail.error = null
         }.check()
     }
+
     private fun validatePasswordField() {
         binding.editTextLoginPassword.validator().nonEmpty().addErrorCallback {
             validPassword = false
