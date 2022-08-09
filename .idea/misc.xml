@@ -17,13 +17,18 @@
         <entry key="..\:/Users/engam/AndroidStudioProjects/Waiting/app/src/main/res/layout/fragment_signup.xml" value="0.19882246376811594" />
         <entry key="..\:/Users/engam/AndroidStudioProjects/Waiting/app/src/main/res/layout/no_internet_layout.xml" value="0.19882246376811594" />
         <entry key="..\:/Users/engam/AndroidStudioProjects/Waiting/app/src/main/res/layout/notification_layout.xml" value="0.14993169398907105" />
+        <entry key="..\:/Users/engam/StudioProjects/waiting/app/src/main/res/layout/fragment_client.xml" value="0.24547101449275363" />
+        <entry key="..\:/Users/engam/StudioProjects/waiting/app/src/main/res/layout/fragment_create_service.xml" value="0.24547101449275363" />
         <entry key="..\:/Users/engam/StudioProjects/waiting/app/src/main/res/layout/fragment_delete_account.xml" value="0.17708333333333334" />
         <entry key="..\:/Users/engam/StudioProjects/waiting/app/src/main/res/layout/fragment_home.xml" value="0.12360688956433637" />
-        <entry key="..\:/Users/engam/StudioProjects/waiting/app/src/main/res/layout/fragment_q_rcode.xml" value="0.1" />
+        <entry key="..\:/Users/engam/StudioProjects/waiting/app/src/main/res/layout/fragment_login.xml" value="0.24547101449275363" />
+        <entry key="..\:/Users/engam/StudioProjects/waiting/app/src/main/res/layout/fragment_q_rcode.xml" value="0.128" />
+        <entry key="..\:/Users/engam/StudioProjects/waiting/app/src/main/res/layout/fragment_reset_password.xml" value="0.24547101449275363" />
         <entry key="..\:/Users/engam/StudioProjects/waiting/app/src/main/res/layout/fragment_scan_or_pick_qr_code.xml" value="0.20742753623188406" />
         <entry key="..\:/Users/engam/StudioProjects/waiting/app/src/main/res/layout/fragment_scan_qr_code.xml" value="0.16847826086956522" />
         <entry key="..\:/Users/engam/StudioProjects/waiting/app/src/main/res/layout/fragment_service.xml" value="0.17708333333333334" />
         <entry key="..\:/Users/engam/StudioProjects/waiting/app/src/main/res/layout/fragment_signup.xml" value="0.1" />
+        <entry key="..\:/Users/engam/StudioProjects/waiting/app/src/main/res/layout/notification_layout.xml" value="0.24547101449275363" />
       </map>
     </option>
   </component>

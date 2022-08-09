@@ -13,6 +13,16 @@
         android:layout_height="match_parent"
         tools:context=".presentation.loginflow.client.clientFragment">
 
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/loading_indecator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
@@ -201,6 +211,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayout6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"

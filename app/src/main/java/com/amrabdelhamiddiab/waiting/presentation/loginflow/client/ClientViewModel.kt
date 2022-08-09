@@ -62,7 +62,6 @@ class ClientViewModel @Inject constructor(
             databaseReference.child("orders").child(userId)
                 .addValueEventListener(orderListener)
         }
-        Log.d(TAG, "22222222222222222222222222notifyWhenOrderChange222222222222222222222222222")
     }
 
     fun saveOrderInPreferences(order: Order) {

@@ -26,27 +26,38 @@ class CreateServiceFragment : Fragment() {
     ): View? {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_create_service, container, false)
-        binding.buttonSave.setOnClickListener {
-            if (checkInternetConnection(requireActivity().applicationContext)) {
+        binding.editTextCategory.text?.clear()
+        binding.editTextNameOfService.text?.clear()
+        binding.editTextPeriodOfEachService.text?.clear()
 
-                val category: String = binding.editTextCategory.text.toString()
-                val serviceName = binding.editTextNameOfService.text.toString()
-                val text = binding.editTextPeriodOfEachService.text.toString()
-                val timePeriod: Int =text.toInt()
-                val service = Service(category, serviceName, "", timePeriod)
-                viewModel.uploadServiceV(service)
-                viewModel.uploadOrderValueFirstTime()
-              //  viewModel.saveServiceInPreferences(service)
+        viewModel.downloading.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.loadingIndecator.visibility = View.VISIBLE
+            } else {
+                binding.loadingIndecator.visibility = View.GONE
+            }
+        }
+
+
+        viewModel.serviceCreated.observe(viewLifecycleOwner){
+            if (it == true){
                 binding.editTextCategory.text?.clear()
                 binding.editTextNameOfService.text?.clear()
                 binding.editTextPeriodOfEachService.text?.clear()
                 findNavController().navigate(R.id.action_createServiceFragment_to_serviceFragment)
-            } else {
-                displayNoInternerConnection()
             }
+        }
+        binding.buttonSave.setOnClickListener {
+                val category: String = binding.editTextCategory.text.toString()
+                val serviceName = binding.editTextNameOfService.text.toString()
+                val text = binding.editTextPeriodOfEachService.text.toString()
+                val timePeriod: Int = text.toInt()
+                val service = Service(category, serviceName, "", timePeriod)
+                viewModel.uploadServiceV(service)
         }
         return binding.root
     }
+
     private fun displayNoInternerConnection() {
         MaterialDialog(requireContext()).show {
             cancelOnTouchOutside(true)
