@@ -14,10 +14,7 @@ import com.amrabdelhamiddiab.waiting.MainActivity
 import com.amrabdelhamiddiab.waiting.framework.firebase.fcm.FcmService
 import com.amrabdelhamiddiab.waiting.framework.utilis.SingleLiveEvent
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -119,7 +116,7 @@ class ServiceViewModel @Inject constructor(
     }
 
     fun incrementCurrentOrderValue(value: String) {
-        changeOrderValueV(value.toLong()+1L)
+        changeOrderValueV(value.toLong() + 1L)
     }
 
     fun decrementCurrentOrderValue(value: String) {
@@ -147,7 +144,8 @@ class ServiceViewModel @Inject constructor(
             _downloading.postValue(false)
         }
     }
-// service here send fcm to the client
+
+    // service here send fcm to the client
     fun sendNotification(pushNotification: PushNotification) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -200,6 +198,33 @@ class ServiceViewModel @Inject constructor(
     }
 
     //****************************
+    //Listener to the list of tokens
+    private val listOfTokensListener = object : ValueEventListener{
+        private val _listOfTokens: MutableList<Token> = mutableListOf()
+        override fun onDataChange(snapshot: DataSnapshot) {
+            _listOfDownloadedTokens.value = emptyList()
+            _listOfTokens.clear()
+            snapshot.children.forEach {
+                val token = it.getValue(Token::class.java)
+                if (token != null) {
+                    _listOfTokens.add(token)
+                }
+            }
+            _listOfDownloadedTokens.value = _listOfTokens
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            _listOfDownloadedTokens.value = emptyList()
+        }
+    }
+
+    fun notifyWhenListOfTokensChanged() {
+        if (uid.isNotEmpty()){
+            databaseReference.child("tokens").child(uid)
+                .addValueEventListener(listOfTokensListener)
+        }
+    }
+
     fun notifyWhenOrderChange() {
         if (uid.isNotEmpty()) {
             databaseReference.child("orders").child(uid)

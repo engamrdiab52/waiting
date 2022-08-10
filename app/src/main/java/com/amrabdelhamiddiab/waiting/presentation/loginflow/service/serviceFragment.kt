@@ -39,7 +39,8 @@ class serviceFragment : Fragment() {
         //    FirebaseMessaging.getInstance().subscribeToTopic()
         viewModel.notifyWhenServiceChange()
         viewModel.notifyWhenOrderChange()
-        viewModel.downloadListOfTokensV()
+      //  viewModel.downloadListOfTokensV()
+        viewModel.notifyWhenListOfTokensChanged()
 
         viewModel.downloading.observe(viewLifecycleOwner) {
             if (it) {
@@ -48,11 +49,6 @@ class serviceFragment : Fragment() {
                 binding.loadingIndecator.visibility = View.GONE
             }
         }
-
-        // val uidString = "/" + viewModel.uid + "/"
-        //   Log.d(TAG, uidString + "2222222222222222222222222222222222222")
-        /*    viewModel.downloadServiceV()
-            viewModel.downloadOrderV()*/
         viewModel.service.observe(viewLifecycleOwner) {
             binding.textViewCategory.text = it?.category ?: ""
             binding.textViewNameOfService.text = it?.name_of_service ?: ""
@@ -63,11 +59,11 @@ class serviceFragment : Fragment() {
             }
         }
 
-        viewModel.listOfDownloadedTokens.observe(viewLifecycleOwner) {
+/*        viewModel.listOfDownloadedTokens.observe(viewLifecycleOwner) {
             if (it.isNullOrEmpty()) {
-                val listOfTokens = it
+
             }
-        }
+        }*/
 
         viewModel.orderValue.observe(viewLifecycleOwner) {
             if (it != null) {
@@ -86,12 +82,6 @@ class serviceFragment : Fragment() {
                             viewModel.sendNotification(pushNotification)
                         }
                     }
-                } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "...No Clients Registered to get notifications",
-                        Toast.LENGTH_SHORT
-                    ).show()
                 }
             } else {
                 Toast.makeText(requireContext(), "error", Toast.LENGTH_SHORT).show()
@@ -243,15 +233,3 @@ class serviceFragment : Fragment() {
         }
     }
 }
-
-/*     if (token.isNotEmpty()) {
-           PushNotification(
-               NotificationData(
-                   "Current Serving Number",
-                   it.order.toString()
-               ),
-               token
-           ).also { pushNotification ->
-               viewModel.sendNotification(pushNotification)
-           }
-       }*/
