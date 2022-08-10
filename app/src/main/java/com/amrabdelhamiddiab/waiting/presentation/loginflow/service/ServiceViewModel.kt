@@ -35,6 +35,7 @@ class ServiceViewModel @Inject constructor(
     private val fcmService: FcmService,
     private val gson: Gson,
     private val downloadToken: DownloadToken,
+    private val listDownloadTokens: ListDownloadTokens,
     private val databaseReference: DatabaseReference
 ) : ViewModel() {
 
@@ -48,6 +49,9 @@ class ServiceViewModel @Inject constructor(
 
     private val _tokenDownloaded = SingleLiveEvent<Token?>()
     val tokenDownloaded: LiveData<Token?> get() = _tokenDownloaded
+
+    private val _listOfDownloadedTokens = SingleLiveEvent<List<Token>?>()
+    val listOfDownloadedTokens: LiveData<List<Token>?> get() = _listOfDownloadedTokens
 
     private val _userDeleted = SingleLiveEvent<Boolean>()
     val userDeleted: LiveData<Boolean> get() = _userDeleted
@@ -94,6 +98,14 @@ class ServiceViewModel @Inject constructor(
     fun downloadTokenV() {
         viewModelScope.launch(Dispatchers.IO) {
             _tokenDownloaded.postValue(downloadToken())
+        }
+    }
+
+    fun downloadListOfTokensV() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _downloading.postValue(true)
+            _listOfDownloadedTokens.postValue(listDownloadTokens())
+            _downloading.postValue(false)
         }
     }
 

@@ -23,12 +23,18 @@ class UploadClientTokenImpl @Inject constructor(
     IUploadClientToken {
     override suspend fun uploadTokenValue(token: Token): Boolean {
         val serviceId = preferenceHelper.fetchUserIdForClient()
-        Log.d(MainActivity.TAG," override suspend fun uploadTokenValue.....called" + serviceId)
-        if (serviceId.isNotEmpty()){
+        Log.d(MainActivity.TAG, " override suspend fun uploadTokenValue.....called" + serviceId)
+        if (serviceId.isNotEmpty()) {
             return if (checkInternetConnection(context)) {
                 try {
-                    databaseReference.child("tokens").child(serviceId).setValue(token).await()
-                    true
+                    val ref = databaseReference.child("tokens").child(serviceId)
+                    val tokenKey = ref.push().key
+                    if (tokenKey != null) {
+                        ref.child(tokenKey).setValue(token).await()
+                        true
+                    } else {
+                        false
+                    }
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
                         Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
@@ -42,8 +48,8 @@ class UploadClientTokenImpl @Inject constructor(
                 }
                 false
             }
-        }else {
-           return false
+        } else {
+            return false
         }
     }
 }

@@ -39,6 +39,7 @@ class serviceFragment : Fragment() {
         //    FirebaseMessaging.getInstance().subscribeToTopic()
         viewModel.notifyWhenServiceChange()
         viewModel.notifyWhenOrderChange()
+        viewModel.downloadListOfTokensV()
 
         viewModel.downloading.observe(viewLifecycleOwner) {
             if (it) {
@@ -62,19 +63,28 @@ class serviceFragment : Fragment() {
             }
         }
 
+        viewModel.listOfDownloadedTokens.observe(viewLifecycleOwner) {
+            if (it.isNullOrEmpty()) {
+                val listOfTokens = it
+            }
+        }
+
         viewModel.orderValue.observe(viewLifecycleOwner) {
             if (it != null) {
                 binding.textViewCurrentNumber.text = it.order.toString()
-                val token = viewModel.tokenDownloaded.value?.token ?: ""
-                if (token.isNotEmpty()) {
-                    PushNotification(
-                        NotificationData(
-                            "Current Serving Number",
-                            it.order.toString()
-                        ),
-                        token
-                    ).also { pushNotification ->
-                        viewModel.sendNotification(pushNotification)
+                //  val token = viewModel.tokenDownloaded.value?.token ?: ""
+                val listOfTokens = viewModel.listOfDownloadedTokens.value
+                if (!listOfTokens.isNullOrEmpty()) {
+                    listOfTokens.forEach { token ->
+                        PushNotification(
+                            NotificationData(
+                                "Current Serving Number",
+                                it.order.toString()
+                            ),
+                            token.token
+                        ).also { pushNotification ->
+                            viewModel.sendNotification(pushNotification)
+                        }
                     }
                 } else {
                     Toast.makeText(
@@ -102,8 +112,9 @@ class serviceFragment : Fragment() {
         }
         //*********************************
         viewModel.tokenDownloaded.observe(viewLifecycleOwner) {
-            if (it == null){
-                Toast.makeText(requireContext(), "NO Client is waiting......", Toast.LENGTH_LONG).show()
+            if (it == null) {
+                Toast.makeText(requireContext(), "NO Client is waiting......", Toast.LENGTH_LONG)
+                    .show()
             }
 
         }
@@ -155,7 +166,6 @@ class serviceFragment : Fragment() {
             }
         }
         //***********************************************************************************
-
         return binding.root
     }
 
@@ -186,7 +196,6 @@ class serviceFragment : Fragment() {
         }
     }
 
-
     private fun displayDialogEditOrder() {
         var myValue: CharSequence = ""
         MaterialDialog(requireContext()).show {
@@ -210,7 +219,6 @@ class serviceFragment : Fragment() {
                 it.dismiss()
             }
         }
-
     }
 
     private fun displayDialogLogOut() {
@@ -235,3 +243,15 @@ class serviceFragment : Fragment() {
         }
     }
 }
+
+/*     if (token.isNotEmpty()) {
+           PushNotification(
+               NotificationData(
+                   "Current Serving Number",
+                   it.order.toString()
+               ),
+               token
+           ).also { pushNotification ->
+               viewModel.sendNotification(pushNotification)
+           }
+       }*/

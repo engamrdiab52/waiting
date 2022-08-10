@@ -170,4 +170,15 @@ class LoginModule {
         return RepositoryDownloadToken(iDownloadToken)
     }
 
+    @Provides
+    fun provideRepositoryListDownloadTokens(iListDownloadTokens: IListDownloadTokens): RepositoryListDownloadTokens {
+        return RepositoryListDownloadTokens(iListDownloadTokens)
+    }
+
+
+    @Provides
+    fun provideListDownloadToken(repositoryListDownloadTokens: RepositoryListDownloadTokens): ListDownloadTokens {
+        return ListDownloadTokens(repositoryListDownloadTokens)
+    }
+
 }

@@ -65,4 +65,7 @@ abstract class intefacesModule {
 
     @Binds
     abstract fun bindDownloadToken(downloadTokenImpl: DownloadTokenImpl) : IDownloadToken
+
+    @Binds
+    abstract fun bindListDownloadTokens(listDownloadTokensImpl: ListDownloadTokensImpl) : IListDownloadTokens
 }
