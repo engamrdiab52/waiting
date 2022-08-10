@@ -4,7 +4,6 @@ import android.content.Context
 
 
 abstract class TtsProviderFactory {
-    abstract fun say(sayThis: String?)
     abstract fun init(context: Context?, toVoice: String)
     abstract fun shutdown()
 

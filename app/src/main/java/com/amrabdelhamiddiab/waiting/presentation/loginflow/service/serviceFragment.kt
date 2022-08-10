@@ -19,12 +19,11 @@ import com.amrabdelhamiddiab.core.domain.PushNotification
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentServiceBinding
-import com.amrabdelhamiddiab.waiting.framework.utilis.checkInternetConnection
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class serviceFragment : Fragment() {
-    private var passwordForDeleteAccount: String =""
+    private var passwordForDeleteAccount: String = ""
     private lateinit var binding: FragmentServiceBinding
     private val viewModel by viewModels<ServiceViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,6 +37,9 @@ class serviceFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_service, container, false)
         //    FirebaseMessaging.getInstance().subscribeToTopic()
+        viewModel.notifyWhenServiceChange()
+        viewModel.notifyWhenOrderChange()
+
         viewModel.downloading.observe(viewLifecycleOwner) {
             if (it) {
                 binding.loadingIndecator.visibility = View.VISIBLE
@@ -45,22 +47,32 @@ class serviceFragment : Fragment() {
                 binding.loadingIndecator.visibility = View.GONE
             }
         }
-        val uidString = "/" + viewModel.uid + "/"
-        Log.d(TAG, uidString + "2222222222222222222222222222222222222")
-        viewModel.downloadServiceV()
-        viewModel.downloadOrderV()
+
+        // val uidString = "/" + viewModel.uid + "/"
+        //   Log.d(TAG, uidString + "2222222222222222222222222222222222222")
+        /*    viewModel.downloadServiceV()
+            viewModel.downloadOrderV()*/
         viewModel.service.observe(viewLifecycleOwner) {
             binding.textViewCategory.text = it?.category ?: ""
             binding.textViewNameOfService.text = it?.name_of_service ?: ""
-            binding.textViewPeriodPerEachService.text = it?.period_per_each_service.toString()
+            if (it != null) {
+                binding.textViewPeriodPerEachService.text = it.period_per_each_service.toString()
+            } else {
+                binding.textViewPeriodPerEachService.text = "0"
+            }
         }
+
         viewModel.orderValue.observe(viewLifecycleOwner) {
             if (it != null) {
                 binding.textViewCurrentNumber.text = it.order.toString()
             } else {
                 binding.textViewCurrentNumber.text = "0"
             }
-
+        }
+        viewModel.dataBaseError.observe(viewLifecycleOwner) {
+            if (it != null) {
+                Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
+            }
         }
         //*****************************
         viewModel.userSignedOut.observe(viewLifecycleOwner) {
@@ -89,24 +101,12 @@ class serviceFragment : Fragment() {
         }
 
         binding.buttonServiceIncrementOrder.setOnClickListener {
-            if (checkInternetConnection(requireActivity().applicationContext)) {
-                val currentOrderValueFromTextView = binding.textViewCurrentNumber.text.toString()
-                viewModel.incrementCurrentOrderValue(currentOrderValueFromTextView)
-                Log.d(TAG, "increment ${binding.textViewCurrentNumber.text}")
-                viewModel.downloadTokenV()
-
-            } else {
-                displayNoInternerConnection()
-            }
+            val currentOrderValueFromTextView = binding.textViewCurrentNumber.text.toString()
+            viewModel.incrementCurrentOrderValue(currentOrderValueFromTextView)
         }
         binding.buttonServiceDecreaseOrder.setOnClickListener {
-            if (checkInternetConnection(requireActivity().applicationContext)) {
-                val currentOrderValueFromTextView = binding.textViewCurrentNumber.text.toString()
-                viewModel.decrementCurrentOrderValue(currentOrderValueFromTextView)
-                Log.d(TAG, "increment ${binding.textViewCurrentNumber.text}")
-            } else {
-                displayNoInternerConnection()
-            }
+            val currentOrderValueFromTextView = binding.textViewCurrentNumber.text.toString()
+            viewModel.decrementCurrentOrderValue(currentOrderValueFromTextView)
         }
 
         //********************************************************************************
@@ -116,7 +116,7 @@ class serviceFragment : Fragment() {
         }
         //********************************************************************************
         binding.buttonServiceDeleteAccount.setOnClickListener {
-                displayDialogDeleteAccount()
+            displayDialogDeleteAccount()
 
         }
         //*******************************************************************************
@@ -125,41 +125,24 @@ class serviceFragment : Fragment() {
         }
         //*******************************************************************************
         binding.buttonEditService.setOnClickListener {
-
-            if (checkInternetConnection(requireActivity().applicationContext)) {
-                findNavController().navigate(R.id.action_serviceFragment_to_createServiceFragment)
-            } else {
-                displayNoInternerConnection()
-            }
-
+            findNavController().navigate(R.id.action_serviceFragment_to_createServiceFragment)
         }
         //*******************************************************************************
         binding.buttonServiceEditOrder.setOnClickListener {
-            if (checkInternetConnection(requireActivity().applicationContext)) {
-                displayDialog()
-            } else {
-                displayNoInternerConnection()
-            }
-
+            displayDialogEditOrder()
         }
         binding.buttonServiceResetOrder.setOnClickListener {
-            if (checkInternetConnection(requireActivity().applicationContext)) {
-                binding.textViewCurrentNumber.text = "0"
-                viewModel.changeOrderValueV(0L)
-            } else {
-                displayNoInternerConnection()
-            }
-
-
+            binding.textViewCurrentNumber.text = "0"
+            viewModel.changeOrderValueV(0L)
         }
-        viewModel.userDeleted.observe(viewLifecycleOwner){
-            if (it == true){
+        viewModel.userDeleted.observe(viewLifecycleOwner) {
+            if (it == true) {
                 findNavController().navigate(R.id.action_serviceFragment_to_homeFragment)
             }
         }
         viewModel.serviceDeleted.observe(viewLifecycleOwner) {
             if (it == true) {
-                if (passwordForDeleteAccount.isNotEmpty()){
+                if (passwordForDeleteAccount.isNotEmpty()) {
                     viewModel.deleteAccountV(passwordForDeleteAccount)
                 }
             }
@@ -170,22 +153,25 @@ class serviceFragment : Fragment() {
     }
 
     private fun displayDialogDeleteAccount() {
+        var myValue: CharSequence = ""
         MaterialDialog(requireContext()).show {
             title(R.string.dialog_delete_account_title)
             message(R.string.dialog_delete_account_message)
-            //******************************
-
             val input = input(
                 hint = "Enter Your Password here",
                 allowEmpty = false,
                 inputType = InputType.TYPE_CLASS_TEXT
             ) { _, password ->
-                viewModel.deleteServiceV()
-                passwordForDeleteAccount = password.toString()
+                myValue = password
             }
             //*********************************
             positiveButton(R.string.delete_account) {
-
+                if (myValue.isNotEmpty()) {
+                    viewModel.deleteServiceV()
+                    passwordForDeleteAccount = myValue.toString()
+                } else {
+                    it.dismiss()
+                }
             }
             negativeButton(R.string.cancel) {
                 it.dismiss()
@@ -193,20 +179,31 @@ class serviceFragment : Fragment() {
         }
     }
 
-    @SuppressLint("CheckResult")
-    private fun displayDialog() {
+
+    private fun displayDialogEditOrder() {
+        var myValue: CharSequence = ""
         MaterialDialog(requireContext()).show {
-            input(
-                hint = "Enter Current Number Here",
+            val input = input(
+                hint = "Enter current number here",
                 allowEmpty = false,
                 maxLength = 3,
                 inputType = InputType.TYPE_CLASS_NUMBER
             ) { _, currentNumber ->
-                binding.textViewCurrentNumber.text = currentNumber.toString()
-                viewModel.changeOrderValueV(currentNumber.toString().toLong())
+                myValue = currentNumber
             }
-            positiveButton(R.string.ok)
+            positiveButton(R.string.edit) {
+                if (myValue.isNotEmpty()) {
+                    binding.textViewCurrentNumber.text = myValue.toString()
+                    viewModel.changeOrderValueV(myValue.toString().toLong())
+                } else {
+                    it.dismiss()
+                }
+            }
+            negativeButton(R.string.cancel) {
+                it.dismiss()
+            }
         }
+
     }
 
     private fun displayDialogLogOut() {
@@ -217,7 +214,7 @@ class serviceFragment : Fragment() {
                 Log.d(TAG, "Logged out ")
                 viewModel.signOut()
             }
-            negativeButton(R.string.no) {
+            negativeButton(R.string.cancel) {
                 it.dismiss()
             }
         }

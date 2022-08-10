@@ -87,28 +87,25 @@ class ScanOrPickQrCode : Fragment() {
                 ).show()
             }
         }
+        viewModel.tokenUploaded.observe(viewLifecycleOwner) {
+            if (it == true) {
 
+                viewModel.sayIfClientIsInAVisit(true)
+                findNavController().navigate(R.id.action_scanOrPickQrCode_to_clientFragment)
+
+            }
+        }
         viewModel.service.observe(viewLifecycleOwner) {
             if (it != null) {
                 val userId = viewModel.userId.value!!
-                // here we are sure it os right QR CODE and userId with us, let's save it in preferences
+                viewModel.saveUserIdInPreferences(userId)
                 viewModel.uploadMyClientToken(
-                    userId,
                     Token(MyFirebaseMessagingService.token.toString())
                 )
-                viewModel.sayIfClientIsInAVisit(true)
-                viewModel.saveUserIdInPreferences(userId)
-                viewModel.navigateToClientFragment()
             } else {
                 Toast.makeText(requireContext(), "Wrong QR CODE", Toast.LENGTH_SHORT).show()
                 //findNavController().navigate(R.id.action_scanQrCodeFragment_to_homeFragment)
             }
-        }
-
-        viewModel.navigateOrder.observe(viewLifecycleOwner) {
-           // Toast.makeText(requireContext(), "GOOD",Toast.LENGTH_SHORT).show()
-            findNavController().navigate(R.id.action_scanOrPickQrCode_to_clientFragment)
-
         }
 
         val options = BarcodeScannerOptions.Builder()

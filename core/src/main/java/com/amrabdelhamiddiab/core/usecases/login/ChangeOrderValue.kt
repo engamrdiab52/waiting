@@ -5,6 +5,6 @@ import com.amrabdelhamiddiab.core.domain.Order
 
 
 class ChangeOrderValue(private val repositoryChangeOrderValue: RepositoryChangeOrderValue) {
-    suspend operator fun invoke(userId: String, order: Order) =
-        repositoryChangeOrderValue.changeOrderValue(userId, order)
+    suspend operator fun invoke(order: Order) =
+        repositoryChangeOrderValue.changeOrderValue( order)
 }

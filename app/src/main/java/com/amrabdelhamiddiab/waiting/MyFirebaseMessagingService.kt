@@ -24,8 +24,7 @@ class MyFirebaseMessagingService :
     override fun onNewToken(newToken: String) {
         super.onNewToken(newToken)
         token = newToken
-        //  Firebase.messaging.subscribeToTopic(TOPIC)
-        Log.d(TAG, "3333333333333333333333" + token.toString())
+        Log.d(TAG,"TOKEN****************************" +token.toString())
     }
 
 
@@ -34,25 +33,13 @@ class MyFirebaseMessagingService :
         createNotification(message)
         val notificationData = message.data
         val toVoice = notificationData["title"] as String
-        Log.d(TAG, "121212121212121212121........"  + toVoice)
-        // i guarantee here one instance
         val ttsProviderImpl = TtsProviderFactory.instance
         if (ttsProviderImpl != null) {
-            Log.d(TAG, "----------------------ttsProviderImpl != null---------------")
             with(ttsProviderImpl) {
-
                 init(applicationContext, toVoice)
-              //  say(toVoice)
-               // shutdown()
             }
-        }else {
-            Log.d(TAG, "----------------------ttsProviderImpl == null---------------")
         }
-
-        //  createVoice(toVoice)
     }
-
-
     //here i can pass the importance dependence on a condition on the value i eil receive from sender (service)
     private fun createNotification(message: RemoteMessage) {
         //Create the Intent

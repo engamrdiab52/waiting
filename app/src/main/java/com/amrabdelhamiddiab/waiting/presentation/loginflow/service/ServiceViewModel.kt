@@ -1,6 +1,7 @@
 package com.amrabdelhamiddiab.waiting.presentation.loginflow.service
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,6 +14,10 @@ import com.amrabdelhamiddiab.waiting.MainActivity
 import com.amrabdelhamiddiab.waiting.framework.firebase.fcm.FcmService
 import com.amrabdelhamiddiab.waiting.framework.utilis.SingleLiveEvent
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -31,14 +36,16 @@ class ServiceViewModel @Inject constructor(
     private val downloadOrder: DownloadOrder,
     private val fcmService: FcmService,
     private val gson: Gson,
-    private val downloadToken: DownloadToken
+    private val downloadToken: DownloadToken,
+    private val databaseReference: DatabaseReference
 ) : ViewModel() {
 
     private val _orderValue = SingleLiveEvent<Order?>()
     val orderValue: LiveData<Order?> get() = _orderValue
+
     val uid: String
         get() {
-            return auth.currentUser!!.uid
+            return auth.currentUser?.uid ?: ""
         }
 
     private val _tokenDownloaded = SingleLiveEvent<Token?>()
@@ -50,8 +57,14 @@ class ServiceViewModel @Inject constructor(
     private val _serviceDeleted = SingleLiveEvent<Boolean>()
     val serviceDeleted: LiveData<Boolean> get() = _serviceDeleted
 
+    private val _dataBaseError = SingleLiveEvent<DatabaseError?>()
+    val dataBaseError: LiveData<DatabaseError?> get() = _dataBaseError
+
     private val _service = SingleLiveEvent<Service?>()
     val service: LiveData<Service?> get() = _service
+
+    private val _orderChanged = SingleLiveEvent<Boolean>()
+    val orderChanged: LiveData<Boolean> get() = _orderChanged
 
     //********************************
     //ok
@@ -60,6 +73,7 @@ class ServiceViewModel @Inject constructor(
 
     private val _userSignedOut = SingleLiveEvent<Boolean?>()
     val userSignedOut: LiveData<Boolean?> get() = _userSignedOut
+
     //************************************
     //*************************
     //ok
@@ -78,6 +92,7 @@ class ServiceViewModel @Inject constructor(
 
         }
     }
+/*
 
     fun downloadOrderV() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -85,6 +100,7 @@ class ServiceViewModel @Inject constructor(
 
         }
     }
+*/
 
     fun downloadTokenV() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -96,36 +112,32 @@ class ServiceViewModel @Inject constructor(
     fun changeOrderValueV(value: Long) {
         val order = Order(value)
         viewModelScope.launch {
-            changeOrderValue(auth.currentUser!!.uid, order)
-
+            _downloading.postValue(true)
+            _orderChanged.postValue(changeOrderValue(order)!!)
+            _downloading.postValue(false)
         }
     }
 
     fun incrementCurrentOrderValue(value: String) {
-        val order = Order(value.toLong() + 1)
-        viewModelScope.launch {
-            changeOrderValue(auth.currentUser!!.uid, order)
-            _orderValue.postValue(downloadOrder(auth.currentUser!!.uid))
-        }
+        changeOrderValueV(value.toLong()+1L)
     }
 
     fun decrementCurrentOrderValue(value: String) {
-        val order = Order(value.toLong() - 1)
-        viewModelScope.launch {
-            changeOrderValue(auth.currentUser!!.uid, order)
-            _orderValue.postValue(downloadOrder(auth.currentUser!!.uid))
+        if (value.toInt() >= 1) {
+            changeOrderValueV(value.toLong() - 1L)
         }
     }
 
     fun deleteAccountV(password: String) {
         viewModelScope.launch(Dispatchers.IO) {
-        //    auth.currentUser?.let { deleteService(it.uid) }
-        //    auth.currentUser?.let { deleteCurrentOrder(it.uid) }
+            //    auth.currentUser?.let { deleteService(it.uid) }
+            //    auth.currentUser?.let { deleteCurrentOrder(it.uid) }
             _downloading.postValue(true)
             _userDeleted.postValue(deleteAccount(password)!!)
             _downloading.postValue(false)
         }
     }
+
     fun deleteServiceV() {
         viewModelScope.launch(Dispatchers.IO) {
             //    auth.currentUser?.let { deleteService(it.uid) }
@@ -154,4 +166,45 @@ class ServiceViewModel @Inject constructor(
         }
     }
 
+    //**********************
+    //Listener to Services
+    private val serviceListener = object : ValueEventListener {
+        override fun onCancelled(error: DatabaseError) {
+            _dataBaseError.postValue(error)
+        }
+
+        override fun onDataChange(dataSnapshot: DataSnapshot) {
+            val item = dataSnapshot.getValue(Service::class.java)
+            _service.postValue(item)
+        }
+    }
+
+    //****************************
+    fun notifyWhenServiceChange() {
+        if (uid.isNotEmpty()) {
+            databaseReference.child("services").child(uid)
+                .addValueEventListener(serviceListener)
+        }
+    }
+
+    //******************************************
+    //Listener to Orders
+    private val orderListener = object : ValueEventListener {
+        override fun onCancelled(error: DatabaseError) {
+            _dataBaseError.postValue(error)
+        }
+
+        override fun onDataChange(dataSnapshot: DataSnapshot) {
+            val item = dataSnapshot.getValue(Order::class.java)
+            _orderValue.postValue(item)
+        }
+    }
+
+    //****************************
+    fun notifyWhenOrderChange() {
+        if (uid.isNotEmpty()) {
+            databaseReference.child("orders").child(uid)
+                .addValueEventListener(orderListener)
+        }
+    }
 }

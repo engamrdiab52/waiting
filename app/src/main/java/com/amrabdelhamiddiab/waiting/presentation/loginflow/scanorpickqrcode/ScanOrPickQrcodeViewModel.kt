@@ -30,6 +30,8 @@ class ScanOrPickQrcodeViewModel @Inject constructor(
     private val _tokenUploaded = SingleLiveEvent<Boolean?>()
     val tokenUploaded: LiveData<Boolean?> get() = _tokenUploaded
 
+    private val _downloading = SingleLiveEvent<Boolean>()
+    val downloading: LiveData<Boolean> get() = _downloading
 
     private val _navigateOrder = SingleLiveEvent<Boolean>()
     val navigateOrder: LiveData<Boolean> get() = _navigateOrder
@@ -37,13 +39,11 @@ class ScanOrPickQrcodeViewModel @Inject constructor(
     fun saveUserIdInPreferences(userId: String){
         prefeHelper.saveUserIdForClient(userId)
     }
-
-    fun navigateToClientFragment(){
-        _navigateOrder.value = true
-    }
     fun downloadServiceV(userId: String) {
         viewModelScope.launch(Dispatchers.IO) {
+            _downloading.postValue(true)
             _service.postValue(downloadService(userId))
+            _downloading.postValue(false)
         }
     }
     //to check it in fragment
@@ -54,9 +54,11 @@ class ScanOrPickQrcodeViewModel @Inject constructor(
     fun sayIfClientIsInAVisit(inAVisit: Boolean){
         prefeHelper.setIfClientInAVisit(inAVisit)
     }
-    fun uploadMyClientToken(userId: String , token : Token) {
+    fun uploadMyClientToken(token : Token) {
         viewModelScope.launch(Dispatchers.IO) {
-            _tokenUploaded.postValue( uploadClientToken(userId , token))
+            _downloading.postValue(true)
+            _tokenUploaded.postValue( uploadClientToken( token))
+            _downloading.postValue(false)
         }
     }
 

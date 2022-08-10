@@ -28,7 +28,6 @@ class ClientViewModel @Inject constructor(
     private val downloadService: DownloadService,
 ) :
     ViewModel() {
-
     private val _orderValue = SingleLiveEvent<Order?>()
     val orderValue: LiveData<Order?> get() = _orderValue
 
@@ -40,11 +39,9 @@ class ClientViewModel @Inject constructor(
 
     private val orderListener = object : ValueEventListener {
         override fun onCancelled(error: DatabaseError) {
-            // error
-            Log.d(TAG, error.message)
+            Log.d(TAG,"Error  orderListener = object : ValueEventListener............."+ error.message)
             _orderValue.postValue(Order(0L))
         }
-
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             val item = dataSnapshot.getValue(Order::class.java)
             _orderValue.postValue(item)
@@ -53,7 +50,6 @@ class ClientViewModel @Inject constructor(
             }
         }
     }
-
 
     fun notifyWhenOrderChange(userId: String) {
         //    val userId = prefeHelper.fetchUserId()

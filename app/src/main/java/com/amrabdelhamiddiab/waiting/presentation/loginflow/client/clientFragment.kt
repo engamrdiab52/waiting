@@ -104,21 +104,31 @@ class clientFragment : Fragment() {
 
 
     private fun displayDialog() {
+        var myValue :CharSequence = ""
         MaterialDialog(requireContext()).show {
-            input(
+          val input =  input(
                 hint = "Enter Your Order Here",
                 allowEmpty = false,
                 maxLength = 3,
                 inputType = InputType.TYPE_CLASS_NUMBER
             ) { _, myNumber ->
-                if (myNumber.toString().toInt() > orderNumber) {
-                    viewModel.saveMyNumberInPreferences(myNumber.toString().toInt())
-                    binding.textViewMyNumber.text = myNumber.toString()
-                } else {
-                    Toast.makeText(requireContext(), "Invalid Number", Toast.LENGTH_SHORT).show()
+              myValue = myNumber
+            }
+            positiveButton(R.string.add){
+                if (myValue.isNotEmpty()){
+                    if (myValue.toString().toInt() > orderNumber) {
+                        viewModel.saveMyNumberInPreferences(myValue.toString().toInt())
+                        binding.textViewMyNumber.text = myValue.toString()
+                    } else {
+                        Toast.makeText(requireContext(), "Invalid Number", Toast.LENGTH_SHORT).show()
+                    }
+                }else {
+                    it.dismiss()
                 }
             }
-            positiveButton(R.string.ok)
+            negativeButton(R.string.cancel) {
+                it.dismiss()
+            }
         }
     }
 

@@ -25,6 +25,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import com.amrabdelhamiddiab.core.domain.Token
+import com.amrabdelhamiddiab.waiting.MainActivity
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.MyFirebaseMessagingService
 import com.amrabdelhamiddiab.waiting.R
@@ -81,14 +82,15 @@ class ScanQrCodeFragment : Fragment() {
 
         )
         startScanQrCode()
-        viewModel.navigateOrder.observe(viewLifecycleOwner) {
-
-            findNavController().navigate(R.id.action_scanQrCodeFragment_to_clientFragment)
+        viewModel.tokenUploaded.observe(viewLifecycleOwner){
+            if (it == true){
+                viewModel.sayIfClientIsInAVisit(true)
+                findNavController().navigate(R.id.action_scanQrCodeFragment_to_clientFragment)
+            }
 
         }
         viewModel.userId.observe(viewLifecycleOwner){
             if (it != null) {
-                //to check if it real user id before save it
                 viewModel.downloadServiceV(it)
             }else{
                 Toast.makeText(requireContext(), "Error when taking the QR code", Toast.LENGTH_SHORT).show()
@@ -97,11 +99,8 @@ class ScanQrCodeFragment : Fragment() {
         viewModel.service.observe(viewLifecycleOwner){
             if (it != null){
                 val userId = viewModel.userId.value!!
-                // here we are sure it os right QR CODE and userId with us, let's save it in preferences
-                viewModel.uploadMyClientToken(userId,Token(MyFirebaseMessagingService.token.toString()) )
-                viewModel.sayIfClientIsInAVisit(true)
                 viewModel.saveUserIdInPreferences(userId)
-                viewModel.navigateToClientFragment()
+                viewModel.uploadMyClientToken(Token(MyFirebaseMessagingService.token.toString()) )
             }else {
                 Toast.makeText(requireContext(), "Wrong QR CODE", Toast.LENGTH_SHORT).show()
                 findNavController().navigate(R.id.action_scanQrCodeFragment_to_homeFragment)
