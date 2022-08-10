@@ -32,7 +32,7 @@ class MyFirebaseMessagingService :
         super.onMessageReceived(message)
         createNotification(message)
         val notificationData = message.data
-        val toVoice = notificationData["title"] as String
+        val toVoice = notificationData["message"] as String
         val ttsProviderImpl = TtsProviderFactory.instance
         if (ttsProviderImpl != null) {
             with(ttsProviderImpl) {

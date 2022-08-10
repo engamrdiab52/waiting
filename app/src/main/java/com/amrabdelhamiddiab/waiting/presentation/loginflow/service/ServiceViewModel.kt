@@ -30,10 +30,8 @@ class ServiceViewModel @Inject constructor(
     private val downloadService: DownloadService,
     private val deleteAccount: DeleteAccount,
     private val deleteService: DeleteService,
-    private val deleteCurrentOrder: DeleteCurrentOrder,
     private val auth: FirebaseAuth,
     private val changeOrderValue: ChangeOrderValue,
-    private val downloadOrder: DownloadOrder,
     private val fcmService: FcmService,
     private val gson: Gson,
     private val downloadToken: DownloadToken,
@@ -92,20 +90,10 @@ class ServiceViewModel @Inject constructor(
 
         }
     }
-/*
-
-    fun downloadOrderV() {
-        viewModelScope.launch(Dispatchers.IO) {
-            _orderValue.postValue(downloadOrder(auth.currentUser!!.uid))
-
-        }
-    }
-*/
 
     fun downloadTokenV() {
         viewModelScope.launch(Dispatchers.IO) {
-            _tokenDownloaded.postValue(downloadToken(auth.currentUser!!.uid))
-
+            _tokenDownloaded.postValue(downloadToken())
         }
     }
 
@@ -147,9 +135,8 @@ class ServiceViewModel @Inject constructor(
             _downloading.postValue(false)
         }
     }
-
+// service here send fcm to the client
     fun sendNotification(pushNotification: PushNotification) {
-
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 //i don't need live data here

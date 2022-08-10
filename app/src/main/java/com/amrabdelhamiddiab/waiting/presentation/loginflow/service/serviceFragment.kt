@@ -28,7 +28,7 @@ class serviceFragment : Fragment() {
     private val viewModel by viewModels<ServiceViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        viewModel.downloadTokenV()
     }
 
     override fun onCreateView(
@@ -65,9 +65,29 @@ class serviceFragment : Fragment() {
         viewModel.orderValue.observe(viewLifecycleOwner) {
             if (it != null) {
                 binding.textViewCurrentNumber.text = it.order.toString()
+                val token = viewModel.tokenDownloaded.value?.token ?: ""
+                if (token.isNotEmpty()) {
+                    PushNotification(
+                        NotificationData(
+                            "Current Serving Number",
+                            it.order.toString()
+                        ),
+                        token
+                    ).also { pushNotification ->
+                        viewModel.sendNotification(pushNotification)
+                    }
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "...No Clients Registered to get notifications",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             } else {
-                binding.textViewCurrentNumber.text = "0"
+                Toast.makeText(requireContext(), "error", Toast.LENGTH_SHORT).show()
             }
+
+
         }
         viewModel.dataBaseError.observe(viewLifecycleOwner) {
             if (it != null) {
@@ -82,24 +102,11 @@ class serviceFragment : Fragment() {
         }
         //*********************************
         viewModel.tokenDownloaded.observe(viewLifecycleOwner) {
-            if (it != null) {
-                Log.d(TAG, "tokenDownloaded................TRUE")
-                PushNotification(
-                    NotificationData(
-                        binding.textViewCurrentNumber.text.toString(),
-                        "you are the after next"
-                    ),
-                    it.token
-
-                ).also { pushNotification ->
-                    viewModel.sendNotification(pushNotification)
-                }
-            } else {
-                Log.d(TAG, "tokenDownloaded................false")
+            if (it == null){
+                Toast.makeText(requireContext(), "NO Client is waiting......", Toast.LENGTH_LONG).show()
             }
 
         }
-
         binding.buttonServiceIncrementOrder.setOnClickListener {
             val currentOrderValueFromTextView = binding.textViewCurrentNumber.text.toString()
             viewModel.incrementCurrentOrderValue(currentOrderValueFromTextView)

@@ -4,5 +4,5 @@ import com.amrabdelhamiddiab.core.domain.Order
 import com.amrabdelhamiddiab.core.domain.Token
 
 interface IDownloadToken {
-    suspend fun downloadToken(userId: String): Token?
+    suspend fun downloadToken(): Token?
 }
