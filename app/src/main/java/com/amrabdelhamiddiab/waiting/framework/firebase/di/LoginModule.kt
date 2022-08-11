@@ -4,6 +4,8 @@ import com.amrabdelhamiddiab.core.data.IDownloadService
 import com.amrabdelhamiddiab.core.data.IUploadService
 import com.amrabdelhamiddiab.core.data.login.*
 import com.amrabdelhamiddiab.core.usecases.login.*
+import com.amrabdelhamiddiab.waiting.framework.firebase.login.DeleteThisDayImpl
+import com.amrabdelhamiddiab.waiting.framework.firebase.login.RemoveClientTokenImpl
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
@@ -181,4 +183,23 @@ class LoginModule {
         return ListDownloadTokens(repositoryListDownloadTokens)
     }
 
+    @Provides
+    fun provideRepositoryRemoveClientToken(iRemoveClientToken: IRemoveClientToken): RepositoryRemoveClientToken {
+        return RepositoryRemoveClientToken(iRemoveClientToken)
+    }
+
+    @Provides
+    fun provideRemoveClientToken(repositoryRemoveClientToken: RepositoryRemoveClientToken): RemoveClientToken {
+        return RemoveClientToken(repositoryRemoveClientToken)
+    }
+
+    @Provides
+    fun provideRepositoryDeleteThisDay(iDeleteThisDay: IDeleteThisDay): RepositoryDeleteThisDay {
+        return RepositoryDeleteThisDay(iDeleteThisDay)
+    }
+
+    @Provides
+    fun provideDeleteThisDay(repositoryDeleteThisDay: RepositoryDeleteThisDay): DeleteThisDay {
+        return DeleteThisDay(repositoryDeleteThisDay)
+    }
 }

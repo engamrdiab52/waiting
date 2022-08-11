@@ -5,12 +5,14 @@ import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.amrabdelhamiddiab.core.data.login.RepositoryDeleteThisDay
 import com.amrabdelhamiddiab.core.domain.Order
 import com.amrabdelhamiddiab.core.domain.PushNotification
 import com.amrabdelhamiddiab.core.domain.Service
 import com.amrabdelhamiddiab.core.domain.Token
 import com.amrabdelhamiddiab.core.usecases.login.*
 import com.amrabdelhamiddiab.waiting.MainActivity
+import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.framework.firebase.fcm.FcmService
 import com.amrabdelhamiddiab.waiting.framework.utilis.SingleLiveEvent
 import com.google.firebase.auth.FirebaseAuth
@@ -33,7 +35,8 @@ class ServiceViewModel @Inject constructor(
     private val gson: Gson,
     private val downloadToken: DownloadToken,
     private val listDownloadTokens: ListDownloadTokens,
-    private val databaseReference: DatabaseReference
+    private val databaseReference: DatabaseReference,
+    private val deleteThisDay: DeleteThisDay
 ) : ViewModel() {
 
     private val _orderValue = SingleLiveEvent<Order?>()
@@ -52,6 +55,9 @@ class ServiceViewModel @Inject constructor(
 
     private val _userDeleted = SingleLiveEvent<Boolean>()
     val userDeleted: LiveData<Boolean> get() = _userDeleted
+
+    private val _dayEnd = SingleLiveEvent<Boolean>()
+    val dayEnd: LiveData<Boolean> get() = _dayEnd
 
     private val _serviceDeleted = SingleLiveEvent<Boolean>()
     val serviceDeleted: LiveData<Boolean> get() = _serviceDeleted
@@ -95,6 +101,14 @@ class ServiceViewModel @Inject constructor(
     fun downloadTokenV() {
         viewModelScope.launch(Dispatchers.IO) {
             _tokenDownloaded.postValue(downloadToken())
+        }
+    }
+
+    fun deleteThisDayV() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _downloading.postValue(true)
+            _dayEnd.postValue(deleteThisDay()!!)
+            _downloading.postValue(false)
         }
     }
 
@@ -199,7 +213,7 @@ class ServiceViewModel @Inject constructor(
 
     //****************************
     //Listener to the list of tokens
-    private val listOfTokensListener = object : ValueEventListener{
+    private val listOfTokensListener = object : ValueEventListener {
         private val _listOfTokens: MutableList<Token> = mutableListOf()
         override fun onDataChange(snapshot: DataSnapshot) {
             _listOfDownloadedTokens.value = emptyList()
@@ -218,8 +232,59 @@ class ServiceViewModel @Inject constructor(
         }
     }
 
+    //****************************
+    //Listener to the list of tokens on Child:
+ /*   private val childInListOfTokensListener = object : ChildEventListener {
+
+        private var _listOfTokens: MutableList<Token> = mutableListOf()
+
+        override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+            val token = snapshot.getValue(Token::class.java)
+            if (token != null ){
+                _listOfTokens.clear()
+                if (listOfDownloadedTokens.value != null){
+                    _listOfTokens.addAll(listOfDownloadedTokens.value!!)
+                    Log.d(TAG, "_listOfTokens ...... != null.....111.....$_listOfTokens")
+                    _listOfTokens.add(token)
+                    _listOfDownloadedTokens.value = emptyList()
+                    _listOfDownloadedTokens.value = _listOfTokens
+                    Log.d(TAG, "_listOfTokens ...... != null.....222.....$_listOfTokens")
+                }else {
+                    _listOfTokens.add(token)
+                    _listOfDownloadedTokens.value = emptyList()
+                    _listOfDownloadedTokens.value = _listOfTokens
+                    Log.d(TAG, "_listOfTokens ...... == null.........$_listOfTokens")
+                }
+
+            }
+
+        }
+
+        override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+            val token = snapshot.getValue(Token::class.java)
+            _listOfTokens.clear()
+            if (token != null){
+                _listOfTokens = listOfDownloadedTokens.value as MutableList<Token>
+                _listOfTokens.filterNot { it.token.equals(token) }
+                _listOfDownloadedTokens.value = _listOfTokens
+            }
+        }
+
+        override fun onChildRemoved(snapshot: DataSnapshot) {
+
+        }
+
+        override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+
+        }
+    }*/
+
     fun notifyWhenListOfTokensChanged() {
-        if (uid.isNotEmpty()){
+        if (uid.isNotEmpty()) {
             databaseReference.child("tokens").child(uid)
                 .addValueEventListener(listOfTokensListener)
         }

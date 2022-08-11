@@ -25,10 +25,11 @@ import dagger.hilt.android.AndroidEntryPoint
 class serviceFragment : Fragment() {
     private var passwordForDeleteAccount: String = ""
     private lateinit var binding: FragmentServiceBinding
+    var fromButton: Boolean = false
     private val viewModel by viewModels<ServiceViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.downloadTokenV()
+        //  viewModel.downloadTokenV()
     }
 
     override fun onCreateView(
@@ -36,10 +37,9 @@ class serviceFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_service, container, false)
-        //    FirebaseMessaging.getInstance().subscribeToTopic()
+
         viewModel.notifyWhenServiceChange()
         viewModel.notifyWhenOrderChange()
-      //  viewModel.downloadListOfTokensV()
         viewModel.notifyWhenListOfTokensChanged()
 
         viewModel.downloading.observe(viewLifecycleOwner) {
@@ -59,35 +59,29 @@ class serviceFragment : Fragment() {
             }
         }
 
-/*        viewModel.listOfDownloadedTokens.observe(viewLifecycleOwner) {
-            if (it.isNullOrEmpty()) {
-
-            }
-        }*/
-
         viewModel.orderValue.observe(viewLifecycleOwner) {
+
             if (it != null) {
                 binding.textViewCurrentNumber.text = it.order.toString()
                 //  val token = viewModel.tokenDownloaded.value?.token ?: ""
-                val listOfTokens = viewModel.listOfDownloadedTokens.value
-                if (!listOfTokens.isNullOrEmpty()) {
-                    listOfTokens.forEach { token ->
-                        PushNotification(
-                            NotificationData(
-                                "Current Serving Number",
-                                it.order.toString()
-                            ),
-                            token.token
-                        ).also { pushNotification ->
-                            viewModel.sendNotification(pushNotification)
+                if (fromButton) {
+                    fromButton = false
+                    val listOfTokens = viewModel.listOfDownloadedTokens.value
+                    if (!listOfTokens.isNullOrEmpty()) {
+                        listOfTokens.forEach { token ->
+                            PushNotification(
+                                NotificationData(
+                                    "Current Serving Number",
+                                    it.order.toString()
+                                ),
+                                token.token
+                            ).also { pushNotification ->
+                                viewModel.sendNotification(pushNotification)
+                            }
                         }
                     }
                 }
-            } else {
-                Toast.makeText(requireContext(), "error", Toast.LENGTH_SHORT).show()
             }
-
-
         }
         viewModel.dataBaseError.observe(viewLifecycleOwner) {
             if (it != null) {
@@ -108,13 +102,28 @@ class serviceFragment : Fragment() {
             }
 
         }
+
+        viewModel.dayEnd.observe(viewLifecycleOwner) {
+            findNavController().navigate(R.id.action_serviceFragment_to_homeFragment)
+        }
+
         binding.buttonServiceIncrementOrder.setOnClickListener {
+            fromButton = true
             val currentOrderValueFromTextView = binding.textViewCurrentNumber.text.toString()
             viewModel.incrementCurrentOrderValue(currentOrderValueFromTextView)
+            Log.d(
+                TAG,
+                "binding.buttonServiceIncrementOrder........................." + viewModel.listOfDownloadedTokens.value.toString()
+            )
         }
         binding.buttonServiceDecreaseOrder.setOnClickListener {
+            fromButton = true
             val currentOrderValueFromTextView = binding.textViewCurrentNumber.text.toString()
             viewModel.decrementCurrentOrderValue(currentOrderValueFromTextView)
+        }
+
+        binding.buttonEndThisDay.setOnClickListener {
+            viewModel.deleteThisDayV()
         }
 
         //********************************************************************************
@@ -140,6 +149,7 @@ class serviceFragment : Fragment() {
             displayDialogEditOrder()
         }
         binding.buttonServiceResetOrder.setOnClickListener {
+            fromButton = true
             binding.textViewCurrentNumber.text = "0"
             viewModel.changeOrderValueV(0L)
         }
@@ -199,6 +209,7 @@ class serviceFragment : Fragment() {
             }
             positiveButton(R.string.edit) {
                 if (myValue.isNotEmpty()) {
+                    fromButton = true
                     binding.textViewCurrentNumber.text = myValue.toString()
                     viewModel.changeOrderValueV(myValue.toString().toLong())
                 } else {

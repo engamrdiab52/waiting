@@ -194,6 +194,8 @@
             android:id="@+id/action_scanOrPickQrCode_to_clientFragment"
             app:destination="@id/clientFragment"
             app:launchSingleTop="true"
-            app:popUpTo="@id/scanOrPickQrCode"/>
+            app:popUpTo="@id/scanOrPickQrCode"
+            app:popUpToInclusive="true"
+            />
     </fragment>
 </navigation>

@@ -7,6 +7,7 @@ import com.amrabdelhamiddiab.core.data.IPreferenceHelper
 import com.amrabdelhamiddiab.core.data.login.IUploadClientToken
 import com.amrabdelhamiddiab.core.domain.Token
 import com.amrabdelhamiddiab.waiting.MainActivity
+import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.framework.utilis.checkInternetConnection
 import com.google.firebase.database.DatabaseReference
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -28,12 +29,21 @@ class UploadClientTokenImpl @Inject constructor(
             return if (checkInternetConnection(context)) {
                 try {
                     val ref = databaseReference.child("tokens").child(serviceId)
-                    val tokenKey = ref.push().key
-                    if (tokenKey != null) {
-                        ref.child(tokenKey).setValue(token).await()
+                    val savedTokenReferenceId = preferenceHelper.retrieveClientTokenId()
+                    if (savedTokenReferenceId.isNotEmpty()){
+                        Log.d(TAG,"savedTokenReferenceId...........isNotEmpty......."+ savedTokenReferenceId )
+                        ref.child(savedTokenReferenceId).setValue(token).await()
                         true
-                    } else {
-                        false
+                    }else {
+                        val tokenKey = ref.push().key
+                        if (tokenKey != null) {
+                            preferenceHelper.saveClientTokenId(tokenKey)
+                            Log.d(TAG,"tokenKey...........!= null......."+ tokenKey )
+                            ref.child(tokenKey).setValue(token).await()
+                            true
+                        } else {
+                            false
+                        }
                     }
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {

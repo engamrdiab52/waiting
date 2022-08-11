@@ -83,10 +83,11 @@ class clientFragment : Fragment() {
         viewModel.orderValue.observe(viewLifecycleOwner) {
             if (it == null) {
                 binding.textViewOrder.text = "0"
+            }else {
+                binding.textViewOrder.text = it.order.toString()
+                orderNumber = it.order.toInt()
             }
-            binding.textViewOrder.text = it?.order.toString()
 
-            orderNumber = it?.order?.toInt() ?: 0
             //  it?.let { it1 -> viewModel.saveOrderInPreferences(it1) }
         }
         binding.buttonScanQrCode.setOnClickListener {
@@ -99,30 +100,38 @@ class clientFragment : Fragment() {
                 displayNoInternerConnection()
             }
         }
+
+        viewModel.clientTokenRemoved.observe(viewLifecycleOwner) {
+            if (it == true) {
+                findNavController().navigate(R.id.action_clientFragment_to_homeFragment)
+            }
+        }
+
         return binding.root
     }
 
 
     private fun displayDialog() {
-        var myValue :CharSequence = ""
+        var myValue: CharSequence = ""
         MaterialDialog(requireContext()).show {
-          val input =  input(
+            val input = input(
                 hint = "Enter Your Order Here",
                 allowEmpty = false,
                 maxLength = 3,
                 inputType = InputType.TYPE_CLASS_NUMBER
             ) { _, myNumber ->
-              myValue = myNumber
+                myValue = myNumber
             }
-            positiveButton(R.string.add){
-                if (myValue.isNotEmpty()){
+            positiveButton(R.string.add) {
+                if (myValue.isNotEmpty()) {
                     if (myValue.toString().toInt() > orderNumber) {
                         viewModel.saveMyNumberInPreferences(myValue.toString().toInt())
                         binding.textViewMyNumber.text = myValue.toString()
                     } else {
-                        Toast.makeText(requireContext(), "Invalid Number", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Invalid Number", Toast.LENGTH_SHORT)
+                            .show()
                     }
-                }else {
+                } else {
                     it.dismiss()
                 }
             }
@@ -139,10 +148,11 @@ class clientFragment : Fragment() {
             positiveButton(R.string.yes) {
                 viewModel.saveMyNumberInPreferences(0)
                 viewModel.sayIfClientIsInAVisit(false)
-                findNavController().navigate(R.id.action_clientFragment_to_homeFragment)
+                viewModel.removeClientTokenV()
+                Log.d(TAG,"displayDialogAreYouSure().............called" )
             }
-            negativeButton(R.string.no) {
-
+            negativeButton(R.string.cancel) {
+                it.dismiss()
             }
         }
     }

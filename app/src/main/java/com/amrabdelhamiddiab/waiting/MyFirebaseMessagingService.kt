@@ -9,6 +9,7 @@ import android.content.SharedPreferences
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.media.RingtoneManager
+import android.net.Uri
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -24,7 +25,9 @@ class MyFirebaseMessagingService :
     override fun onNewToken(newToken: String) {
         super.onNewToken(newToken)
         token = newToken
-        Log.d(TAG,"TOKEN****************************" +token.toString())
+        //here i have to create token reference uid
+        //   Firebase.database.reference
+        Log.d(TAG, "TOKEN****************************" + token.toString())
     }
 
 
@@ -40,11 +43,14 @@ class MyFirebaseMessagingService :
             }
         }
     }
+
     //here i can pass the importance dependence on a condition on the value i eil receive from sender (service)
     private fun createNotification(message: RemoteMessage) {
         //Create the Intent
         val intent = Intent(applicationContext, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        val sound: Uri =
+            Uri.parse("android.resource://" + packageName + "/" + com.amrabdelhamiddiab.waiting.R.raw.sound)
 
         //Create Pending Intent
         val pendingIntent = PendingIntent.getActivity(
@@ -58,7 +64,7 @@ class MyFirebaseMessagingService :
         //here priority will be variable and will change depending on the condition of you are the next
         //Urgent Importance when his number arrives
         //Here I will pass the number of current serving number
-        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+        val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentIntent(pendingIntent)
             .setContentTitle(message.data["title"])
             .setContentText(message.data["message"])
@@ -66,9 +72,9 @@ class MyFirebaseMessagingService :
             .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.waiting_logo))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
-            .setVibrate(longArrayOf(1000, 1000, 1000))
-            .build()
+            .setVibrate(longArrayOf(1000, 1000, 1000))/*.setSound(sound)*/
 
+        val notification = notificationBuilder.build()
         with(NotificationManagerCompat.from(applicationContext)) {
             val channel = NotificationChannel(
                 CHANNEL_ID, CHANNEL_NAME,
@@ -77,6 +83,7 @@ class MyFirebaseMessagingService :
                 description = "My channel description"
                 enableLights(true)
                 lightColor = Color.GREEN
+               setSound(sound, null)
             }
             channel.lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
             createNotificationChannel(channel)
@@ -95,6 +102,12 @@ class MyFirebaseMessagingService :
             e.printStackTrace()
         }
     }
+/*
+    private fun playCustomSound() {
+        val sound: Uri =
+            Uri.parse("android.resource://" + packageName + "/" + com.amrabdelhamiddiab.waiting.R.raw.sound)
+        mBuilder.setSound(sound)
+    }*/
 
     companion object {
         private const val CHANNEL_ID = "notification_channel"

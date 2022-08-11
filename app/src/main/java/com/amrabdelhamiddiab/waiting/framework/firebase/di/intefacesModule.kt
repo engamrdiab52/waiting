@@ -52,6 +52,10 @@ abstract class intefacesModule {
     abstract fun bindDeleteService(deleteServiceImpl: DeleteServiceImpl): IDeleteService
 
     @Binds
+    abstract fun bindDeleteThisDay(deleteThisDayImpl: DeleteThisDayImpl): IDeleteThisDay
+
+
+    @Binds
     abstract fun bindDeleteCurrentOrder(deleteCurrentOrderImpl: DeleteCurrentOrderImpl): IDeleteCurrentOrder
 
     @Binds
@@ -68,4 +72,7 @@ abstract class intefacesModule {
 
     @Binds
     abstract fun bindListDownloadTokens(listDownloadTokensImpl: ListDownloadTokensImpl) : IListDownloadTokens
+
+    @Binds
+    abstract fun bindRemoveClientToken(removeClientTokenImpl: RemoveClientTokenImpl) : IRemoveClientToken
 }

@@ -8,6 +8,7 @@ import com.amrabdelhamiddiab.core.data.IPreferenceHelper
 import com.amrabdelhamiddiab.core.domain.Order
 import com.amrabdelhamiddiab.core.domain.Service
 import com.amrabdelhamiddiab.core.usecases.login.DownloadService
+import com.amrabdelhamiddiab.core.usecases.login.RemoveClientToken
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.framework.utilis.SingleLiveEvent
 import com.google.firebase.database.DataSnapshot
@@ -26,6 +27,7 @@ class ClientViewModel @Inject constructor(
     private val prefeHelper: IPreferenceHelper,
     private val gson: Gson,
     private val downloadService: DownloadService,
+    private val removeClientToken: RemoveClientToken
 ) :
     ViewModel() {
     private val _orderValue = SingleLiveEvent<Order?>()
@@ -36,6 +38,12 @@ class ClientViewModel @Inject constructor(
 
     private val _service = SingleLiveEvent<Service?>()
     val service: LiveData<Service?> get() = _service
+
+    private val _downloading = SingleLiveEvent<Boolean>()
+    val downloading: LiveData<Boolean> get() = _downloading
+
+    private val _clientTokenRemoved = SingleLiveEvent<Boolean>()
+    val clientTokenRemoved: LiveData<Boolean> get() = _clientTokenRemoved
 
     private val orderListener = object : ValueEventListener {
         override fun onCancelled(error: DatabaseError) {
@@ -51,6 +59,20 @@ class ClientViewModel @Inject constructor(
         }
     }
 
+
+//*****************************
+    //remove token from DB to not receive notifications
+    //first i need the reference with key
+    // IRemoveClientToken
+
+    fun removeClientTokenV() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _downloading.postValue(true)
+            _clientTokenRemoved.postValue(removeClientToken()!!)
+            _downloading.postValue(false)
+        }
+    }
+//*****************************
     fun notifyWhenOrderChange(userId: String) {
         //    val userId = prefeHelper.fetchUserId()
         // val userId = "C8UkQhcYCRRzqqtCFf5MtDqR9Cq2"

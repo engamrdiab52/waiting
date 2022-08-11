@@ -18,5 +18,8 @@ interface IPreferenceHelper {
     //in an visit
     fun setIfClientInAVisit(inAVisit: Boolean)
     fun getIfClientInAVisit() : Boolean
+    // client token id
+    fun saveClientTokenId(tokenId:String)
+    fun retrieveClientTokenId(): String
     fun clearPrefs()
 }

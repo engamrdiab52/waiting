@@ -15,7 +15,7 @@ class PreferenceManager @Inject constructor(@ApplicationContext context: Context
         const val MY_NUMBER = "myNumber"
         const val SERVICE_FOR_CLIENT = "serviceForClient"
         const val CLIENT_IN_A_VISIT = "clientInAVisit"
-        const val TOKEN = "deviceToken"
+        const val TOKEN_REF_ID = "deviceTokenReferenceId"
     }
 
     private val PREFS_NAME = "PHARMACYPreferences"
@@ -62,6 +62,14 @@ class PreferenceManager @Inject constructor(@ApplicationContext context: Context
 
     override fun getIfClientInAVisit(): Boolean {
         return preferences[CLIENT_IN_A_VISIT] ?: false
+    }
+
+    override fun saveClientTokenId(tokenId: String) {
+        preferences[TOKEN_REF_ID] = tokenId
+    }
+
+    override fun retrieveClientTokenId(): String {
+        return preferences[TOKEN_REF_ID] ?: ""
     }
 
 
