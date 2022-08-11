@@ -105,4 +105,5 @@
     <string name="dialog_logout_title">LOG OUT</string>
     <string name="dialog_delete_account_title">Delete account</string>
     <string name="pick_qr_code">Pick QR Code</string>
+    <string name="end_the_day">End The Day</string>
 </resources>

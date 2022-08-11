@@ -106,7 +106,6 @@ class clientFragment : Fragment() {
                 findNavController().navigate(R.id.action_clientFragment_to_homeFragment)
             }
         }
-
         return binding.root
     }
 
