@@ -68,7 +68,9 @@ class HomeFragment : Fragment() {
         // Client PART
         //*****************************************
         binding.buttonClient.setOnClickListener {
-            if (checkInternetConnection(requireActivity().applicationContext)) {
+            //==============================================================
+            //original part
+    /*        if (checkInternetConnection(requireActivity().applicationContext)) {
                 if (viewModel.getClientInAVisit()) {
                     findNavController().navigate(R.id.action_homeFragment_to_clientFragment)
                 } else {
@@ -78,7 +80,8 @@ class HomeFragment : Fragment() {
                 }
             } else {
                 displayNoInternerConnection()
-            }
+            }*/
+            //==========================================================
         }
         return binding.root
     }
