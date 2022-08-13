@@ -198,4 +198,8 @@
             app:popUpToInclusive="true"
             />
     </fragment>
+    <fragment
+        android:id="@+id/UIFragment"
+        android:name="com.amrabdelhamiddiab.waiting.presentation.loginflow.UIFragment"
+        android:label="UIFragment" />
 </navigation>

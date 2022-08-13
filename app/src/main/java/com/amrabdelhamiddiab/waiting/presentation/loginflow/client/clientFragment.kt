@@ -1,12 +1,18 @@
 package com.amrabdelhamiddiab.waiting.presentation.loginflow.client
 
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.appcompat.view.ContextThemeWrapper
+import androidx.core.view.WindowCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -27,15 +33,23 @@ class clientFragment : Fragment() {
     private var orderNumber: Int = 0
 
     var order: Order? = null
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+   //       requireActivity().theme.applyStyle(R.style.Theme_Waiting_NoActionBar, false)
+
+        super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        /*    val co = ContextThemeWrapper(requireActivity(), R.style.Theme_Waiting_NoActionBar_Fragment)
+            val infl = inflater.cloneInContext(co
+            )*/
+        //requireActivity().setTheme(R.style.Theme_Waiting_NoActionBar_Fragment)
+   //    requireContext().theme.applyStyle(R.style.Theme_Waiting_NoActionBar, false)
+     //   requireActivity().setTheme(R.style.Theme_Waiting_NoActionBar)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_client, container, false)
         val userId = viewModel.retrieveUserIdFromPreferences()
         viewModel.notifyWhenOrderChange(userId)
@@ -83,7 +97,7 @@ class clientFragment : Fragment() {
         viewModel.orderValue.observe(viewLifecycleOwner) {
             if (it == null) {
                 binding.textViewOrder.text = "0"
-            }else {
+            } else {
                 binding.textViewOrder.text = it.order.toString()
                 orderNumber = it.order.toInt()
             }
@@ -106,9 +120,21 @@ class clientFragment : Fragment() {
                 findNavController().navigate(R.id.action_clientFragment_to_homeFragment)
             }
         }
+
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        /* requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+         requireActivity().window.statusBarColor =
+             Color.parseColor("#000000");
+ */
+
+
+        //  WindowCompat.setDecorFitsSystemWindows(requireActivity().window, false)
+    }
 
     private fun displayDialog() {
         var myValue: CharSequence = ""
@@ -148,7 +174,7 @@ class clientFragment : Fragment() {
                 viewModel.saveMyNumberInPreferences(0)
                 viewModel.sayIfClientIsInAVisit(false)
                 viewModel.removeClientTokenV()
-                Log.d(TAG,"displayDialogAreYouSure().............called" )
+                Log.d(TAG, "displayDialogAreYouSure().............called")
             }
             negativeButton(R.string.cancel) {
                 it.dismiss()

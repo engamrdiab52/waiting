@@ -107,4 +107,5 @@
     <string name="pick_qr_code">Pick QR Code</string>
     <string name="end_the_day">End The Day</string>
     <string name="total_balance">Total Balance</string>
+    <string name="or">or</string>
 </resources>

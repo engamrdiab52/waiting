@@ -4,13 +4,14 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
@@ -165,10 +166,56 @@ class serviceFragment : Fragment() {
                 }
             }
         }
+
         //***********************************************************************************
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_edit, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when(menuItem.itemId){
+                    R.id.menu_edit -> {
+                        Toast.makeText(requireContext(), "EDIT", Toast.LENGTH_SHORT).show()
+                        true
+                    }
+                    else -> false
+                }
+            }
+
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+    /*   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+           inflater.inflate(R.menu.menu_edit, menu)
+       }*/
+
+
+    /*    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+            return when (item.itemId) {
+                R.id.menu_edit -> {
+                    Toast(requireContext(), "EDIT", Toast.LENGTH_SHORT).show()
+                    true
+                }
+                *//*     R.id.menu_add -> {
+                     viewModel.counterForFakeTime++
+                     if (viewModel.counterForFakeTime >= 29) {
+                         viewModel.fakeTime -= (28 * DAY)
+                         viewModel.counterForFakeTime = 0
+                     }
+                     viewModel.fakeTime += DAY
+                     Log.d(TAG, "${viewModel.fakeTime} +  ${viewModel.counterForFakeTime}")
+                     adapter.run { notifyDataSetChanged() }
+                     true
+                 }*//*
+            else -> super.onOptionsItemSelected(item)
+        }
+    }*/
     private fun displayDialogDeleteAccount() {
         var myValue: CharSequence = ""
         MaterialDialog(requireContext()).show {

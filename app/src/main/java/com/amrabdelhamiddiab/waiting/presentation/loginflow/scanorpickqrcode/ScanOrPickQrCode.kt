@@ -16,6 +16,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.amrabdelhamiddiab.core.domain.Token
+import com.amrabdelhamiddiab.waiting.MainActivity
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.MyFirebaseMessagingService
 import com.amrabdelhamiddiab.waiting.R
@@ -141,7 +142,16 @@ class ScanOrPickQrCode : Fragment() {
         }.addOnCanceledListener {
             Log.d(TAG, "Canceled")
         }
-    }
+    }}
 //*************************************************
-
+/*
+override fun onResume() {
+    super.onResume()
+    (requireActivity() as MainActivity).hideStatusBar()
 }
+
+    override fun onStop() {
+        (requireActivity() as MainActivity).showStatusBar()
+        super.onStop()
+    }
+}*/

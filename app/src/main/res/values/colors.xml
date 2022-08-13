@@ -9,4 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="number_color">#0CA3F4</color>
     <color name="card_view_background">#FAFAFB</color>
+    <color name="color_background_home">#F5F7FB</color>
+    <color name="color_button_home">#679EF3</color>
+
 </resources>
