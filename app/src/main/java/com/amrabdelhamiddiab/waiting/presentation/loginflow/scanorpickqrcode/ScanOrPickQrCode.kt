@@ -59,7 +59,7 @@ class ScanOrPickQrCode : Fragment() {
 
     }
 
-    override fun onCreateView(
+/*    override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
@@ -75,11 +75,10 @@ class ScanOrPickQrCode : Fragment() {
         binding.buttonChoosePick.setOnClickListener {
             openSomeActivityForResult()
         }
-
         viewModel.userId.observe(viewLifecycleOwner) {
             if (it != null) {
                 //to check if it real user id before save it
-                viewModel.downloadServiceV(it)
+                viewModel.downloadServiceV_pick(it)
             } else {
                 Toast.makeText(
                     requireContext(),
@@ -108,7 +107,6 @@ class ScanOrPickQrCode : Fragment() {
                 //findNavController().navigate(R.id.action_scanQrCodeFragment_to_homeFragment)
             }
         }
-
         val options = BarcodeScannerOptions.Builder()
             .setBarcodeFormats(
                 Barcode.FORMAT_QR_CODE
@@ -117,7 +115,7 @@ class ScanOrPickQrCode : Fragment() {
 
 
         return binding.root
-    }
+    }*/
 
     // GET THE QR CODE VALUE
     //*******************************************************
@@ -142,7 +140,8 @@ class ScanOrPickQrCode : Fragment() {
         }.addOnCanceledListener {
             Log.d(TAG, "Canceled")
         }
-    }}
+    }
+}
 //*************************************************
 /*
 override fun onResume() {

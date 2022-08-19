@@ -2,11 +2,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.amrabdelhamiddiab.waiting">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28"/>
-    <uses-permission android:name="android.permission.CAMERA" android:required="true"/>
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+    <uses-permission
+        android:name="android.permission.CAMERA"
+        android:required="true" />
+
     <application
         android:name=".framework.utilis.WaitingApplication"
         android:allowBackup="true"
@@ -17,15 +23,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Waiting"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
-   <!--     <meta-data
-            android:name="firebase_messaging_auto_init_enabled"
-            android:value="true" />
+        <!--
+        commented out to enable re generation of tokens evey install
+                <meta-data
+                    android:name="firebase_messaging_auto_init_enabled"
+                    android:value="false" />
+                <meta-data
+                    android:name="firebase_analytics_collection_enabled"
+                    android:value="false" />-->
         <meta-data
-            android:name="firebase_analytics_collection_enabled"
-            android:value="true" />-->
-
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -49,6 +59,5 @@
 
     </application>
 
-</manifest>
-<!--android:permission="com.google.android.c2dm.permission.SEND"-->
-<!-- <action android:name="com.google.android.c2dm.intent.RECEIVE" />-->
+</manifest><!--android:permission="com.google.android.c2dm.permission.SEND"-->
+    <!-- <action android:name="com.google.android.c2dm.intent.RECEIVE" />-->

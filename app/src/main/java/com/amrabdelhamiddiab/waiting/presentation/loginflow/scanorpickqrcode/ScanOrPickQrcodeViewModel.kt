@@ -39,7 +39,7 @@ class ScanOrPickQrcodeViewModel @Inject constructor(
     fun saveUserIdInPreferences(userId: String){
         prefeHelper.saveUserIdForClient(userId)
     }
-    fun downloadServiceV(userId: String) {
+    fun downloadServiceV_pick(userId: String) {
         viewModelScope.launch(Dispatchers.IO) {
             _downloading.postValue(true)
             _service.postValue(downloadService(userId))

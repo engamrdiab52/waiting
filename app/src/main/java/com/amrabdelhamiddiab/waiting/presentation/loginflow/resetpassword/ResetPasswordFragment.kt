@@ -68,5 +68,13 @@ class ResetPasswordFragment : Fragment() {
             binding.textLayoutEmailResetPassword.error = null
         }.check()
     }
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity).setDrawerLocked()
+    }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        (activity as MainActivity).setDrawerUnlocked()
+    }
 }

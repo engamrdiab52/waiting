@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
+import com.amrabdelhamiddiab.waiting.MainActivity
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentLoginBinding
@@ -99,5 +100,15 @@ class LoginFragment : Fragment() {
             validPassword = true
             binding.textLayoutLoginPassword.error = null
         }.check()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity).setDrawerLocked()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        (activity as MainActivity).setDrawerUnlocked()
     }
 }

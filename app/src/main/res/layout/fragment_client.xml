@@ -11,7 +11,6 @@
         android:id="@+id/frameLayout2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/shape1"
         tools:context=".presentation.loginflow.client.clientFragment">
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
@@ -25,255 +24,44 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
+     <!--   <TextView
+            android:id="@+id/text_view_my_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            android:weightSum="2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:gravity="bottom|center"
+            android:paddingBottom="8dp"
+            android:text="@string/_0"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#303F9F"
+            android:textSize="90sp"
+            android:visibility="visible" />-->
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card_view_add_my_number"
-                android:layout_width="0dp"
-                android:layout_height="200dp"
-                android:layout_marginEnd="4dp"
-                android:layout_weight="1"
-                android:clickable="true"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="4dp"
-                app:strokeColor="#FF0000"
-                app:strokeWidth="2dp">
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:gravity="center"
-                        android:text="My Number"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                        android:textColor="#303F9F"
-                        android:visibility="visible" />
-
-                    <TextView
-                        android:id="@+id/text_view_my_number"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="bottom|center"
-                        android:paddingBottom="8dp"
-                        android:text="@string/_0"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textColor="#303F9F"
-                        android:textSize="90sp"
-                        android:visibility="visible" />
-
-                    <!--    <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:visibility="gone">
-
-                            <com.google.android.material.textfield.TextInputLayout
-                                android:id="@+id/text_layout_edit_order"
-                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:gravity="bottom"
-                                android:padding="0dp"
-                                app:errorEnabled="true"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/linearLayout">
-
-                                <com.google.android.material.textfield.TextInputEditText
-                                    android:id="@+id/edit_text_edit_order"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:focusable="true"
-                                    android:inputType="number"
-                                    android:padding="0dp"
-                                    android:hint="؟؟"
-                                    android:textColor="#303F9F"
-                                    android:gravity="center"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                                    android:textSize="80sp" />
-
-                                <Button
-                                    android:id="@+id/button_done"
-                                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/done"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                                    android:textColor="#303F9F" />
-                            </com.google.android.material.textfield.TextInputLayout>
-                        </LinearLayout>-->
-
-                </FrameLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="0dp"
-                android:layout_height="200dp"
-                android:layout_marginStart="4dp"
-                android:layout_weight="1"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="4dp"
-                app:strokeColor="#303F9F"
-                app:strokeWidth="2dp">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:gravity="center"
-                            android:text="Current"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                            android:textColor="#FF0000" />
-
-                        <TextView
-                            android:id="@+id/text_view_order"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="bottom|center"
-                            android:maxLines="1"
-                            android:paddingBottom="8dp"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                            android:textColor="#FF0000"
-                            android:textSize="90sp"
-                            tools:text="98" />
-                    </FrameLayout>
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout2"
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/text_view_order"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="160dp"
-            android:orientation="horizontal"
-            android:weightSum="2"
+            android:layout_marginStart="24dp"
+            android:maxLines="1"
+            tools:text="158"
+            android:gravity="center"
+            android:padding="@dimen/_8sdp"
+            android:layout_marginEnd="24dp"
+            android:textSize="@dimen/_100ssp"
+            android:textColor="@color/color_text_home"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <Button
-                android:id="@+id/button_scan_qr_code"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
-                android:layout_weight="1"
-                android:alpha="0.8"
-                android:enabled="true"
-                android:gravity="center"
-                android:text="@string/scan_qr_code"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="#303F9F"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:typeface="serif"
-                app:strokeWidth="1dp" />
-
-            <Button
-                android:id="@+id/button_add_my_number"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_weight="1"
-                android:alpha="0.8"
-                android:maxLines="1"
-                android:text="@string/add_my_number"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="#303F9F"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:typeface="serif"
-                android:visibility="visible"
-                app:strokeWidth="1dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
-
-            <TextView
-                android:id="@+id/text_view_peiod_for_each_visitor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="@string/period_of_time_for_eatch_visitor"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="#303F9F" />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/textView_category"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="4dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-            android:textColor="#303F9F"
-
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/line_view"
-            tools:text="Clinic" />
-
-        <TextView
-            android:id="@+id/textView_name_of_service"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:padding="4dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textColor="#303F9F"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-
-            app:layout_constraintTop_toBottomOf="@+id/textView_category"
-            tools:text="DR/Mohamed Shosha" />
-
-        <View
-            android:id="@+id/line_view"
-            android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:background="#303F9F"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.31" />
 
         <Button
             android:id="@+id/button_end_visit"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="7dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
             android:layout_weight="1"
             android:alpha="0.8"
             android:text="@string/end_visit"
@@ -282,9 +70,27 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:typeface="serif"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_name_of_service"
             app:strokeWidth="1dp" />
+
+        <TextView
+            android:id="@+id/text_view_my_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:paddingBottom="8dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/color_text_home"
+            tools:text = "my Bumber is 200"
+            android:textSize="@dimen/_16ssp"
+            android:padding="@dimen/_4sdp"
+            android:gravity="end"
+            app:layout_constraintBottom_toTopOf="@+id/button_end_visit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

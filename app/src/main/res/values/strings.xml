@@ -73,6 +73,7 @@
     <string name="save">SAVE</string>
     <string name="generate_qr_code">QR Code</string>
     <string name="scan_qr_code">Scan QR Code</string>
+    <string name="brows_gallery">Brows Gallery</string>
     <string name="enter_current_serving_number">Enter Current Serving number</string>
     <string name="end_visit">End Visit</string>
     <string name="end_this_day">End This Day</string>
@@ -84,6 +85,7 @@
     <string name="yes">YES</string>
     <string name="no">NO</string>
     <string name="edit">Edit</string>
+    <string name="edit_my_number">Edit My Number</string>
     <string name="cancel">Cancel</string>
     <string name="add">Add</string>
     <string name="period_of_time_for_eatch_visitor">period of time for eatch visitor</string>
@@ -107,5 +109,8 @@
     <string name="pick_qr_code">Pick QR Code</string>
     <string name="end_the_day">End The Day</string>
     <string name="total_balance">Total Balance</string>
+    <string name="bottom_sheet_message">choose Either to scan new QRcode Or brows uour gallery</string>
+    <string name="bottom_sheet_title">choose </string>
     <string name="or">or</string>
+    <string name="choose">Choose</string>
 </resources>

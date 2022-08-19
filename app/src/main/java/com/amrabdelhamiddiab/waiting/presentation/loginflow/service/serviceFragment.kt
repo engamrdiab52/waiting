@@ -70,6 +70,10 @@ class serviceFragment : Fragment() {
                     val listOfTokens = viewModel.listOfDownloadedTokens.value
                     if (!listOfTokens.isNullOrEmpty()) {
                         listOfTokens.forEach { token ->
+                            Log.d(
+                                TAG,
+                                ",,,,,,,,,,,,,,,,,,,,,inside  viewModel.orderValue.observe....................."
+                            )
                             PushNotification(
                                 NotificationData(
                                     "Current Serving Number",
@@ -112,10 +116,10 @@ class serviceFragment : Fragment() {
             fromButton = true
             val currentOrderValueFromTextView = binding.textViewCurrentNumber.text.toString()
             viewModel.incrementCurrentOrderValue(currentOrderValueFromTextView)
-            Log.d(
-                TAG,
-                "binding.buttonServiceIncrementOrder........................." + viewModel.listOfDownloadedTokens.value.toString()
-            )
+            /*  Log.d(
+                  TAG,
+                  "binding.buttonServiceIncrementOrder........................." + viewModel.listOfDownloadedTokens.value.toString()
+              )*/
         }
         binding.buttonServiceDecreaseOrder.setOnClickListener {
             fromButton = true
@@ -180,9 +184,9 @@ class serviceFragment : Fragment() {
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return when(menuItem.itemId){
+                return when (menuItem.itemId) {
                     R.id.menu_edit -> {
-                        Toast.makeText(requireContext(), "EDIT", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "EDIT IN SERVICE", Toast.LENGTH_SHORT).show()
                         true
                     }
                     else -> false

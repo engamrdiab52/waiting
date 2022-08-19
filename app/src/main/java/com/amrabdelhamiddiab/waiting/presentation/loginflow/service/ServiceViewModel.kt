@@ -166,9 +166,15 @@ class ServiceViewModel @Inject constructor(
                 //i don't need live data here
                 val response = fcmService.postNotification(pushNotification)
                 if (response.isSuccessful) {
-                    Log.d(MainActivity.TAG, "Response: ${gson.toJson(response.body())}")
+                    Log.d(
+                        MainActivity.TAG,
+                        "7777777777777888888888888888888888888888888" + "Response: ${gson.toJson(response.body())}"
+                    )
                 } else {
-                    Log.e(MainActivity.TAG, response.errorBody().toString())
+                    Log.e(
+                        MainActivity.TAG,
+                        "77777777777777777777777777777777777777" + response.raw()
+                    )
                 }
             } catch (e: Exception) {
                 Log.e(MainActivity.TAG, e.toString())
@@ -234,54 +240,54 @@ class ServiceViewModel @Inject constructor(
 
     //****************************
     //Listener to the list of tokens on Child:
- /*   private val childInListOfTokensListener = object : ChildEventListener {
+    /*   private val childInListOfTokensListener = object : ChildEventListener {
 
-        private var _listOfTokens: MutableList<Token> = mutableListOf()
+           private var _listOfTokens: MutableList<Token> = mutableListOf()
 
-        override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-            val token = snapshot.getValue(Token::class.java)
-            if (token != null ){
-                _listOfTokens.clear()
-                if (listOfDownloadedTokens.value != null){
-                    _listOfTokens.addAll(listOfDownloadedTokens.value!!)
-                    Log.d(TAG, "_listOfTokens ...... != null.....111.....$_listOfTokens")
-                    _listOfTokens.add(token)
-                    _listOfDownloadedTokens.value = emptyList()
-                    _listOfDownloadedTokens.value = _listOfTokens
-                    Log.d(TAG, "_listOfTokens ...... != null.....222.....$_listOfTokens")
-                }else {
-                    _listOfTokens.add(token)
-                    _listOfDownloadedTokens.value = emptyList()
-                    _listOfDownloadedTokens.value = _listOfTokens
-                    Log.d(TAG, "_listOfTokens ...... == null.........$_listOfTokens")
-                }
+           override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+               val token = snapshot.getValue(Token::class.java)
+               if (token != null ){
+                   _listOfTokens.clear()
+                   if (listOfDownloadedTokens.value != null){
+                       _listOfTokens.addAll(listOfDownloadedTokens.value!!)
+                       Log.d(TAG, "_listOfTokens ...... != null.....111.....$_listOfTokens")
+                       _listOfTokens.add(token)
+                       _listOfDownloadedTokens.value = emptyList()
+                       _listOfDownloadedTokens.value = _listOfTokens
+                       Log.d(TAG, "_listOfTokens ...... != null.....222.....$_listOfTokens")
+                   }else {
+                       _listOfTokens.add(token)
+                       _listOfDownloadedTokens.value = emptyList()
+                       _listOfDownloadedTokens.value = _listOfTokens
+                       Log.d(TAG, "_listOfTokens ...... == null.........$_listOfTokens")
+                   }
 
-            }
+               }
 
-        }
+           }
 
-        override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-            val token = snapshot.getValue(Token::class.java)
-            _listOfTokens.clear()
-            if (token != null){
-                _listOfTokens = listOfDownloadedTokens.value as MutableList<Token>
-                _listOfTokens.filterNot { it.token.equals(token) }
-                _listOfDownloadedTokens.value = _listOfTokens
-            }
-        }
+           override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+               val token = snapshot.getValue(Token::class.java)
+               _listOfTokens.clear()
+               if (token != null){
+                   _listOfTokens = listOfDownloadedTokens.value as MutableList<Token>
+                   _listOfTokens.filterNot { it.token.equals(token) }
+                   _listOfDownloadedTokens.value = _listOfTokens
+               }
+           }
 
-        override fun onChildRemoved(snapshot: DataSnapshot) {
+           override fun onChildRemoved(snapshot: DataSnapshot) {
 
-        }
+           }
 
-        override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+           override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
 
-        }
+           }
 
-        override fun onCancelled(error: DatabaseError) {
+           override fun onCancelled(error: DatabaseError) {
 
-        }
-    }*/
+           }
+       }*/
 
     fun notifyWhenListOfTokensChanged() {
         if (uid.isNotEmpty()) {

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.*
@@ -16,17 +17,14 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.amrabdelhamiddiab.core.data.IPreferenceHelper
 import com.amrabdelhamiddiab.waiting.databinding.ActivityMainBinding
+import com.amrabdelhamiddiab.waiting.presentation.loginflow.MyDrawerController
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
-
-    companion object {
-        const val TAG = "MainActivity"
-    }
+class MainActivity : AppCompatActivity(), MyDrawerController {
 
     private val navController: NavController by lazy {
         Navigation.findNavController(this, R.id.nav_host_fragment_content_main)
@@ -42,122 +40,44 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+       /* appBarLayout.background.alpha = 1*/
+      //  WindowCompat.setDecorFitsSystemWindows(window, false)
         setContentView(binding.root)
+        drawerLayout = binding.drawerLayout
+        navigationView = binding.navigationView
+        toolbar = binding.toolbar
+        appBarLayout = binding.appbar
 
- /*      binding.appBarMain.appbar.applyInsetter {
-           // Apply the navigation bar insets...
-           type(navigationBars = true) {
-               // Add to padding on all sides
-               padding()
-           }
+        setSupportActionBar(toolbar)
 
-           // Apply the status bar insets...
-           type(statusBars = true) {
-               // Add to margin on all sides
-               margin()
-       }}*/
-    //it is to disable status bar color
-/*    val w: Window = window
-        w.setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-        )*/
-       /* setWindowFlag(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false)
-        window.statusBarColor = Color.TRANSPARENT*/
+        navigationView.setupWithNavController(navController)
 
-        /*if (Build.VERSION.SDK_INT in 21..29) {
-            window.statusBarColor = Color.TRANSPARENT
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            (SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or SYSTEM_UI_FLAG_LAYOUT_STABLE).also { window.decorView.systemUiVisibility = it }
-
-        } else if (Build.VERSION.SDK_INT >= 30) {
-            window.statusBarColor = Color.TRANSPARENT
-            // Making status bar overlaps with the activity
-           *//* WindowCompat.setDecorFitsSystemWindows(window, false)*//*
-        }
-        if (Build.VERSION.SDK_INT >= 30) {
-
-            // Root ViewGroup of my activity
-            val root = binding.root
-
-            ViewCompat.setOnApplyWindowInsetsListener(root) { view, windowInsets ->
-
-                val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-
-                // Apply the insets as a margin to the view. Here the system is setting
-                // only the bottom, left, and right dimensions, but apply whichever insets are
-                // appropriate to your layout. You can also update the view padding
-                // if that's more appropriate.
-
-                view.layoutParams =  (view.layoutParams as FrameLayout.LayoutParams).apply {
-                    leftMargin = insets.left
-                    bottomMargin = insets.bottom
-                    rightMargin = insets.right
-                }
-
-                // Return CONSUMED if you don't want want the window insets to keep being
-                // passed down to descendant views.
-                WindowInsetsCompat.CONSUMED
-            }
-
-        }*/
+        appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.homeFragment,
+                R.id.clientFragment,
+                R.id.serviceFragment
+            ), drawerLayout
+        )
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration)
 
         addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.menu_app_bar, menu)
             }
-
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return false
             }
-
         })
-
 
         MyFirebaseMessagingService.sharedPref =
             getSharedPreferences("sharedPrefToken", Context.MODE_PRIVATE)
-
-     //   preferenceHelper = PreferenceManager(this.applicationContext)
-
-        drawerLayout = binding.drawerLayout
-        navigationView = binding.navigationView
-        toolbar = binding.toolbar
-        appBarLayout = binding.appbar
-        appBarLayout.background.alpha = 0
-        setSupportActionBar(toolbar)
-        navigationView.setupWithNavController(navController)
-        appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.currentBalanceFragment,
-                R.id.homeFragment
-            ), drawerLayout
-        )
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration)
     }
 
     override fun onSupportNavigateUp(): Boolean {
         return NavigationUI.navigateUp(navController, appBarConfiguration)
     }
 
-/*    private fun setWindowFlag(bits: Int, on: Boolean) {
-        val win = window
-        val winParams = win.attributes
-        if (on) {
-            winParams.flags = winParams.flags or bits
-        } else {
-            winParams.flags = winParams.flags and bits.inv()
-        }
-        win.attributes = winParams
-    }*/
-
-    /*
-        override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-            // Inflate the menu; this adds items to the action bar if it is present.
-            menuInflater.inflate(R.menu.menu_app_bar, menu)
-            return true
-        }*/
     override fun onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
@@ -165,6 +85,22 @@ class MainActivity : AppCompatActivity() {
             super.onBackPressed()
         }
     }
+
+    override fun setDrawerLocked() {
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+        toolbar.visibility = View.GONE
+        //  fab.visibility = View.GONE
+      //  bottomNavigationView.visibility = View.GONE
+    }
+
+    override fun setDrawerUnlocked() {
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+        toolbar.visibility = View.VISIBLE
+        //  fab.visibility = View.VISIBLE
+     //   bottomNavigationView.visibility = View.VISIBLE
+    }
+
+
 
     fun hideStatusBar() {
 
@@ -187,4 +123,8 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+
+    companion object {
+        const val TAG = "MainActivity"
+    }
 }

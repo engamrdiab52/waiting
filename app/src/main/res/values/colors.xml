@@ -11,5 +11,7 @@
     <color name="card_view_background">#FAFAFB</color>
     <color name="color_background_home">#F5F7FB</color>
     <color name="color_button_home">#679EF3</color>
+    <color name="color_text_home">#0084BD</color>
+    #0084BD
 
 </resources>

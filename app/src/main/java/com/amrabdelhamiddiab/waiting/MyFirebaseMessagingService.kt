@@ -33,6 +33,7 @@ class MyFirebaseMessagingService :
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
+        Log.d(TAG, "...............Message Received..................")
         createNotification(message)
         val notificationData = message.data
         val toVoice = notificationData["message"] as String

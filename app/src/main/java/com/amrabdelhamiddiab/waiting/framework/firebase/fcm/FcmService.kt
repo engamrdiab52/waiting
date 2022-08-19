@@ -10,7 +10,7 @@ import retrofit2.http.Headers
 import retrofit2.http.POST
 
 private const val SERVER_KEY =
-    "AAAAxyZDfww:APA91bHj8Y2UI32deYrTVfUDCAFaWn2RLVYasEM9LtyN5xdULugOkHCHbnf8Egs3vvCjgmtvCXGBmlqlw6l3je53S_1Ba93dhQMHPzxacBlfcPz4-RMKN6-hw9J9ot1ENDUKm7mtxkfy"
+    "AAAAaqkq-wA:APA91bFCGQsMPuw9p80c_wbpRxT8Ma_er06LwI9-sQ5DOzA1iTqS0J5v3PrLp3t43MVJeFwuG8wXiAhTixCy3d6HQ8-LecF43gBe2gittk0RwNXPhHhhX4UuopQbStzURzxcvQR5SAL3"
 private const val CONTENT_TYPE = "application/json"
 
 interface FcmService {

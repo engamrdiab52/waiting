@@ -100,6 +100,7 @@ class ClientViewModel @Inject constructor(
 
     fun saveMyNumberInPreferences(myNumber: Int) {
         prefeHelper.saveClientNumberInPreferences(myNumber)
+        _myNumber.value = myNumber
     }
 
     fun retrieveUserIdFromPreferences(): String {
