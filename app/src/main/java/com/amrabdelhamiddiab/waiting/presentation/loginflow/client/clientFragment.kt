@@ -65,17 +65,18 @@ class clientFragment : Fragment() {
         navigationHeaderNameOfService =
             navigationHeader.findViewById(R.id.textView_name_of_service_nav_header)
 
+
         val userId = viewModel.retrieveUserIdFromPreferences()
         viewModel.notifyWhenOrderChange(userId)
         viewModel.downloadServiceV(userId)
         viewModel.retrieveClientNumberFromPreferences()
-     /*   binding.cardViewAddMyNumber.setOnClickListener {
-            if (checkInternetConnection(requireActivity().applicationContext)) {
-                displayDialog()
-            } else {
-                displayNoInternerConnection()
-            }
-        }*/
+        /*   binding.cardViewAddMyNumber.setOnClickListener {
+               if (checkInternetConnection(requireActivity().applicationContext)) {
+                   displayDialog()
+               } else {
+                   displayNoInternerConnection()
+               }
+           }*/
         binding.buttonEndVisit.setOnClickListener {
             if (checkInternetConnection(requireActivity().applicationContext)) {
                 displayDialogAreYouSure()
@@ -84,8 +85,8 @@ class clientFragment : Fragment() {
             }
         }
         //-----------------------------
-     /*   binding.buttonAddMyNumber.setOnClickListener {
-            *//*   if (checkInternetConnection(requireActivity().applicationContext)) {
+        /*   binding.buttonAddMyNumber.setOnClickListener {
+               *//*   if (checkInternetConnection(requireActivity().applicationContext)) {
                    displayDialog()
                } else {
                    displayNoInternerConnection()
@@ -93,15 +94,17 @@ class clientFragment : Fragment() {
         }*/
         //----------------------------
         viewModel.myNumber.observe(viewLifecycleOwner) {
-            "My Number: $it".also { binding.textViewMyNumber.text = it }
-
+            (getString(R.string.my_number) + " " + it.toString()).also {
+                binding.textViewMyNumber.text = it
+            }
         }
         viewModel.service.observe(viewLifecycleOwner) {
             if (it != null) {
                 myService = it
-                val text = it.period_per_each_service
                 navigationHeaderTitle.text = myService.category
-                "about $text minuets for each visit".also { navigationHeaderPeriod.text = it }
+                val text = it.period_per_each_service
+                (getString(R.string.about)+" " + text +" " + getString(R.string.minuits_for_each_visit)).also { navigationHeaderPeriod.text = it }
+
                 navigationHeaderNameOfService.text = myService.name_of_service
                 /* binding.textViewCategory.text = it.category
                  binding.textViewNameOfService.text = it.name_of_service
@@ -125,16 +128,16 @@ class clientFragment : Fragment() {
 
             //  it?.let { it1 -> viewModel.saveOrderInPreferences(it1) }
         }
-       /* binding.buttonScanQrCode.setOnClickListener {
-            if (checkInternetConnection(requireActivity().applicationContext)) {
-                Log.d(TAG, "buttonScanQrCode called")
-                viewModel.saveMyNumberInPreferences(0)
-                findNavController().navigate(R.id.action_clientFragment_to_scanQrCodeFragment)
+        /* binding.buttonScanQrCode.setOnClickListener {
+             if (checkInternetConnection(requireActivity().applicationContext)) {
+                 Log.d(TAG, "buttonScanQrCode called")
+                 viewModel.saveMyNumberInPreferences(0)
+                 findNavController().navigate(R.id.action_clientFragment_to_scanQrCodeFragment)
 
-            } else {
-                displayNoInternerConnection()
-            }
-        }*/
+             } else {
+                 displayNoInternerConnection()
+             }
+         }*/
 
         viewModel.clientTokenRemoved.observe(viewLifecycleOwner) {
             if (it == true) {
@@ -179,7 +182,7 @@ class clientFragment : Fragment() {
         var myValue: CharSequence = ""
         MaterialDialog(requireContext()).show {
             val input = input(
-                hint = "Enter Your Order Here",
+                hint = getString(R.string.enter_your_number_here),
                 allowEmpty = false,
                 maxLength = 3,
                 inputType = InputType.TYPE_CLASS_NUMBER
@@ -190,10 +193,10 @@ class clientFragment : Fragment() {
                 if (myValue.isNotEmpty()) {
                     if (myValue.toString().toInt() > orderNumber) {
                         viewModel.saveMyNumberInPreferences(myValue.toString().toInt())
-                    //    viewModel.retrieveClientNumberFromPreferences()
-                     //   binding.textViewMyNumber.text = myValue.toString()
+                        //    viewModel.retrieveClientNumberFromPreferences()
+                        //   binding.textViewMyNumber.text = myValue.toString()
                     } else {
-                        Toast.makeText(requireContext(), "Invalid Number", Toast.LENGTH_SHORT)
+                        Toast.makeText(requireContext(), getString(R.string.invalid_number), Toast.LENGTH_SHORT)
                             .show()
                     }
                 } else {

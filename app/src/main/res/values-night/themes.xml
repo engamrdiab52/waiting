@@ -13,4 +13,19 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+    <style name="Theme.Waiting.NoActionBar.Fragment" parent="Theme.Waiting">
+        <!--u need these to get full screen behind system bars-->
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:fitsSystemWindows">true</item>
+        <!--      <item name="windowActionBar">false</item>-->
+        <item name="windowNoTitle">true</item>
+        <item name="android:textColor">@color/color_text_home_bright</item>
+        <item name="android:textColorSecondary">@color/color_text_home_bright</item>
+        <!--<item name="android:background">@drawable/background</item>-->
+        <!-- <item name="android:background">@color/white</item>-->
+        <!-- Optional: set the status bar light and content dark. -->
+        <item name="android:windowLightStatusBar">false</item>
+
+    </style>
 </resources>

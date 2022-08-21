@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.InputType
 import android.util.Log
 import android.view.*
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -17,13 +18,24 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import com.amrabdelhamiddiab.core.domain.NotificationData
 import com.amrabdelhamiddiab.core.domain.PushNotification
+import com.amrabdelhamiddiab.core.domain.Service
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentServiceBinding
+import com.amrabdelhamiddiab.waiting.framework.utilis.checkInternetConnection
+import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class serviceFragment : Fragment() {
+
+    private lateinit var navigationView: NavigationView
+    private lateinit var navigationHeader: View
+    private lateinit var navigationHeaderTitle: TextView
+    private lateinit var navigationHeaderNameOfService: TextView
+    private lateinit var navigationHeaderPeriod: TextView
+    private var myService: Service = Service("", "", "", 0)
+
     private var passwordForDeleteAccount: String = ""
     private lateinit var binding: FragmentServiceBinding
     var fromButton: Boolean = false
@@ -39,6 +51,17 @@ class serviceFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_service, container, false)
 
+
+        navigationView = requireActivity().findViewById(R.id.navigation_view)
+        navigationHeader = navigationView.getHeaderView(0)
+        navigationHeaderTitle = navigationHeader.findViewById(R.id.textView_category_nav_header)
+        navigationHeaderPeriod =
+            navigationHeader.findViewById(R.id.text_view_peiod_for_each_visitor_nav_header)
+        navigationHeaderNameOfService =
+            navigationHeader.findViewById(R.id.textView_name_of_service_nav_header)
+
+
+
         viewModel.notifyWhenServiceChange()
         viewModel.notifyWhenOrderChange()
         viewModel.notifyWhenListOfTokensChanged()
@@ -51,12 +74,16 @@ class serviceFragment : Fragment() {
             }
         }
         viewModel.service.observe(viewLifecycleOwner) {
-            binding.textViewCategory.text = it?.category ?: ""
-            binding.textViewNameOfService.text = it?.name_of_service ?: ""
             if (it != null) {
-                binding.textViewPeriodPerEachService.text = it.period_per_each_service.toString()
+                myService = it
+            }
+            navigationHeaderTitle.text = myService.category
+            navigationHeaderNameOfService.text = myService.name_of_service
+            if (it != null) {
+                val text = it.period_per_each_service
+                (getString(R.string.about)+" " + text +" " + getString(R.string.minuits_for_each_visit)).also { navigationHeaderPeriod.text = it }
             } else {
-                binding.textViewPeriodPerEachService.text = "0"
+                navigationHeaderPeriod.text = "0"
             }
         }
 
@@ -76,7 +103,7 @@ class serviceFragment : Fragment() {
                             )
                             PushNotification(
                                 NotificationData(
-                                    "Current Serving Number",
+                                    getString( R.string.current_serving_number) ,
                                     it.order.toString()
                                 ),
                                 token.token
@@ -112,52 +139,16 @@ class serviceFragment : Fragment() {
             findNavController().navigate(R.id.action_serviceFragment_to_homeFragment)
         }
 
-        binding.buttonServiceIncrementOrder.setOnClickListener {
+        binding.cardViewServiceIncrementOrder.setOnClickListener {
             fromButton = true
             val currentOrderValueFromTextView = binding.textViewCurrentNumber.text.toString()
             viewModel.incrementCurrentOrderValue(currentOrderValueFromTextView)
-            /*  Log.d(
-                  TAG,
-                  "binding.buttonServiceIncrementOrder........................." + viewModel.listOfDownloadedTokens.value.toString()
-              )*/
-        }
-        binding.buttonServiceDecreaseOrder.setOnClickListener {
-            fromButton = true
-            val currentOrderValueFromTextView = binding.textViewCurrentNumber.text.toString()
-            viewModel.decrementCurrentOrderValue(currentOrderValueFromTextView)
         }
 
         binding.buttonEndThisDay.setOnClickListener {
             viewModel.deleteThisDayV()
         }
 
-        //********************************************************************************
-
-        binding.buttonLogout.setOnClickListener {
-            displayDialogLogOut()
-        }
-        //********************************************************************************
-        binding.buttonServiceDeleteAccount.setOnClickListener {
-            displayDialogDeleteAccount()
-
-        }
-        //*******************************************************************************
-        binding.buttonQrcode.setOnClickListener {
-            findNavController().navigate(R.id.action_serviceFragment_to_QRcodeFragment)
-        }
-        //*******************************************************************************
-        binding.buttonEditService.setOnClickListener {
-            findNavController().navigate(R.id.action_serviceFragment_to_createServiceFragment)
-        }
-        //*******************************************************************************
-        binding.buttonServiceEditOrder.setOnClickListener {
-            displayDialogEditOrder()
-        }
-        binding.buttonServiceResetOrder.setOnClickListener {
-            fromButton = true
-            binding.textViewCurrentNumber.text = "0"
-            viewModel.changeOrderValueV(0L)
-        }
         viewModel.userDeleted.observe(viewLifecycleOwner) {
             if (it == true) {
                 findNavController().navigate(R.id.action_serviceFragment_to_homeFragment)
@@ -180,53 +171,45 @@ class serviceFragment : Fragment() {
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.menu_edit, menu)
+                menuInflater.inflate(R.menu.menu_service, menu)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
-                    R.id.menu_edit -> {
-                        Toast.makeText(requireContext(), "EDIT IN SERVICE", Toast.LENGTH_SHORT).show()
+                    R.id.menu_edit_current_order -> {
+                        displayDialogEditOrder()
                         true
                     }
+                    R.id.menu_delete_account -> {
+                        displayDialogDeleteAccount()
+                        true
+                    }
+                    R.id.menu_qr_code -> {
+                        findNavController().navigate(R.id.action_serviceFragment_to_QRcodeFragment)
+                        true
+                    }
+                    R.id.menu_log_out -> {
+                        displayDialogLogOut()
+                        true
+                    }
+                    R.id.menu_edit_service -> {
+                        findNavController().navigate(R.id.action_serviceFragment_to_createServiceFragment)
+                        true
+                    }
+
                     else -> false
                 }
             }
 
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
-    /*   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-           inflater.inflate(R.menu.menu_edit, menu)
-       }*/
-
-
-    /*    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-            return when (item.itemId) {
-                R.id.menu_edit -> {
-                    Toast(requireContext(), "EDIT", Toast.LENGTH_SHORT).show()
-                    true
-                }
-                *//*     R.id.menu_add -> {
-                     viewModel.counterForFakeTime++
-                     if (viewModel.counterForFakeTime >= 29) {
-                         viewModel.fakeTime -= (28 * DAY)
-                         viewModel.counterForFakeTime = 0
-                     }
-                     viewModel.fakeTime += DAY
-                     Log.d(TAG, "${viewModel.fakeTime} +  ${viewModel.counterForFakeTime}")
-                     adapter.run { notifyDataSetChanged() }
-                     true
-                 }*//*
-            else -> super.onOptionsItemSelected(item)
-        }
-    }*/
     private fun displayDialogDeleteAccount() {
         var myValue: CharSequence = ""
         MaterialDialog(requireContext()).show {
             title(R.string.dialog_delete_account_title)
             message(R.string.dialog_delete_account_message)
             val input = input(
-                hint = "Enter Your Password here",
+                hint = getString(R.string.enter_your_password_here),
                 allowEmpty = false,
                 inputType = InputType.TYPE_CLASS_TEXT
             ) { _, password ->
@@ -251,7 +234,7 @@ class serviceFragment : Fragment() {
         var myValue: CharSequence = ""
         MaterialDialog(requireContext()).show {
             val input = input(
-                hint = "Enter current number here",
+                hint = getString(R.string.enter_current_serving_number),
                 allowEmpty = false,
                 maxLength = 3,
                 inputType = InputType.TYPE_CLASS_NUMBER
@@ -293,5 +276,18 @@ class serviceFragment : Fragment() {
             title(R.string.no_internet_title)
             message(R.string.no_internet_message)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        navigationHeader.visibility = View.VISIBLE
+    }
+
+    override fun onStop() {
+        navigationHeader.visibility = View.GONE
+        navigationHeaderTitle.text = ""
+        navigationHeaderPeriod.text = ""
+        navigationHeaderNameOfService.text = ""
+        super.onStop()
     }
 }

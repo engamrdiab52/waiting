@@ -2,11 +2,13 @@ package com.amrabdelhamiddiab.waiting
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.*
 import androidx.drawerlayout.widget.DrawerLayout
@@ -15,8 +17,10 @@ import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
+import androidx.preference.PreferenceManager
 import com.amrabdelhamiddiab.core.data.IPreferenceHelper
 import com.amrabdelhamiddiab.waiting.databinding.ActivityMainBinding
+import com.amrabdelhamiddiab.waiting.framework.utilis.LocaleHelper
 import com.amrabdelhamiddiab.waiting.presentation.loginflow.MyDrawerController
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.navigation.NavigationView
@@ -40,9 +44,21 @@ class MainActivity : AppCompatActivity(), MyDrawerController {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-       /* appBarLayout.background.alpha = 1*/
-      //  WindowCompat.setDecorFitsSystemWindows(window, false)
+        /* appBarLayout.background.alpha = 1*/
+        //  WindowCompat.setDecorFitsSystemWindows(window, false)
         setContentView(binding.root)
+
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        val language = sharedPreferences.getString("language_list", "en")
+        Log.d(TAG, "888888888888888888888888888888888888888888888888888888" + language.toString())
+        LocaleHelper.updateResources(this, language)
+        val nightMode =sharedPreferences.getBoolean("night_mode", false)
+            if (nightMode) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+
         drawerLayout = binding.drawerLayout
         navigationView = binding.navigationView
         toolbar = binding.toolbar
@@ -65,6 +81,7 @@ class MainActivity : AppCompatActivity(), MyDrawerController {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.menu_app_bar, menu)
             }
+
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return false
             }
@@ -90,16 +107,15 @@ class MainActivity : AppCompatActivity(), MyDrawerController {
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         toolbar.visibility = View.GONE
         //  fab.visibility = View.GONE
-      //  bottomNavigationView.visibility = View.GONE
+        //  bottomNavigationView.visibility = View.GONE
     }
 
     override fun setDrawerUnlocked() {
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
         toolbar.visibility = View.VISIBLE
         //  fab.visibility = View.VISIBLE
-     //   bottomNavigationView.visibility = View.VISIBLE
+        //   bottomNavigationView.visibility = View.VISIBLE
     }
-
 
 
     fun hideStatusBar() {
@@ -107,21 +123,29 @@ class MainActivity : AppCompatActivity(), MyDrawerController {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         WindowInsetsControllerCompat(window, binding.root).let { controller ->
             controller.hide(WindowInsetsCompat.Type.statusBars())
-            controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            controller.systemBarsBehavior =
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
     }
 
     fun showStatusBar() {
         WindowCompat.setDecorFitsSystemWindows(window, true)
-        WindowInsetsControllerCompat(window, binding.root).show(WindowInsetsCompat.Type.statusBars())
+        WindowInsetsControllerCompat(
+            window,
+            binding.root
+        ).show(WindowInsetsCompat.Type.statusBars())
 
         // your code depending upon what you have implemented
     }
+
     fun changeTheme() {
-       this.theme.applyStyle(R.style.Theme_Waiting_NoActionBar, true)
+        this.theme.applyStyle(R.style.Theme_Waiting_NoActionBar, true)
 
     }
 
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(LocaleHelper.onAttach(base))
+    }
 
 
     companion object {

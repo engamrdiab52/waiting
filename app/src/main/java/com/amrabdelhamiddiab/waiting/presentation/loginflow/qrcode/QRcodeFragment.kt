@@ -71,7 +71,7 @@ class QRcodeFragment : Fragment() {
             if (permissionGranted) {
                 // Permissions are already granted, do your stuff
                 saveImage(bitmap, requireActivity(), "Waiting App")
-                Toast.makeText(requireContext(), "Image saved", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "Image saved in Gallery", Toast.LENGTH_LONG).show()
 
             }
         }

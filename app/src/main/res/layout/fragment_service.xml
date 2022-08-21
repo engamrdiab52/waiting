@@ -14,367 +14,95 @@
         tools:context=".presentation.loginflow.service.serviceFragment">
 
         <!-- TODO: Update blank fragment layout -->
+
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/loading_indecator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:indeterminate="true"
             android:visibility="invisible"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
+            app:layout_constraintBottom_toTopOf="@+id/button_end_this_day"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout7" />
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="match_parent"
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_view_service_increment_order"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="3"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.41000003"
+            app:strokeWidth="2dp">
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card_view_add_my_number"
-                android:layout_width="0dp"
-                android:layout_height="200dp"
-                android:layout_marginEnd="4dp"
-                android:layout_weight="3"
-                android:clickable="true"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="4dp"
-                app:strokeColor="#FF0000"
-                app:strokeWidth="2dp">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/_36sdp">
 
-                <FrameLayout
+                <TextView
+                    android:id="@+id/text_view_current_number"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:gravity="bottom|center"
+                    android:paddingBottom="8dp"
+                    android:text="0"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textColor="@color/color_text_home"
+                    android:textSize="90sp"
+                    android:visibility="visible" />
+            </FrameLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:gravity="center"
-                        android:text="@string/current_number"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                        android:textColor="#303F9F"
-                        android:visibility="visible" />
-
-                    <TextView
-                        android:id="@+id/text_view_current_number"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="bottom|center"
-                        android:paddingBottom="8dp"
-                        android:text="0"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textColor="#303F9F"
-                        android:textSize="90sp"
-                        android:visibility="visible" />
-
-                    <TextView
-                        android:id="@+id/textView_period_per_each_service"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|end"
-                        android:layout_margin="16dp"
-                        android:text="55"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textColor="#FF0000"
-                        android:textSize="40sp"
-                        android:visibility="visible" />
-
-                </FrameLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <!--   <com.google.android.material.card.MaterialCardView
-                   android:layout_width="0dp"
-                   android:layout_height="200dp"
-                   android:layout_marginStart="4dp"
-                   android:layout_weight="1"
-                   app:cardCornerRadius="16dp"
-                   app:cardElevation="4dp"
-                   app:strokeColor="#303F9F"
-                   app:strokeWidth="2dp">
-
-                   <androidx.constraintlayout.widget.ConstraintLayout
-                       android:layout_width="match_parent"
-                       android:layout_height="match_parent">
-
-                       <FrameLayout
-                           android:layout_width="match_parent"
-                           android:layout_height="match_parent">
-
-                           <TextView
-                               android:layout_width="match_parent"
-                               android:layout_height="wrap_content"
-                               android:layout_marginTop="8dp"
-                               android:gravity="center"
-                               android:text="Current"
-                               android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                               android:textColor="#FF0000" />
-
-                           <TextView
-                               android:id="@+id/text_view_order"
-                               android:layout_width="match_parent"
-                               android:layout_height="match_parent"
-                               android:gravity="bottom|center"
-                               android:maxLines="1"
-                               android:paddingBottom="8dp"
-                               android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                               android:textColor="#FF0000"
-                               android:textSize="30sp"
-                               tools:text="13" />
-                       </FrameLayout>
-                   </androidx.constraintlayout.widget.ConstraintLayout>
-               </com.google.android.material.card.MaterialCardView>-->
-        </LinearLayout>
-
-        <LinearLayout
-
-            android:id="@+id/linearLayout7"
+        <TextView
+            android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal"
-            android:weightSum="2"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:gravity="start"
+            android:text="@string/current_serving_number"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
 
-            <Button
-                android:id="@+id/button_service_increment_order"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
-                android:layout_weight="1"
-                android:alpha="0.8"
-                android:enabled="true"
-                android:gravity="center"
-                android:text="@string/increment"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="#303F9F"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:typeface="serif"
-                app:strokeWidth="1dp" />
-
-            <Button
-                android:id="@+id/button_service_decrease_order"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_weight="1"
-                android:alpha="0.8"
-                android:maxLines="1"
-                android:text="@string/decrement"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="#303F9F"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:typeface="serif"
-                android:visibility="visible"
-                app:strokeWidth="1dp" />
-
-        </LinearLayout>
+            android:textColor="@color/color_text_home"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/card_view_service_increment_order" />
 
         <Button
             android:id="@+id/button_end_this_day"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
             android:layout_weight="1"
             android:alpha="0.8"
             android:text="@string/end_this_day"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="#FF0000"
+            android:textColor="@color/red"
             android:textSize="20sp"
             android:textStyle="bold"
             android:typeface="serif"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:strokeWidth="1dp" />
 
-        <LinearLayout
-            android:id="@+id/linearLayout4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <Button
-                android:id="@+id/button_service_edit_order"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
-                android:layout_weight="1"
-                android:alpha="0.8"
-                android:enabled="true"
-                android:gravity="center"
-                android:text="@string/edit_order"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="#303F9F"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:typeface="serif"
-                app:strokeWidth="1dp" />
-
-            <Button
-                android:id="@+id/button_service_reset_order"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_weight="1"
-                android:alpha="0.8"
-                android:maxLines="1"
-                android:text="@string/reset"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="#303F9F"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:typeface="serif"
-                android:visibility="visible"
-                app:strokeWidth="1dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-
-            android:id="@+id/linearLayout5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2"
-            app:layout_constraintBottom_toTopOf="@+id/button_end_this_day"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <Button
-                android:id="@+id/button_qrcode"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
-                android:layout_weight="1"
-                android:alpha="0.8"
-                android:enabled="true"
-                android:gravity="center"
-                android:text="@string/generate_qr_code"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="#303F9F"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:typeface="serif"
-                app:strokeWidth="1dp" />
-
-            <Button
-                android:id="@+id/button_edit_service"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_weight="1"
-                android:alpha="0.8"
-                android:maxLines="1"
-                android:text="@string/edit_service"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="#303F9F"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:typeface="serif"
-                android:visibility="visible"
-                app:strokeWidth="1dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:weightSum="2"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout2">
-
-            <TextView
-                android:id="@+id/textView_category"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:padding="4dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="#303F9F"
-                tools:text="Clinic" />
-
-            <TextView
-                android:id="@+id/textView_name_of_service"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:padding="4dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="#303F9F"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-
-                app:layout_constraintTop_toBottomOf="@+id/textView_category"
-                tools:text="DR/Mohamed Shosha" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <Button
-                android:id="@+id/button_logout"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
-                android:layout_weight="1"
-                android:alpha="0.8"
-                android:enabled="true"
-                android:gravity="center"
-                android:text="@string/log_out"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="#303F9F"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:typeface="serif"
-                app:strokeWidth="1dp" />
-
-            <Button
-                android:id="@+id/button_service_delete_account"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_weight="1"
-                android:alpha="0.8"
-                android:maxLines="1"
-                android:text="@string/delete_account"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="#303F9F"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:typeface="serif"
-                android:visibility="visible"
-                app:strokeWidth="1dp" />
-
-        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

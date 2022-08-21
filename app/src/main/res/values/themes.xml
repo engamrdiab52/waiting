@@ -18,36 +18,29 @@
     <style name="Theme.Waiting.NoActionBar" parent="Theme.Waiting">
 
         <!--u need these to get full screen behind system bars-->
-        <!--<item name="android:navigationBarColor">@android:color/transparent</item>-->
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:fitsSystemWindows">true</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:background">@drawable/background</item>
-       <!-- <item name="android:background">@color/white</item>-->
         <!-- Optional: set the status bar light and content dark. -->
         <item name="android:windowLightStatusBar">false</item>
 
-        <!--    <item name="windowActionBar">false</item>
-            <item name="windowNoTitle">true</item>
-        &lt;!&ndash;    <item name="android:windowTranslucentStatus">true</item>
-            <item name="android:windowTranslucentNavigation">true</item>&ndash;&gt;
-            <item name="android:fitsSystemWindows">true</item>
-            <item name="android:statusBarColor">@android:color/transparent</item>
-        &lt;!&ndash;    <item name="android:windowDrawsSystemBarBackgrounds">true</item>&ndash;&gt;-->
+        <!--    <item name="android:windowTranslucentStatus">true</item>
+            <item name="android:windowTranslucentNavigation">true</item>
+       <item name="android:windowDrawsSystemBarBackgrounds">true</item>-->
     </style>
 
     <style name="Theme.Waiting.NoActionBar.Fragment" parent="Theme.Waiting">
         <!--u need these to get full screen behind system bars-->
-        <!--<item name="android:navigationBarColor">@android:color/transparent</item>-->
-        <item name="android:statusBarColor">@android:color/white</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:fitsSystemWindows">true</item>
   <!--      <item name="windowActionBar">false</item>-->
         <item name="windowNoTitle">true</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/color_text_home</item>
         <item name="android:textColorSecondary">@color/color_text_home</item>
         <!--<item name="android:background">@drawable/background</item>-->
-        <item name="android:background">@color/white</item>
+       <!-- <item name="android:background">@color/white</item>-->
         <!-- Optional: set the status bar light and content dark. -->
         <item name="android:windowLightStatusBar">true</item>
 
@@ -62,8 +55,10 @@
         <!-- Support library compatibility -->
         <!--here writing is by white color-->
       <!--  <item name="android:background">@drawable/md_transparent</item>-->
- <!--       <item name="android:background">@color/white</item>
-        <item name="windowActionBarOverlay">true</item>-->
+        <item name="android:background">@color/white</item>
+        <item name="windowActionBarOverlay">true</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorSecondary">@color/color_text_home</item>
     </style>
 
 </resources>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/frameLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.loginflow.client.clientFragment">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/loading_indecator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!--   <TextView
+               android:id="@+id/text_view_my_number"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:gravity="bottom|center"
+               android:paddingBottom="8dp"
+               android:text="@string/_0"
+               android:textAppearance="@style/TextAppearance.AppCompat.Large"
+               android:textColor="#303F9F"
+               android:textSize="90sp"
+               android:visibility="visible" />-->
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/text_view_order"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:maxLines="1"
+            tools:text="158"
+            android:gravity="center"
+            android:padding="@dimen/_8sdp"
+            android:layout_marginEnd="24dp"
+            android:textSize="@dimen/_100ssp"
+            android:textColor="@color/color_text_home"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.31" />
+
+        <Button
+            android:id="@+id/button_end_visit"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1"
+            android:alpha="0.8"
+            android:text="@string/end_visit"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/red_bright"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:typeface="serif"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:strokeWidth="1dp" />
+
+        <TextView
+            android:id="@+id/text_view_my_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:paddingBottom="8dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/color_text_home"
+            tools:text = "my Bumber is 200"
+            android:textSize="@dimen/_16ssp"
+            android:padding="@dimen/_4sdp"
+            android:gravity="end"
+            app:layout_constraintBottom_toTopOf="@+id/button_end_visit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

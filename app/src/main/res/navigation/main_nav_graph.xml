@@ -163,8 +163,9 @@
     </fragment>
     <fragment
         android:id="@+id/QRcodeFragment"
+        tools:layout="@layout/fragment_q_rcode"
         android:name="com.amrabdelhamiddiab.waiting.presentation.loginflow.qrcode.QRcodeFragment"
-        android:label="QRcodeFragment" />
+        android:label="" />
     <fragment
         android:id="@+id/scanQrCodeFragment"
         android:name="com.amrabdelhamiddiab.waiting.presentation.loginflow.scanqr.ScanQrCodeFragment"
@@ -207,4 +208,8 @@
         android:id="@+id/UIFragment"
         android:name="com.amrabdelhamiddiab.waiting.presentation.loginflow.UIFragment"
         android:label="UIFragment" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.amrabdelhamiddiab.waiting.settings.SettingsFragment"
+        android:label="" />
 </navigation>

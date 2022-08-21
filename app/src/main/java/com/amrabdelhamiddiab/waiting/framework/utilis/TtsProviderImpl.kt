@@ -51,7 +51,8 @@ class TtsProviderImpl : TtsProviderFactory(), OnInitListener {
                 tts!!.speak(toVoice2, TextToSpeech.QUEUE_FLUSH, null, "")
             }
         } else {
-            Toast.makeText(context2, "Error...", Toast.LENGTH_SHORT).show()
+          //  Toast.makeText(context2, "Error...", Toast.LENGTH_SHORT).show()
+            Log.d(TAG, "ERROR................ override fun onInit(status: Int).....")
         }
     }
 

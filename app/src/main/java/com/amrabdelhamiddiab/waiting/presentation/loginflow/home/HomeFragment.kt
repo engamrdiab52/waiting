@@ -70,7 +70,8 @@ class HomeFragment : Fragment() {
             }
 
     }
-   /* @RequiresApi(Build.VERSION_CODES.Q)*/
+
+    /* @RequiresApi(Build.VERSION_CODES.Q)*/
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -169,6 +170,7 @@ class HomeFragment : Fragment() {
     private fun startToBrows() {
         openSomeActivityForResult()
     }
+
     private fun openSomeActivityForResult() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
         resultLauncher.launch(intent)
@@ -204,14 +206,14 @@ class HomeFragment : Fragment() {
         val dialog = MaterialDialog(requireContext(), BottomSheet(WRAP_CONTENT)).show {
             customView(
                 R.layout.bottomsheet_custom_view,
-                scrollable = true,
-                horizontalPadding = true
+                scrollable = false,
+                horizontalPadding = false
             )
             autoDismissEnabled
 
             cornerRadius(16F)
         }
-
+        requireContext()
         val customView = dialog.getCustomView()
         val scanQrChoice = customView.findViewById<LinearLayout>(R.id.linearLayout_scanQr)
         val browsQrChoice = customView.findViewById<LinearLayout>(R.id.linearLayout_brows_qr)
