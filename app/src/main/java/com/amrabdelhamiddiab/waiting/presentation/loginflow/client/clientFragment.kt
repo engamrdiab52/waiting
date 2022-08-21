@@ -84,6 +84,13 @@ class clientFragment : Fragment() {
                 displayNoInternerConnection()
             }
         }
+        binding.textViewMyNumber.setOnClickListener {
+            if (checkInternetConnection(requireActivity().applicationContext)) {
+                displayDialog()
+            } else {
+                displayNoInternerConnection()
+            }
+        }
         //-----------------------------
         /*   binding.buttonAddMyNumber.setOnClickListener {
                *//*   if (checkInternetConnection(requireActivity().applicationContext)) {

@@ -13,6 +13,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.preference.PreferenceManager
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.framework.utilis.TtsProviderFactory
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -36,13 +37,18 @@ class MyFirebaseMessagingService :
         Log.d(TAG, "...............Message Received..................")
         createNotification(message)
         val notificationData = message.data
-        val toVoice = notificationData["message"] as String
-        val ttsProviderImpl = TtsProviderFactory.instance
-        if (ttsProviderImpl != null) {
-            with(ttsProviderImpl) {
-                init(applicationContext, toVoice)
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        val speakNumbersEnabled = sharedPreferences.getBoolean("notification_speak_number", true)
+        if (speakNumbersEnabled){
+            val toVoice = notificationData["message"] as String
+            val ttsProviderImpl = TtsProviderFactory.instance
+            if (ttsProviderImpl != null) {
+                with(ttsProviderImpl) {
+                    init(applicationContext, toVoice)
+                }
             }
         }
+
     }
 
     //here i can pass the importance dependence on a condition on the value i eil receive from sender (service)
@@ -70,7 +76,7 @@ class MyFirebaseMessagingService :
             .setContentTitle(message.data["title"])
             .setContentText(message.data["message"])
             .setSmallIcon(R.drawable.ic_timelapse)
-            .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.waiting_logo))
+            .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.notification_image))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
             .setVibrate(longArrayOf(1000, 1000, 1000))/*.setSound(sound)*/
@@ -90,6 +96,7 @@ class MyFirebaseMessagingService :
             createNotificationChannel(channel)
             notify(NOTIFICATION_ID, notification)
         }
+      //  NotificationManagerCompat.from(applicationContext).notify(NOTIFICATION_ID, notification)
         // playNotificationSound(applicationContext)
     }
 

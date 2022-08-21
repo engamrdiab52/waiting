@@ -77,20 +77,19 @@
 
         <TextView
             android:id="@+id/text_view_my_number"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
+            android:clickable="true"
+            android:gravity="end"
+            android:padding="@dimen/_4sdp"
             android:paddingBottom="8dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textColor="@color/color_text_home"
-            tools:text = "my Bumber is 200"
             android:textSize="@dimen/_16ssp"
-            android:padding="@dimen/_4sdp"
-            android:gravity="end"
             app:layout_constraintBottom_toTopOf="@+id/button_end_visit"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            tools:text="my Bumber is 200" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
