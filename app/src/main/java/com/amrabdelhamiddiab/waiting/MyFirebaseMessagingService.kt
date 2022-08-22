@@ -41,10 +41,12 @@ class MyFirebaseMessagingService :
         super.onMessageReceived(message)
         Log.d(TAG, "...............Message Received..................")
 
-        createNotification(message)
+
         val notificationData = message.data
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        val notificationSoundEnabled = sharedPreferences.getBoolean("notification_enable", true)
         val speakNumbersEnabled = sharedPreferences.getBoolean("notification_speak_number", true)
+        createNotification(message, notificationSoundEnabled)
         if (speakNumbersEnabled) {
             val toVoice = notificationData["message"] as String
             val ttsProviderImpl = TtsProviderFactory.instance
@@ -58,7 +60,7 @@ class MyFirebaseMessagingService :
     }
 
     //here i can pass the importance dependence on a condition on the value i eil receive from sender (service)
-    private fun createNotification(message: RemoteMessage) {
+    private fun createNotification(message: RemoteMessage, soundEnabled:Boolean) {
         val soundMe: Uri =
             Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + "/raw/" + "sound1.mp3")
         //Create the Intent
@@ -110,7 +112,10 @@ class MyFirebaseMessagingService :
              }*/
         NotificationManagerCompat.from(applicationContext).notify(NOTIFICATION_ID, notification)
         //   playNotificationSound(applicationContext)
-        playCustomSound()
+      if (soundEnabled){
+          playCustomSound()
+      }
+
     }
 
     /*    private fun playNotificationSound(context: Context) {
