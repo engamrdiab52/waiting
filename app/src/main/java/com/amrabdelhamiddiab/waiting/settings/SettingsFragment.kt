@@ -15,7 +15,6 @@ import com.amrabdelhamiddiab.waiting.framework.utilis.LocaleHelper
 
 class SettingsFragment : PreferenceFragmentCompat() {
     private lateinit var notificationEnable: SwitchPreferenceCompat
-    private lateinit var notificationSound: SwitchPreferenceCompat
     private lateinit var notificationSpeakNumber: SwitchPreferenceCompat
     private lateinit var nightMode: SwitchPreferenceCompat
     private lateinit var languageList: ListPreference
@@ -29,16 +28,10 @@ class SettingsFragment : PreferenceFragmentCompat() {
         savedInstanceState: Bundle?
     ): View {
         notificationEnable = preferenceManager.findPreference("notification_enable")!!
-        notificationSound = preferenceManager.findPreference("notification_sound")!!
         notificationSpeakNumber = preferenceManager.findPreference("notification_speak_number")!!
         nightMode = preferenceManager.findPreference("night_mode")!!
         languageList = preferenceManager.findPreference("language_list")!!
         notificationEnable.onPreferenceChangeListener =
-            Preference.OnPreferenceChangeListener { _, newValue ->
-                Toast.makeText(requireContext(), newValue.toString(), Toast.LENGTH_SHORT).show()
-                true
-            }
-        notificationSound.onPreferenceChangeListener =
             Preference.OnPreferenceChangeListener { _, newValue ->
                 Toast.makeText(requireContext(), newValue.toString(), Toast.LENGTH_SHORT).show()
                 true

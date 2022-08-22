@@ -6,16 +6,8 @@
             app:defaultValue="true"
             app:summaryOn="@string/notification_sound_enabled"
             app:title="@string/enable_notification" />
-        <SwitchPreferenceCompat
-            app:dependency="notification_enable"
-            app:key="notification_sound"
-            app:defaultValue="true"
-            app:summaryOff="@string/enable_notification_before"
-            app:summaryOn="@string/notification_sound_enabled"
-            app:title="@string/notification_sound" />
 
         <SwitchPreferenceCompat
-            app:dependency="notification_sound"
             app:key="notification_speak_number"
             app:defaultValue="true"
             app:summaryOff="@string/enable_speaking_after"

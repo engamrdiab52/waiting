@@ -1,6 +1,10 @@
 package com.amrabdelhamiddiab.waiting
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
+import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -10,6 +14,8 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.view.*
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -47,17 +53,17 @@ class MainActivity : AppCompatActivity(), MyDrawerController {
         /* appBarLayout.background.alpha = 1*/
         //  WindowCompat.setDecorFitsSystemWindows(window, false)
         setContentView(binding.root)
-
+      //  createWaitingNotificationChannel()
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         val language = sharedPreferences.getString("language_list", "en")
         Log.d(TAG, "888888888888888888888888888888888888888888888888888888" + language.toString())
         LocaleHelper.updateResources(this, language)
-        val nightMode =sharedPreferences.getBoolean("night_mode", false)
-            if (nightMode) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
+        val nightMode = sharedPreferences.getBoolean("night_mode", false)
+        if (nightMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
 
         drawerLayout = binding.drawerLayout
         navigationView = binding.navigationView
@@ -90,6 +96,25 @@ class MainActivity : AppCompatActivity(), MyDrawerController {
         MyFirebaseMessagingService.sharedPref =
             getSharedPreferences("sharedPrefToken", Context.MODE_PRIVATE)
     }
+/*
+    private fun createWaitingNotificationChannel() {
+        val soundMe: Uri =
+            Uri.parse("android.resource://" + packageName + "/" + com.amrabdelhamiddiab.waiting.R.raw.sound)
+
+        with(NotificationManagerCompat.from(applicationContext)) {
+            val channel = NotificationChannel(
+                CHANNEL_ID, CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                description = "My channel description"
+                enableLights(true)
+                lightColor = Color.GREEN
+                setSound(soundMe, null)
+            }
+            channel.lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
+            createNotificationChannel(channel)
+        }
+    }*/
 
     override fun onSupportNavigateUp(): Boolean {
         return NavigationUI.navigateUp(navController, appBarConfiguration)
@@ -150,5 +175,8 @@ class MainActivity : AppCompatActivity(), MyDrawerController {
 
     companion object {
         const val TAG = "MainActivity"
+
+    /*    const val CHANNEL_ID = "notification_channel"
+        const val CHANNEL_NAME = "com.amrabdelhamiddiab.waiting"*/
     }
 }
