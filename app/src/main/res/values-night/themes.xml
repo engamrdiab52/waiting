@@ -22,6 +22,12 @@
         <item name="windowNoTitle">true</item>
         <item name="android:textColor">@color/color_text_home_bright</item>
         <item name="android:textColorSecondary">@color/color_text_home_bright</item>
+        <!--Dialog theme-->
+        <item name="md_corner_radius">16dp</item>
+        <item name="md_color_title">@color/color_text_home_bright</item>
+        <item name="md_color_content">@color/color_button_home_bright</item>
+        <item name="md_color_button_text">@color/color_button_home_bright</item>
+        <item name="backgroundTint">@color/gray</item>
         <!--<item name="android:background">@drawable/background</item>-->
         <!-- <item name="android:background">@color/white</item>-->
         <!-- Optional: set the status bar light and content dark. -->

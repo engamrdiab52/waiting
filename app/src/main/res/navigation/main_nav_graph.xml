@@ -10,7 +10,7 @@
         <fragment
             android:id="@+id/loginFragment"
             android:name="com.amrabdelhamiddiab.waiting.presentation.loginflow.signin.LoginFragment"
-            android:label=""
+            android:label="@string/space"
             tools:layout="@layout/fragment_login">
             <action
                 android:id="@+id/action_loginFragment_to_resetPasswordFragment"
@@ -30,7 +30,7 @@
         <fragment
             android:id="@+id/resetPasswordFragment"
             android:name="com.amrabdelhamiddiab.waiting.presentation.loginflow.resetpassword.ResetPasswordFragment"
-            android:label=""
+            android:label="@string/space"
             tools:layout="@layout/fragment_reset_password">
             <action
                 android:id="@+id/action_resetPasswordFragment_to_loginFragment"
@@ -43,7 +43,7 @@
         <fragment
             android:id="@+id/signupFragment"
             android:name="com.amrabdelhamiddiab.waiting.presentation.loginflow.signup.SignupFragment"
-            android:label=""
+            android:label="@string/space"
             tools:layout="@layout/fragment_signup">
             <action
                 android:id="@+id/action_signupFragment_to_loginFragment"
@@ -80,7 +80,7 @@
     <fragment
         android:id="@+id/clientFragment"
         android:name="com.amrabdelhamiddiab.waiting.presentation.loginflow.client.clientFragment"
-        android:label=""
+        android:label="@string/space"
         tools:layout="@layout/fragment_client" >
         <action
             android:id="@+id/action_clientFragment_to_scanQrCodeFragment"
@@ -107,7 +107,7 @@
     <fragment
         android:id="@+id/serviceFragment"
         android:name="com.amrabdelhamiddiab.waiting.presentation.loginflow.service.serviceFragment"
-        android:label=""
+        android:label="@string/space"
         tools:layout="@layout/fragment_service" >
         <action
             android:id="@+id/action_serviceFragment_to_homeFragment"
@@ -147,25 +147,25 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.amrabdelhamiddiab.waiting.presentation.loginflow.home.HomeFragment"
-        android:label=""
+        android:label="@string/space"
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment_to_nested_graph_login"
             app:destination="@id/nested_graph_login"
             app:launchSingleTop="true"
             app:popUpTo="@id/homeFragment"
-
+            app:popUpToInclusive="true"
             />
         <action
             android:id="@+id/action_homeFragment_to_clientFragment"
             app:destination="@id/clientFragment"
             app:enterAnim="@anim/from_left"
             app:exitAnim="@anim/to_right"
-
             app:launchSingleTop="true"
             app:popEnterAnim="@anim/from_right"
             app:popExitAnim="@anim/to_left"
-            app:popUpTo="@id/homeFragment" />
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true"/>
         <action
             android:id="@+id/action_homeFragment_to_serviceFragment"
             app:destination="@id/serviceFragment"
@@ -195,7 +195,7 @@
     <fragment
         android:id="@+id/createServiceFragment"
         android:name="com.amrabdelhamiddiab.waiting.presentation.loginflow.createservice.CreateServiceFragment"
-        android:label="Create a Service" >
+        android:label="@string/space" >
         <action
             android:id="@+id/action_createServiceFragment_to_serviceFragment"
             app:destination="@id/serviceFragment"
@@ -207,7 +207,7 @@
         android:id="@+id/QRcodeFragment"
         tools:layout="@layout/fragment_q_rcode"
         android:name="com.amrabdelhamiddiab.waiting.presentation.loginflow.qrcode.QRcodeFragment"
-        android:label="" />
+        android:label="@string/space" />
     <fragment
         android:id="@+id/scanQrCodeFragment"
         android:name="com.amrabdelhamiddiab.waiting.presentation.loginflow.scanqr.ScanQrCodeFragment"
@@ -249,7 +249,7 @@
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.amrabdelhamiddiab.waiting.settings.SettingsFragment"
-        android:label="" />
+        android:label="@string/space" />
     <fragment
         android:id="@+id/qrCodeClientFragment"
         android:name="com.amrabdelhamiddiab.waiting.presentation.loginflow.qrcodeclient.QrCodeClientFragment"

@@ -254,11 +254,10 @@ class clientFragment : Fragment() {
         MaterialDialog(requireContext()).show {
             title(R.string.qrcode_fake_title)
             message(R.string.qrcode_fake_message)
-            positiveButton(R.string.yes) {
+            positiveButton(R.string.ok) {
+              //  findNavController().navigate(R.id.action_clientFragment_to_homeFragment)
+                viewModel.sayIfClientIsInAVisit(false)
                 findNavController().navigate(R.id.action_clientFragment_to_homeFragment)
-            }
-            negativeButton(R.string.no) {
-
             }
         }
     }

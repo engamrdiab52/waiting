@@ -82,11 +82,13 @@
     <string name="my_number">My Number</string>
     <string name="invalid_number">Invalid Number</string>
     <string name="enter_your_number_here">Enter Your Order Here</string>
+    <string name="space" translatable="false" />
     <!--AdMob Ids-->
     <string name="app_id_test" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
     <string name="app_id" translatable="false">ca-app-pub-4551978188781875~8904166344</string>
     <string name="banner_ad_unit_id_test" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
     <string name="banner_ad_unit_id" translatable="false">ca-app-pub-4551978188781875/4000706911</string>
   <string name="client_order_bottom_sheet">Client Order</string>
+    <string name="review_our_app">Review Our App</string>
 
 </resources>

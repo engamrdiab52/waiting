@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity(), MyDrawerController {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        //--------------------------
+ /*       //--------------------------
         val widthPx = screenRectPx.width()
         val heightPx = screenRectPx.height()
         Log.d(TAG,"[PX] screen width: $widthPx , height: $heightPx")
@@ -69,10 +69,7 @@ class MainActivity : AppCompatActivity(), MyDrawerController {
         val physicalWidthDp = physicalScreenRectDp.width()
         val physicalHeightDp = physicalScreenRectDp.height()
         Log.d(TAG,"[DP] physical screen width: $physicalWidthDp , height: $physicalHeightDp")
-        //--------------------------
-
-
-
+        //--------------------------*/
 
         //Google Ads
         MobileAds.initialize(this) {
@@ -186,12 +183,10 @@ class MainActivity : AppCompatActivity(), MyDrawerController {
         return NavigationUI.navigateUp(navController, appBarConfiguration)
     }
 
-    override fun onBackPressed() {
+    override fun  onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
+        } else super.onBackPressed()
     }
 
     override fun setDrawerLocked() {
