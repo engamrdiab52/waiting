@@ -6,39 +6,41 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/notification_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_marginTop="0dp"
             android:padding="0dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/notification_image" />
+            android:src="@drawable/notification_icon" />
+
 
         <TextView
             android:id="@+id/notification_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="32dp"
+            android:layout_marginLeft="54dp"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/notification_logo"
-            tools:text="title"
             android:textSize="16sp"
-            android:textStyle="bold" />
-
+            android:textStyle="bold"
+            tools:text="title" />
 
         <TextView
             android:id="@+id/notification_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/notification_title"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginLeft="27dp"
+            android:layout_marginTop="5dp"
             android:layout_toRightOf="@id/notification_logo"
-            tools:text="this is the description"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            tools:text="this is the description" />
+
+
     </RelativeLayout>
 
 </RelativeLayout>

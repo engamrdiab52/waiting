@@ -1,12 +1,21 @@
 package com.amrabdelhamiddiab.waiting.presentation.loginflow.service
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.DialogInterface
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.text.InputType
 import android.util.Log
 import android.view.*
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
@@ -28,6 +37,9 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class serviceFragment : Fragment() {
+
+    private lateinit var permissionLauncher: ActivityResultLauncher<String>
+    private var permissionGranted : Boolean =false
 
     private lateinit var navigationView: NavigationView
     private lateinit var navigationHeader: View
@@ -51,6 +63,24 @@ class serviceFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_service, container, false)
 
+        permissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted ->
+            if (isGranted) {
+                permissionGranted =true
+                // Do if the permission is granted
+                Toast.makeText(requireContext(), "permission Post Notification Already granted", Toast.LENGTH_LONG)
+                    .show()
+
+            } else {
+                // Do otherwise
+                //   Toast.makeText(requireContext(), "permission Denied", Toast.LENGTH_LONG).show()
+                showPermissionDeniedDialog()
+            }
+        }
+
+
+        askForPostNotificationPermission()
 
         navigationView = requireActivity().findViewById(R.id.navigation_view)
         navigationHeader = navigationView.getHeaderView(0)
@@ -60,11 +90,20 @@ class serviceFragment : Fragment() {
         navigationHeaderNameOfService =
             navigationHeader.findViewById(R.id.textView_name_of_service_nav_header)
 
+  /*      navigationHeaderTitle.text = myService.category
+        navigationHeaderNameOfService.text = myService.name_of_service
 
-
+        if (myService.period_per_each_service != 0) {
+            val text = myService.period_per_each_service
+            (getString(R.string.about)+" " + text +" " + getString(R.string.minuits_for_each_visit)).also { navigationHeaderPeriod.text = it }
+        } else {
+            navigationHeaderPeriod.text = "0"
+        }
+*/
         viewModel.notifyWhenServiceChange()
         viewModel.notifyWhenOrderChange()
         viewModel.notifyWhenListOfTokensChanged()
+        viewModel.downloadServiceV()
 
         viewModel.downloading.observe(viewLifecycleOwner) {
             if (it) {
@@ -74,11 +113,12 @@ class serviceFragment : Fragment() {
             }
         }
         viewModel.service.observe(viewLifecycleOwner) {
+            Log.d(TAG, "//////////////////////////??????????????????"+ it?.name_of_service.toString())
             if (it != null) {
                 myService = it
-            }
             navigationHeaderTitle.text = myService.category
             navigationHeaderNameOfService.text = myService.name_of_service
+        }
             if (it != null) {
                 val text = it.period_per_each_service
                 (getString(R.string.about)+" " + text +" " + getString(R.string.minuits_for_each_visit)).also { navigationHeaderPeriod.text = it }
@@ -97,18 +137,16 @@ class serviceFragment : Fragment() {
                     val listOfTokens = viewModel.listOfDownloadedTokens.value
                     if (!listOfTokens.isNullOrEmpty()) {
                         listOfTokens.forEach { token ->
-                            Log.d(
-                                TAG,
-                                ",,,,,,,,,,,,,,,,,,,,,inside  viewModel.orderValue.observe....................."
-                            )
-                            PushNotification(
-                                NotificationData(
-                                    getString( R.string.current_serving_number) ,
-                                    it.order.toString()
-                                ),
-                                token.token
-                            ).also { pushNotification ->
-                                viewModel.sendNotification(pushNotification)
+                            if (token.visitorNumber == it.order.toInt()){
+                                PushNotification(
+                                    NotificationData(
+                                        getString( R.string.current_serving_number) ,
+                                        it.order.toString()
+                                    ),
+                                    token.token
+                                ).also { pushNotification ->
+                                    viewModel.sendNotification(pushNotification)
+                                }
                             }
                         }
                     }
@@ -166,6 +204,14 @@ class serviceFragment : Fragment() {
         return binding.root
     }
 
+    private fun askForPostNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }else{
+            permissionGranted = true
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val menuHost: MenuHost = requireActivity()
@@ -196,6 +242,10 @@ class serviceFragment : Fragment() {
                         findNavController().navigate(R.id.action_serviceFragment_to_createServiceFragment)
                         true
                     }
+                  /*  R.id.menu_scan_qr_code -> {
+                        findNavController().navigate(R.id.action_serviceFragment_to_scanQrServiceFragment)
+                   true
+                    }*/
 
                     else -> false
                 }
@@ -281,6 +331,7 @@ class serviceFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         navigationHeader.visibility = View.VISIBLE
+        viewModel.downloadServiceV()
     }
 
     override fun onStop() {
@@ -290,4 +341,24 @@ class serviceFragment : Fragment() {
         navigationHeaderNameOfService.text = ""
         super.onStop()
     }
+
+
+    private fun showPermissionDeniedDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Permission Denied")
+            .setMessage("Permission is denied, Please allow Post Notification permissions from App Settings.")
+            .setPositiveButton("App Settings",
+                DialogInterface.OnClickListener { _, _ ->
+                    // send to app settings if permission is denied permanently
+                    val intent = Intent()
+                    intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                    val uri = Uri.fromParts("package",requireActivity().packageName, null)
+                    intent.data = uri
+                    startActivity(intent)
+                })
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+
 }

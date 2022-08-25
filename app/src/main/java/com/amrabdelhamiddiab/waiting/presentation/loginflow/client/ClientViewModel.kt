@@ -7,8 +7,11 @@ import androidx.lifecycle.viewModelScope
 import com.amrabdelhamiddiab.core.data.IPreferenceHelper
 import com.amrabdelhamiddiab.core.domain.Order
 import com.amrabdelhamiddiab.core.domain.Service
+import com.amrabdelhamiddiab.core.domain.Token
 import com.amrabdelhamiddiab.core.usecases.login.DownloadService
 import com.amrabdelhamiddiab.core.usecases.login.RemoveClientToken
+import com.amrabdelhamiddiab.core.usecases.login.UploadClientToken
+import com.amrabdelhamiddiab.waiting.MainActivity
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.framework.utilis.SingleLiveEvent
 import com.google.firebase.database.DataSnapshot
@@ -27,7 +30,8 @@ class ClientViewModel @Inject constructor(
     private val prefeHelper: IPreferenceHelper,
     private val gson: Gson,
     private val downloadService: DownloadService,
-    private val removeClientToken: RemoveClientToken
+    private val removeClientToken: RemoveClientToken,
+    private val uploadClientToken: UploadClientToken
 ) :
     ViewModel() {
     private val _orderValue = SingleLiveEvent<Order?>()
@@ -35,6 +39,9 @@ class ClientViewModel @Inject constructor(
 
     private val _myNumber = SingleLiveEvent<Int>()
     val myNumber: LiveData<Int> get() = _myNumber
+
+    private val _tokenUploaded = SingleLiveEvent<Boolean>()
+    val tokenUploaded: LiveData<Boolean> get() = _tokenUploaded
 
     private val _service = SingleLiveEvent<Service?>()
     val service: LiveData<Service?> get() = _service
@@ -115,6 +122,12 @@ class ClientViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             _service.postValue(downloadService(userId))
 
+        }
+    }
+    fun uploadMyClientToken(token : Token) {
+        Log.d(MainActivity.TAG,"uploadMyClientToken(token : Token).....called..." + token)
+        viewModelScope.launch(Dispatchers.IO) {
+            _tokenUploaded.postValue( uploadClientToken(token)!!)
         }
     }
 }

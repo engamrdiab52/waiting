@@ -92,6 +92,7 @@ class ServiceViewModel @Inject constructor(
     //******************************
 
     fun downloadServiceV() {
+        Log.d(TAG, "downloadServiceV............................called")
         viewModelScope.launch(Dispatchers.IO) {
             _service.postValue(downloadService(auth.currentUser!!.uid))
 
@@ -222,6 +223,7 @@ class ServiceViewModel @Inject constructor(
     private val listOfTokensListener = object : ValueEventListener {
         private val _listOfTokens: MutableList<Token> = mutableListOf()
         override fun onDataChange(snapshot: DataSnapshot) {
+            //here you will trigger the observer with empty list
             _listOfDownloadedTokens.value = emptyList()
             _listOfTokens.clear()
             snapshot.children.forEach {

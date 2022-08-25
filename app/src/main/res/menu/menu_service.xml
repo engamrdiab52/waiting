@@ -9,26 +9,26 @@
     </item>
     <item
         android:id="@+id/menu_qr_code"
-        android:icon="@drawable/ic_edit"
         android:title="@string/generate_qr_code"
         app:showAsAction="never">
     </item>
     <item
         android:id="@+id/menu_edit_service"
-        android:icon="@drawable/ic_edit"
         android:title="@string/edit_service"
         app:showAsAction="never">
     </item>
-
+<!--    <item
+        android:id="@+id/menu_scan_qr_code"
+        android:title="@string/scan_qr_code"
+        app:showAsAction="never">
+    </item>-->
     <item
         android:id="@+id/menu_log_out"
-        android:icon="@drawable/ic_edit"
         android:title="@string/log_out"
         app:showAsAction="never">
     </item>
     <item
         android:id="@+id/menu_delete_account"
-        android:icon="@drawable/ic_edit"
         android:title="@string/delete_account"
         app:showAsAction="never">
     </item>

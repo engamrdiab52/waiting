@@ -18,7 +18,9 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import com.amrabdelhamiddiab.core.domain.Order
 import com.amrabdelhamiddiab.core.domain.Service
+import com.amrabdelhamiddiab.core.domain.Token
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
+import com.amrabdelhamiddiab.waiting.MyFirebaseMessagingService
 import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentClientBinding
 import com.amrabdelhamiddiab.waiting.framework.utilis.checkInternetConnection
@@ -105,7 +107,15 @@ class clientFragment : Fragment() {
                 binding.textViewMyNumber.text = it
             }
         }
+
+        viewModel.tokenUploaded.observe(viewLifecycleOwner){
+            if (it == true){
+                viewModel.sayIfClientIsInAVisit(true)
+            }
+        }
+
         viewModel.service.observe(viewLifecycleOwner) {
+            Log.d(TAG, "//////////////////////////...cient....??????????????????"+ it?.name_of_service.toString())
             if (it != null) {
                 myService = it
                 navigationHeaderTitle.text = myService.category
@@ -162,7 +172,7 @@ class clientFragment : Fragment() {
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.menu_edit, menu)
+                menuInflater.inflate(R.menu.menu_client, menu)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -178,6 +188,12 @@ class clientFragment : Fragment() {
                              .show()*/
                         true
                     }
+             /*       R.id.menu_qr_code_client -> {
+                        findNavController().navigate(R.id.action_clientFragment_to_qrCodeClientFragment)
+                        true
+                        *//* Toast.makeText(requireContext(), "EDIT IN CLIENT", Toast.LENGTH_SHORT)
+                             .show()*//*
+                    }*/
                     else -> false
                 }
             }
@@ -198,8 +214,10 @@ class clientFragment : Fragment() {
             }
             positiveButton(R.string.add) {
                 if (myValue.isNotEmpty()) {
-                    if (myValue.toString().toInt() > orderNumber) {
+                    val myValue = myValue.toString().toInt()
+                    if (myValue > orderNumber) {
                         viewModel.saveMyNumberInPreferences(myValue.toString().toInt())
+                        viewModel.uploadMyClientToken(Token(MyFirebaseMessagingService.token.toString(),myValue ) )
                         //    viewModel.retrieveClientNumberFromPreferences()
                         //   binding.textViewMyNumber.text = myValue.toString()
                     } else {

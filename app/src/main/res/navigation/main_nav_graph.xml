@@ -20,7 +20,11 @@
             <action
                 android:id="@+id/action_loginFragment_to_signupFragment"
                 app:destination="@id/signupFragment"
+                app:enterAnim="@anim/from_left"
+                app:exitAnim="@anim/to_right"
                 app:launchSingleTop="true"
+                app:popEnterAnim="@anim/from_right"
+                app:popExitAnim="@anim/to_left"
                 app:popUpTo="@id/loginFragment" />
         </fragment>
         <fragment
@@ -51,16 +55,23 @@
         <action
             android:id="@+id/action_global_createServiceFragment"
             app:destination="@id/createServiceFragment"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
             app:launchSingleTop="true"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left"
             app:popUpTo="@id/nested_graph_login"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_global_serviceFragment"
             app:destination="@id/serviceFragment"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
             app:launchSingleTop="true"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left"
             app:popUpTo="@id/nested_graph_login"
-            app:popUpToInclusive="true"
-            />
+            app:popUpToInclusive="true" />
         <!--        <action
                     android:id="@+id/a"
                     app:destination="@id/serviceFragment"
@@ -83,6 +94,15 @@
             app:launchSingleTop="true"
             app:popUpTo="@id/clientFragment"
             app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_clientFragment_to_qrCodeClientFragment"
+            app:destination="@id/qrCodeClientFragment"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:launchSingleTop="true"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left"
+            app:popUpTo="@id/clientFragment"/>
     </fragment>
     <fragment
         android:id="@+id/serviceFragment"
@@ -99,14 +119,30 @@
         <action
             android:id="@+id/action_serviceFragment_to_QRcodeFragment"
             app:destination="@id/QRcodeFragment"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
             app:launchSingleTop="true"
-            app:popUpTo="@id/serviceFragment"/>
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left"
+            app:popUpTo="@id/serviceFragment" />
         <action
             android:id="@+id/action_serviceFragment_to_createServiceFragment"
             app:destination="@id/createServiceFragment"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
             app:launchSingleTop="true"
-            app:popUpTo="@id/serviceFragment"
-           />
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left"
+            app:popUpTo="@id/serviceFragment" />
+        <action
+            android:id="@+id/action_serviceFragment_to_scanQrServiceFragment"
+            app:destination="@id/scanQrServiceFragment"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:launchSingleTop="true"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left"
+            app:popUpTo="@id/serviceFragment"/>
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
@@ -123,17 +159,23 @@
         <action
             android:id="@+id/action_homeFragment_to_clientFragment"
             app:destination="@id/clientFragment"
-            app:launchSingleTop="true"
-            app:popUpTo="@id/homeFragment"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
 
-            />
+            app:launchSingleTop="true"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left"
+            app:popUpTo="@id/homeFragment" />
         <action
             android:id="@+id/action_homeFragment_to_serviceFragment"
             app:destination="@id/serviceFragment"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
             app:launchSingleTop="true"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left"
             app:popUpTo="@id/homeFragment"
-            app:popUpToInclusive="true"
-            />
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_homeFragment_to_createServiceFragment"
             app:destination="@id/createServiceFragment"
@@ -205,11 +247,15 @@
             />
     </fragment>
     <fragment
-        android:id="@+id/UIFragment"
-        android:name="com.amrabdelhamiddiab.waiting.presentation.loginflow.UIFragment"
-        android:label="UIFragment" />
-    <fragment
         android:id="@+id/settingsFragment"
         android:name="com.amrabdelhamiddiab.waiting.settings.SettingsFragment"
         android:label="" />
+    <fragment
+        android:id="@+id/qrCodeClientFragment"
+        android:name="com.amrabdelhamiddiab.waiting.presentation.loginflow.qrcodeclient.QrCodeClientFragment"
+        android:label="QrCodeClientFragment" />
+    <fragment
+        android:id="@+id/scanQrServiceFragment"
+        android:name="com.amrabdelhamiddiab.waiting.presentation.loginflow.scanqrservice.ScanQrServiceFragment"
+        android:label="ScanQrServiceFragment" />
 </navigation>

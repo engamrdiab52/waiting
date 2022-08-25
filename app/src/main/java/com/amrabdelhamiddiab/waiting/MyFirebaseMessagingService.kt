@@ -83,7 +83,7 @@ class MyFirebaseMessagingService :
             .setContentTitle(message.data["title"])
             .setContentText(message.data["message"])
             .setSmallIcon(R.drawable.ic_timelapse)
-            .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.notification_image))
+            .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.notification_icon))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
             .setVibrate(

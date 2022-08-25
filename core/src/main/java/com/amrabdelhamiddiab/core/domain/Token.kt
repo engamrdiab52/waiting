@@ -1,3 +1,3 @@
 package com.amrabdelhamiddiab.core.domain
 
-data class Token(var token: String = "")
+data class Token(var token: String = "", var visitorNumber: Int = 0)

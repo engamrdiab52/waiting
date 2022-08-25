@@ -1,4 +1,4 @@
-package com.amrabdelhamiddiab.waiting.presentation.loginflow.qrcode
+package com.amrabdelhamiddiab.waiting.presentation.loginflow.qrcodeclient
 
 import android.Manifest
 import android.content.ContentValues
@@ -13,37 +13,34 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
+import com.amrabdelhamiddiab.waiting.MainActivity
+import com.amrabdelhamiddiab.waiting.MyFirebaseMessagingService
 import com.amrabdelhamiddiab.waiting.R
-import com.amrabdelhamiddiab.waiting.databinding.FragmentQRcodeBinding
+import com.amrabdelhamiddiab.waiting.databinding.FragmentQrCodeClientBinding
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
-import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 
-
-@AndroidEntryPoint
-class QRcodeFragment : Fragment() {
-
-    private lateinit var binding: FragmentQRcodeBinding
+class QrCodeClientFragment : Fragment() {
+    private lateinit var binding: FragmentQrCodeClientBinding
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
     private lateinit var bitmap: Bitmap
-    private var permissionGranted : Boolean =false
+    private var permissionGranted: Boolean = false
 
-    private val viewModel by viewModels<QrCodeViewModel>()
+    private val viewModel by viewModels<QrCodeClientViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         permissionLauncher = registerForActivityResult(
@@ -62,12 +59,15 @@ class QRcodeFragment : Fragment() {
             }
         }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_q_rcode, container, false)
-        binding.buttonSave.setOnClickListener {
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_qr_code_client, container, false)
+
+        binding.buttonSaveQrcodeClient.setOnClickListener {
             if (permissionGranted) {
                 // Permissions are already granted, do your stuff
                 saveImage(bitmap, requireActivity(), "Waiting App")
@@ -75,21 +75,28 @@ class QRcodeFragment : Fragment() {
 
             }
         }
-        binding.buttonGenerateQr.setOnClickListener {
-            binding.imageView.setImageBitmap(bitmap)
-        }
+ /*       binding.buttonSaveQrcodeClient.setOnClickListener {
+            binding.imageViewClientQrcode.setImageBitmap(bitmap)
+        }*/
 
+        binding.buttonGenerateQrClient.setOnClickListener {
+            binding.imageViewClientQrcode.setImageBitmap(bitmap)
+        }
         askForExternalStoragePermission()
-        val userId = viewModel.userId
-        if ( userId.isNotEmpty()){
 
-            val encoder = BarcodeEncoder()
-            bitmap = encoder.encodeBitmap(userId, BarcodeFormat.QR_CODE, 400, 400)
-            Log.d(TAG, "USER ID:  $userId")
-        }
-            // Inflate the layout for this fragment
-            return binding.root
+       val token = MyFirebaseMessagingService.token
+            if ( token!!.isNotEmpty()){
+                val encoder = BarcodeEncoder()
+                bitmap = encoder.encodeBitmap(token, BarcodeFormat.QR_CODE, 400, 400)
+                Log.d(MainActivity.TAG, "USER ID::::::  $token")
+            }
+
+
+
+
+        return binding.root
     }
+
 
     private fun askForExternalStoragePermission() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q){
@@ -116,6 +123,7 @@ class QRcodeFragment : Fragment() {
             .setNegativeButton("Cancel", null)
             .show()
     }
+
     private fun saveImage(
         bitmap: Bitmap,
         context: Context,
@@ -141,6 +149,7 @@ class QRcodeFragment : Fragment() {
             if (!directory.exists()) {
                 directory.mkdirs()
             }
+            //here i want to add real file name that can be overridden
             val fileName = System.currentTimeMillis().toString() + ".png"
             val file = File(directory, fileName)
             saveImageToStream(bitmap, FileOutputStream(file))
@@ -150,6 +159,7 @@ class QRcodeFragment : Fragment() {
             context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
         }
     }
+
     private fun contentValues() : ContentValues {
         val values = ContentValues()
         values.put(MediaStore.Images.Media.MIME_TYPE, "image/png")
@@ -168,6 +178,4 @@ class QRcodeFragment : Fragment() {
             }
         }
     }
-
-
 }

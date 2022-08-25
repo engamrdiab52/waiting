@@ -120,20 +120,19 @@ class HomeFragment : Fragment() {
                 ).show()
             }
         }
-        viewModel.tokenUploaded.observe(viewLifecycleOwner) {
+      /*  viewModel.tokenUploaded.observe(viewLifecycleOwner) {
             if (it == true) {
                 viewModel.sayIfClientIsInAVisit(true)
-                findNavController().navigate(R.id.action_homeFragment_to_clientFragment)
-
             }
-        }
+        }*/
         viewModel.service_for_client.observe(viewLifecycleOwner) {
             if (it != null) {
                 val userId = viewModel.userId_for_client.value!!
                 viewModel.saveUserIdInPreferences(userId)
-                viewModel.uploadMyClientToken(
+                findNavController().navigate(R.id.action_homeFragment_to_clientFragment)
+            /*    viewModel.uploadMyClientToken(
                     Token(MyFirebaseMessagingService.token.toString())
-                )
+                )*/
             } else {
                 Toast.makeText(requireContext(), "Wrong QR CODE", Toast.LENGTH_SHORT).show()
                 //findNavController().navigate(R.id.action_scanQrCodeFragment_to_homeFragment)

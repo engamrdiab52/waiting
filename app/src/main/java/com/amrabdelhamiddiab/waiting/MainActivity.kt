@@ -26,8 +26,9 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
 import com.amrabdelhamiddiab.core.data.IPreferenceHelper
 import com.amrabdelhamiddiab.waiting.databinding.ActivityMainBinding
-import com.amrabdelhamiddiab.waiting.framework.utilis.LocaleHelper
+import com.amrabdelhamiddiab.waiting.framework.utilis.*
 import com.amrabdelhamiddiab.waiting.presentation.loginflow.MyDrawerController
+import com.google.android.gms.ads.*
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,10 +51,75 @@ class MainActivity : AppCompatActivity(), MyDrawerController {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+        //--------------------------
+        val widthPx = screenRectPx.width()
+        val heightPx = screenRectPx.height()
+        Log.d(TAG,"[PX] screen width: $widthPx , height: $heightPx")
+
+        val widthDp = screenRectDp.width()
+        val heightDp = screenRectDp.height()
+        Log.d(TAG,"[DP] screen width: $widthDp , height: $heightDp")
+
+        println()
+
+        val physicalWidthPx = physicalScreenRectPx.width()
+        val physicalHeightPx = physicalScreenRectPx.height()
+        Log.d(TAG,"[PX] physical screen width: $physicalWidthPx , height: $physicalHeightPx")
+
+        val physicalWidthDp = physicalScreenRectDp.width()
+        val physicalHeightDp = physicalScreenRectDp.height()
+        Log.d(TAG,"[DP] physical screen width: $physicalWidthDp , height: $physicalHeightDp")
+        //--------------------------
+
+
+
+
+        //Google Ads
+        MobileAds.initialize(this) {
+            Log.d(TAG, it.toString())
+        }
+        MobileAds.setRequestConfiguration(
+            RequestConfiguration.Builder().setTestDeviceIds(listOf("", "")).build()
+        )
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
+        binding.adView.adListener = object : AdListener() {
+            override fun onAdClicked() {
+                super.onAdClicked()
+                Log.d(TAG,"onAdClicked//////////////////////////////" )
+            }
+
+            override fun onAdClosed() {
+                super.onAdClosed()
+                Log.d(TAG,"onAdClosed...........//////////////////////////////" )
+            }
+
+            override fun onAdFailedToLoad(p0: LoadAdError) {
+                super.onAdFailedToLoad(p0)
+                Log.d(TAG,"onAdFailedToLoad ${p0.message}...........//////////////////////////////" )
+            }
+
+            override fun onAdImpression() {
+                super.onAdImpression()
+                Log.d(TAG,"onAdImpression...........//////////////////////////////" )
+            }
+
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                Log.d(TAG,"onAdLoaded...........//////////////////////////////" )
+            }
+
+            override fun onAdOpened() {
+                super.onAdOpened()
+                Log.d(TAG,"onAdOpened...........//////////////////////////////" )
+            }
+        }
+
+//----------------------------------------
         /* appBarLayout.background.alpha = 1*/
         //  WindowCompat.setDecorFitsSystemWindows(window, false)
         setContentView(binding.root)
-      //  createWaitingNotificationChannel()
+        //  createWaitingNotificationChannel()
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         val language = sharedPreferences.getString("language_list", "en")
         Log.d(TAG, "888888888888888888888888888888888888888888888888888888" + language.toString())
@@ -172,11 +238,27 @@ class MainActivity : AppCompatActivity(), MyDrawerController {
         super.attachBaseContext(LocaleHelper.onAttach(base))
     }
 
+    override fun onPause() {
+        binding.adView.pause()
+        super.onPause()
 
+    }
+
+    override fun onResume() {
+        binding.adView.resume()
+        super.onResume()
+
+    }
+
+    override fun onDestroy() {
+        binding.adView.destroy()
+        super.onDestroy()
+
+    }
     companion object {
         const val TAG = "MainActivity"
 
-    /*    const val CHANNEL_ID = "notification_channel"
-        const val CHANNEL_NAME = "com.amrabdelhamiddiab.waiting"*/
+        /*    const val CHANNEL_ID = "notification_channel"
+            const val CHANNEL_NAME = "com.amrabdelhamiddiab.waiting"*/
     }
 }
