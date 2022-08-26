@@ -7,9 +7,4 @@
         android:title="@string/edit"
         app:showAsAction="always">
     </item>
-  <!--  <item
-        android:id="@+id/menu_qr_code_client"
-        android:title="@string/generate_qr_code"
-        app:showAsAction="never">
-    </item>-->
 </menu>

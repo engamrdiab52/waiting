@@ -4,10 +4,6 @@
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
         <ImageView
             android:id="@+id/notification_logo"
             android:layout_width="60dp"
@@ -39,8 +35,5 @@
             android:layout_toRightOf="@id/notification_logo"
             android:textSize="16sp"
             tools:text="this is the description" />
-
-
-    </RelativeLayout>
 
 </RelativeLayout>

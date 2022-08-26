@@ -1,22 +1,23 @@
 package com.amrabdelhamiddiab.waiting.presentation.loginflow.service
 
+import android.annotation.SuppressLint
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.amrabdelhamiddiab.core.data.login.RepositoryDeleteThisDay
 import com.amrabdelhamiddiab.core.domain.Order
 import com.amrabdelhamiddiab.core.domain.PushNotification
 import com.amrabdelhamiddiab.core.domain.Service
 import com.amrabdelhamiddiab.core.domain.Token
 import com.amrabdelhamiddiab.core.usecases.login.*
-import com.amrabdelhamiddiab.waiting.MainActivity
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.framework.firebase.fcm.FcmService
 import com.amrabdelhamiddiab.waiting.framework.utilis.SingleLiveEvent
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -33,8 +34,6 @@ class ServiceViewModel @Inject constructor(
     private val changeOrderValue: ChangeOrderValue,
     private val fcmService: FcmService,
     private val gson: Gson,
-    private val downloadToken: DownloadToken,
-    private val listDownloadTokens: ListDownloadTokens,
     private val databaseReference: DatabaseReference,
     private val deleteThisDay: DeleteThisDay
 ) : ViewModel() {
@@ -69,7 +68,6 @@ class ServiceViewModel @Inject constructor(
     val service: LiveData<Service?> get() = _service
 
     private val _orderChanged = SingleLiveEvent<Boolean>()
-    val orderChanged: LiveData<Boolean> get() = _orderChanged
 
     //********************************
     //ok
@@ -99,33 +97,21 @@ class ServiceViewModel @Inject constructor(
         }
     }
 
-    fun downloadTokenV() {
-        viewModelScope.launch(Dispatchers.IO) {
-            _tokenDownloaded.postValue(downloadToken())
-        }
-    }
-
+    @SuppressLint("NullSafeMutableLiveData")
     fun deleteThisDayV() {
         viewModelScope.launch(Dispatchers.IO) {
             _downloading.postValue(true)
-            _dayEnd.postValue(deleteThisDay()!!)
+            _dayEnd.postValue(deleteThisDay())
             _downloading.postValue(false)
         }
     }
 
-    fun downloadListOfTokensV() {
-        viewModelScope.launch(Dispatchers.IO) {
-            _downloading.postValue(true)
-            _listOfDownloadedTokens.postValue(listDownloadTokens())
-            _downloading.postValue(false)
-        }
-    }
-
+    @SuppressLint("NullSafeMutableLiveData")
     fun changeOrderValueV(value: Long) {
         val order = Order(value)
         viewModelScope.launch {
             _downloading.postValue(true)
-            _orderChanged.postValue(changeOrderValue(order)!!)
+            _orderChanged.postValue(changeOrderValue(order))
             _downloading.postValue(false)
         }
     }
@@ -134,28 +120,22 @@ class ServiceViewModel @Inject constructor(
         changeOrderValueV(value.toLong() + 1L)
     }
 
-    fun decrementCurrentOrderValue(value: String) {
-        if (value.toInt() >= 1) {
-            changeOrderValueV(value.toLong() - 1L)
-        }
-    }
-
+    @SuppressLint("NullSafeMutableLiveData")
     fun deleteAccountV(password: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            //    auth.currentUser?.let { deleteService(it.uid) }
-            //    auth.currentUser?.let { deleteCurrentOrder(it.uid) }
-            _downloading.postValue(true)
-            _userDeleted.postValue(deleteAccount(password)!!)
+             _downloading.postValue(true)
+            _userDeleted.postValue(deleteAccount(password))
             _downloading.postValue(false)
         }
     }
 
+    @SuppressLint("NullSafeMutableLiveData")
     fun deleteServiceV() {
         viewModelScope.launch(Dispatchers.IO) {
             //    auth.currentUser?.let { deleteService(it.uid) }
             //    auth.currentUser?.let { deleteCurrentOrder(it.uid) }
             _downloading.postValue(true)
-            _serviceDeleted.postValue(deleteService()!!)
+            _serviceDeleted.postValue(deleteService())
             _downloading.postValue(false)
         }
     }
@@ -167,18 +147,12 @@ class ServiceViewModel @Inject constructor(
                 //i don't need live data here
                 val response = fcmService.postNotification(pushNotification)
                 if (response.isSuccessful) {
-                    Log.d(
-                        MainActivity.TAG,
-                        "7777777777777888888888888888888888888888888" + "Response: ${gson.toJson(response.body())}"
-                    )
+                    Log.d(TAG,"Response: ${gson.toJson(response.body())}")
                 } else {
-                    Log.e(
-                        MainActivity.TAG,
-                        "77777777777777777777777777777777777777" + response.raw()
-                    )
+                    Log.e(TAG,response.raw().message())
                 }
             } catch (e: Exception) {
-                Log.e(MainActivity.TAG, e.toString())
+                Log.e(TAG, e.toString())
             }
 
         }
@@ -239,57 +213,6 @@ class ServiceViewModel @Inject constructor(
             _listOfDownloadedTokens.value = emptyList()
         }
     }
-
-    //****************************
-    //Listener to the list of tokens on Child:
-    /*   private val childInListOfTokensListener = object : ChildEventListener {
-
-           private var _listOfTokens: MutableList<Token> = mutableListOf()
-
-           override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-               val token = snapshot.getValue(Token::class.java)
-               if (token != null ){
-                   _listOfTokens.clear()
-                   if (listOfDownloadedTokens.value != null){
-                       _listOfTokens.addAll(listOfDownloadedTokens.value!!)
-                       Log.d(TAG, "_listOfTokens ...... != null.....111.....$_listOfTokens")
-                       _listOfTokens.add(token)
-                       _listOfDownloadedTokens.value = emptyList()
-                       _listOfDownloadedTokens.value = _listOfTokens
-                       Log.d(TAG, "_listOfTokens ...... != null.....222.....$_listOfTokens")
-                   }else {
-                       _listOfTokens.add(token)
-                       _listOfDownloadedTokens.value = emptyList()
-                       _listOfDownloadedTokens.value = _listOfTokens
-                       Log.d(TAG, "_listOfTokens ...... == null.........$_listOfTokens")
-                   }
-
-               }
-
-           }
-
-           override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-               val token = snapshot.getValue(Token::class.java)
-               _listOfTokens.clear()
-               if (token != null){
-                   _listOfTokens = listOfDownloadedTokens.value as MutableList<Token>
-                   _listOfTokens.filterNot { it.token.equals(token) }
-                   _listOfDownloadedTokens.value = _listOfTokens
-               }
-           }
-
-           override fun onChildRemoved(snapshot: DataSnapshot) {
-
-           }
-
-           override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-
-           }
-
-           override fun onCancelled(error: DatabaseError) {
-
-           }
-       }*/
 
     fun notifyWhenListOfTokensChanged() {
         if (uid.isNotEmpty()) {

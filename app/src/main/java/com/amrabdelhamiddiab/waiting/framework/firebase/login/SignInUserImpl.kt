@@ -1,10 +1,8 @@
 package com.amrabdelhamiddiab.waiting.framework.firebase.login
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import com.amrabdelhamiddiab.core.data.login.ISignInUser
-import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.framework.utilis.checkInternetConnection
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -20,16 +18,12 @@ class SignInUserImpl @Inject constructor(
     override suspend fun signInUser(email: String, password: String): Boolean {
         return if (checkInternetConnection(context)) {
             try {
-                Log.d(TAG,"LOGIN..............................." )
                 val authResult = mAuth.signInWithEmailAndPassword(email, password).await()
-                Log.d(TAG,"LOGIN..............................." + authResult.toString())
                 authResult != null
             } catch (ex: Exception) {
-                Log.d(TAG,"LOGIN..............................." + ex.message.toString())
                 withContext(Dispatchers.Main) {
                     Toast.makeText(context, ex.message, Toast.LENGTH_LONG).show()
                 }
-                Log.d(TAG,"LOGIN..............................." + ex.message.toString())
                 false
             }
         } else {

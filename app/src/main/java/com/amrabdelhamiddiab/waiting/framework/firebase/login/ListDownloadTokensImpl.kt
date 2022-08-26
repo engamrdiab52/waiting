@@ -2,7 +2,6 @@ package com.amrabdelhamiddiab.waiting.framework.firebase.login
 
 import android.content.Context
 import android.widget.Toast
-import com.amrabdelhamiddiab.core.data.login.IDownloadToken
 import com.amrabdelhamiddiab.core.data.login.IListDownloadTokens
 import com.amrabdelhamiddiab.core.domain.Token
 import com.amrabdelhamiddiab.waiting.framework.utilis.checkInternetConnection

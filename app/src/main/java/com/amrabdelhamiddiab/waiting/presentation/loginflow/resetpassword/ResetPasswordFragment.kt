@@ -13,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import com.amrabdelhamiddiab.waiting.MainActivity
 import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentResetPasswordBinding
-import com.amrabdelhamiddiab.waiting.framework.utilis.checkInternetConnection
 import com.amrabdelhamiddiab.waiting.presentation.loginflow.LoginFlowViewModel
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,7 +26,7 @@ class ResetPasswordFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_reset_password, container, false)
         viewModel.downloading.observe(viewLifecycleOwner) {

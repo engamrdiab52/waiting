@@ -8,11 +8,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.afollestad.materialdialogs.MaterialDialog
 import com.amrabdelhamiddiab.core.domain.Service
 import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentCreateServiceBinding
-import com.amrabdelhamiddiab.waiting.framework.utilis.checkInternetConnection
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,7 +21,7 @@ class CreateServiceFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_create_service, container, false)
         binding.editTextCategory.text?.clear()
@@ -56,13 +54,5 @@ class CreateServiceFragment : Fragment() {
                 viewModel.uploadServiceV(service)
         }
         return binding.root
-    }
-
-    private fun displayNoInternerConnection() {
-        MaterialDialog(requireContext()).show {
-            cancelOnTouchOutside(true)
-            title(R.string.no_internet_title)
-            message(R.string.no_internet_message)
-        }
     }
 }

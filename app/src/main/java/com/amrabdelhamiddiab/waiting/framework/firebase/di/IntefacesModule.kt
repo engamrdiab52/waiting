@@ -14,7 +14,7 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class intefacesModule {
+abstract class IntefacesModule {
     @Binds
     abstract fun bindSignUpUser(signupUserImpl: SignupUserImpl): ISignUpUser
 

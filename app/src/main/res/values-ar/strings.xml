@@ -82,4 +82,6 @@
     <string name="invalid_number">رقم غير مقبول</string>
     <string name="enter_your_number_here">قم بإدخال رقم دورك</string>
     <string name="client_order_bottom_sheet">رقم الزائر</string>
+    <string name="review_our_app">قيم التطبيق</string>
+    <string name="client_order">رقم العميل</string>
 </resources>

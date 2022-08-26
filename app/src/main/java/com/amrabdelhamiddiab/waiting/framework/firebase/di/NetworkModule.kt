@@ -16,8 +16,4 @@ class NetworkModule {
     fun provideFcmService(): FcmService {
         return FcmService.create()
     }
-  /*
-    @Provides
-    @Singleton
-    fun procideTtsProviderImpl(): */
 }

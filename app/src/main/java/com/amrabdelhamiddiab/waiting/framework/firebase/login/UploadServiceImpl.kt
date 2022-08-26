@@ -1,12 +1,10 @@
 package com.amrabdelhamiddiab.waiting.framework.firebase.login
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import com.amrabdelhamiddiab.core.data.IUploadService
 import com.amrabdelhamiddiab.core.domain.Order
 import com.amrabdelhamiddiab.core.domain.Service
-import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.framework.utilis.checkInternetConnection
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference

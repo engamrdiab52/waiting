@@ -1,19 +1,15 @@
 package com.amrabdelhamiddiab.waiting.framework.utilis
 
 import android.annotation.SuppressLint
-import android.content.Context
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
-import androidx.navigation.NavController
 import com.amrabdelhamiddiab.waiting.presentation.loginflow.scanqr.ScanQrViewModel
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 
 class MyImageAnalyzer(
-    private val context: Context,
-    private val scanQrViewModel: ScanQrViewModel,
-    private val navController: NavController
+    private val scanQrViewModel: ScanQrViewModel
 ) :
     ImageAnalysis.Analyzer {
     override fun analyze(imageProxy: ImageProxy) {

@@ -90,5 +90,6 @@
     <string name="banner_ad_unit_id" translatable="false">ca-app-pub-4551978188781875/4000706911</string>
   <string name="client_order_bottom_sheet">Client Order</string>
     <string name="review_our_app">Review Our App</string>
+    <string name="client_order">Client Order</string>
 
 </resources>

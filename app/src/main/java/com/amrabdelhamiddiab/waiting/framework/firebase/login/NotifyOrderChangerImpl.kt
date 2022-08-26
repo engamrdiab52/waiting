@@ -11,7 +11,6 @@ import javax.inject.Inject
 class NotifyOrderChangerImpl @Inject constructor() : ValueEventListener {
 
     override fun onDataChange(snapshot: DataSnapshot) {
-      //  Log.d(TAG, snapshot.value.toString())
         val item = snapshot.getValue(Order::class.java)
         Log.d(TAG, item.toString())
     }

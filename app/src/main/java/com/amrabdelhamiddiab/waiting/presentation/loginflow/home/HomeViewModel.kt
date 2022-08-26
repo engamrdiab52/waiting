@@ -1,17 +1,15 @@
 package com.amrabdelhamiddiab.waiting.presentation.loginflow.home
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amrabdelhamiddiab.core.data.IPreferenceHelper
 import com.amrabdelhamiddiab.core.domain.Service
-import com.amrabdelhamiddiab.core.domain.Token
 import com.amrabdelhamiddiab.core.usecases.login.DownloadService
 import com.amrabdelhamiddiab.core.usecases.login.EmailVerifiedState
-import com.amrabdelhamiddiab.core.usecases.login.UploadClientToken
 import com.amrabdelhamiddiab.waiting.framework.utilis.SingleLiveEvent
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,8 +21,7 @@ class HomeViewModel @Inject constructor(
     private val preHelper: IPreferenceHelper,
     private val downloadService: DownloadService,
     private val auth: FirebaseAuth,
-    private val emailVerifiedState: EmailVerifiedState,
-    private val uploadClientToken: UploadClientToken
+    private val emailVerifiedState: EmailVerifiedState
 
 ) : ViewModel() {
     private val _userId = SingleLiveEvent<String>()
@@ -41,9 +38,6 @@ class HomeViewModel @Inject constructor(
 
     private val _downloading = SingleLiveEvent<Boolean>()
     val downloading: LiveData<Boolean> get() = _downloading
-
-    private val _tokenUploaded = SingleLiveEvent<Boolean?>()
-    val tokenUploaded: LiveData<Boolean?> get() = _tokenUploaded
 
     private val _emailVerified = SingleLiveEvent<Boolean>()
     val emailVerified: LiveData<Boolean> get() = _emailVerified
@@ -68,22 +62,9 @@ class HomeViewModel @Inject constructor(
         _userId_for_client.value = string
     }
 
-    fun uploadMyClientToken(token : Token) {
-        viewModelScope.launch(Dispatchers.IO) {
-            _downloading.postValue(true)
-            _tokenUploaded.postValue( uploadClientToken( token))
-            _downloading.postValue(false)
-        }
-    }
-
-    fun sayIfClientIsInAVisit(inAVisit: Boolean){
-        preHelper.setIfClientInAVisit(inAVisit)
-    }
-
+    @SuppressLint("NullSafeMutableLiveData")
     fun isEmailVerified() {
-        viewModelScope.launch(Dispatchers.IO) {
-            _emailVerified.postValue(emailVerifiedState()!!)
-        }
+        viewModelScope.launch(Dispatchers.IO) { _emailVerified.postValue(emailVerifiedState()) }
     }
 
     fun getClientInAVisit(): Boolean {

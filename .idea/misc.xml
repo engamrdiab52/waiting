@@ -3,15 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/drawable-v24/ic_android_black_24dp.xml" value="0.121" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/drawable-v24/ic_outline_settings_24.xml" value="0.156" />
+        <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/drawable/ic_baseline_camera_alt_24.xml" value="0.121" />
+        <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/drawable/ic_baseline_navigate_next_240.xml" value="0.156" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/drawable/ic_baseline_settings_24.xml" value="0.156" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout-night/activity_main.xml" value="0.24547101449275363" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout-night/fragment_client.xml" value="0.1" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout-night/fragment_service.xml" value="0.24547101449275363" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout-night/nav_header_main.xml" value="0.24547101449275363" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/activity_main.xml" value="0.2" />
-        <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/bottomsheet_custom_view.xml" value="0.24547101449275363" />
-        <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/bottomshhet_custom_view_client_order.xml" value="0.24547101449275363" />
+        <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/bottomsheet_custom_view.xml" value="0.1" />
+        <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/bottomshhet_custom_view_client_order.xml" value="0.1" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/fragment_client.xml" value="0.24010416666666667" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/fragment_create_service.xml" value="0.264" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/fragment_delete_account.xml" value="0.24547101449275363" />
@@ -27,7 +30,7 @@
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/fragment_signup.xml" value="0.2" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/fragment_u_i.xml" value="0.12360688956433637" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/nav_header_main.xml" value="0.24547101449275363" />
-        <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/notification_layout.xml" value="0.264" />
+        <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/notification_layout.xml" value="0.1" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/temp1.xml" value="0.16799999999999998" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/temp2.xml" value="0.24547101449275363" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/temp3.xml" value="0.253125" />
@@ -91,6 +94,12 @@
         <entry key="..\:/Users/engam/StudioProjects/waiting/app/src/main/res/xml/values_base_config.xml" value="0.24547101449275363" />
       </map>
     </option>
+  </component>
+  <component name="EntryPointsManager">
+    <list size="2">
+      <item index="0" class="java.lang.String" itemvalue="dagger.Binds" />
+      <item index="1" class="java.lang.String" itemvalue="dagger.Module" />
+    </list>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />

@@ -24,10 +24,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
-import com.amrabdelhamiddiab.core.domain.Token
-import com.amrabdelhamiddiab.waiting.MainActivity
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
-import com.amrabdelhamiddiab.waiting.MyFirebaseMessagingService
 import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentScanQrCodeBinding
 import com.amrabdelhamiddiab.waiting.framework.utilis.MyImageAnalyzer
@@ -70,23 +67,15 @@ class ScanQrCodeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_scan_qr_code, container, false)
         // Inflate the layout for this fragment
         Log.d(TAG, "ScanQrCodeFragment called...................................")
         analyzer = MyImageAnalyzer(
-            requireContext(),
-            viewModel,
-            findNavController(),
-
+            viewModel
         )
         startScanQrCode()
-/*        viewModel.tokenUploaded.observe(viewLifecycleOwner){
-            if (it == true){
-                viewModel.sayIfClientIsInAVisit(true)
-            }
-        }*/
         viewModel.userId.observe(viewLifecycleOwner){
             if (it != null) {
                 viewModel.downloadServiceV(it)
@@ -99,9 +88,7 @@ class ScanQrCodeFragment : Fragment() {
                 val userId = viewModel.userId.value!!
                 viewModel.saveUserIdInPreferences(userId)
                 findNavController().navigate(R.id.action_scanQrCodeFragment_to_clientFragment)
-                //i will change it
-              //  viewModel.uploadMyClientToken(Token(MyFirebaseMessagingService.token.toString()) )
-            }else {
+                 }else {
                 Toast.makeText(requireContext(), "Wrong QR CODE", Toast.LENGTH_SHORT).show()
                 findNavController().navigate(R.id.action_scanQrCodeFragment_to_homeFragment)
             }

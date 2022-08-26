@@ -2,35 +2,26 @@ package com.amrabdelhamiddiab.waiting.presentation.loginflow.home
 
 import android.app.Activity
 import android.content.Intent
-import android.icu.text.DisplayContext
-import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.findFragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.afollestad.materialdialogs.LayoutMode.*
+import com.afollestad.materialdialogs.LayoutMode.WRAP_CONTENT
 import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.bottomsheets.BasicGridItem
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
-import com.afollestad.materialdialogs.bottomsheets.gridItems
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
-import com.amrabdelhamiddiab.core.domain.Token
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
-import com.amrabdelhamiddiab.waiting.MyFirebaseMessagingService
 import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentHomeBinding
 import com.amrabdelhamiddiab.waiting.framework.utilis.checkInternetConnection
@@ -51,14 +42,11 @@ class HomeFragment : Fragment() {
     private lateinit var scanner: BarcodeScanner
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-// for activity result
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
-                    // There are no request codes
                     val data: Intent? = result.data
                     val imageUri = data?.data
-                    // here i have the uri and will create the input image
                     try {
                         val inputImage =
                             imageUri?.let { InputImage.fromFilePath(requireContext(), it) }!!
@@ -70,21 +58,11 @@ class HomeFragment : Fragment() {
             }
 
     }
-
-    /* @RequiresApi(Build.VERSION_CODES.Q)*/
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        //  requireActivity().setTheme(R.style.Theme_Waiting_NoActionBar_Fragment)
-        // requireContext().theme.applyStyle(R.style.Theme_Waiting_NoActionBar, true)
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
-        // WindowCompat.setDecorFitsSystemWindows(requireActivity().window, false)
-// Hide the status bar.
-
-        //**************************************
-        //Service part
-        //************************
+    ): View {
+         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
         viewModel.service.observe(viewLifecycleOwner) {
             if (it != null) {
                 findNavController().navigate(R.id.action_homeFragment_to_serviceFragment)
@@ -102,9 +80,6 @@ class HomeFragment : Fragment() {
         binding.buttonService.setOnClickListener {
             startAsService()
         }
-        //*************************************************
-        // Client PART Pick QR CODE
-        //*****************************************
         binding.buttonClient.setOnClickListener {
             startAsClient()
         }
@@ -120,22 +95,13 @@ class HomeFragment : Fragment() {
                 ).show()
             }
         }
-      /*  viewModel.tokenUploaded.observe(viewLifecycleOwner) {
-            if (it == true) {
-                viewModel.sayIfClientIsInAVisit(true)
-            }
-        }*/
         viewModel.service_for_client.observe(viewLifecycleOwner) {
             if (it != null) {
                 val userId = viewModel.userId_for_client.value!!
                 viewModel.saveUserIdInPreferences(userId)
                 findNavController().navigate(R.id.action_homeFragment_to_clientFragment)
-            /*    viewModel.uploadMyClientToken(
-                    Token(MyFirebaseMessagingService.token.toString())
-                )*/
             } else {
                 Toast.makeText(requireContext(), "Wrong QR CODE", Toast.LENGTH_SHORT).show()
-                //findNavController().navigate(R.id.action_scanQrCodeFragment_to_homeFragment)
             }
         }
 
@@ -158,7 +124,7 @@ class HomeFragment : Fragment() {
                 showBottomSheet()
             }
         } else {
-            displayNoInternerConnection()
+            displayNoInternetConnection()
         }
     }
 
@@ -197,7 +163,7 @@ class HomeFragment : Fragment() {
         if (checkInternetConnection(requireActivity().applicationContext)) {
             viewModel.userLoggedIn()
         } else {
-            displayNoInternerConnection()
+            displayNoInternetConnection()
         }
     }
 
@@ -227,7 +193,7 @@ class HomeFragment : Fragment() {
     }
 
 
-    private fun displayNoInternerConnection() {
+    private fun displayNoInternetConnection() {
         MaterialDialog(requireContext()).show {
             cancelOnTouchOutside(true)
             title(R.string.no_internet_title)

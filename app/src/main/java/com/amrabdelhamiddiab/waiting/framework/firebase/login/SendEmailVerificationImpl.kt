@@ -1,10 +1,8 @@
 package com.amrabdelhamiddiab.waiting.framework.firebase.login
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import com.amrabdelhamiddiab.core.data.login.ISendEmailVerification
-import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.framework.utilis.checkInternetConnection
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.qualifiers.ApplicationContext

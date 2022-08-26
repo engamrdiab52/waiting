@@ -14,7 +14,6 @@ import com.amrabdelhamiddiab.waiting.MainActivity
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentLoginBinding
-import com.amrabdelhamiddiab.waiting.framework.utilis.checkInternetConnection
 import com.amrabdelhamiddiab.waiting.presentation.loginflow.LoginFlowViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
@@ -30,7 +29,7 @@ class LoginFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
         viewModel.downloading.observe(viewLifecycleOwner) {
             if (it) {

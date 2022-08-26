@@ -17,11 +17,6 @@
         android:title="@string/edit_service"
         app:showAsAction="never">
     </item>
-<!--    <item
-        android:id="@+id/menu_scan_qr_code"
-        android:title="@string/scan_qr_code"
-        app:showAsAction="never">
-    </item>-->
     <item
         android:id="@+id/menu_log_out"
         android:title="@string/log_out"

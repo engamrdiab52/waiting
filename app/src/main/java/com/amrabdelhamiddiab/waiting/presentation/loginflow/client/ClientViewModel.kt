@@ -1,6 +1,6 @@
 package com.amrabdelhamiddiab.waiting.presentation.loginflow.client
 
-import android.util.Log
+import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,8 +11,6 @@ import com.amrabdelhamiddiab.core.domain.Token
 import com.amrabdelhamiddiab.core.usecases.login.DownloadService
 import com.amrabdelhamiddiab.core.usecases.login.RemoveClientToken
 import com.amrabdelhamiddiab.core.usecases.login.UploadClientToken
-import com.amrabdelhamiddiab.waiting.MainActivity
-import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.framework.utilis.SingleLiveEvent
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -27,7 +25,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ClientViewModel @Inject constructor(
     private val databaseReference: DatabaseReference,
-    private val prefeHelper: IPreferenceHelper,
+    private val iPreferenceHelper: IPreferenceHelper,
     private val gson: Gson,
     private val downloadService: DownloadService,
     private val removeClientToken: RemoveClientToken,
@@ -54,7 +52,6 @@ class ClientViewModel @Inject constructor(
 
     private val orderListener = object : ValueEventListener {
         override fun onCancelled(error: DatabaseError) {
-            Log.d(TAG,"Error  orderListener = object : ValueEventListener............."+ error.message)
             _orderValue.postValue(Order(0L))
         }
         override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -65,24 +62,15 @@ class ClientViewModel @Inject constructor(
             }
         }
     }
-
-
-//*****************************
-    //remove token from DB to not receive notifications
-    //first i need the reference with key
-    // IRemoveClientToken
-
+    @SuppressLint("NullSafeMutableLiveData")
     fun removeClientTokenV() {
         viewModelScope.launch(Dispatchers.IO) {
             _downloading.postValue(true)
-            _clientTokenRemoved.postValue(removeClientToken()!!)
+            _clientTokenRemoved.postValue(removeClientToken())
             _downloading.postValue(false)
         }
     }
-//*****************************
     fun notifyWhenOrderChange(userId: String) {
-        //    val userId = prefeHelper.fetchUserId()
-        // val userId = "C8UkQhcYCRRzqqtCFf5MtDqR9Cq2"
         if (userId.isNotEmpty()) {
             databaseReference.child("orders").child(userId)
                 .addValueEventListener(orderListener)
@@ -92,30 +80,30 @@ class ClientViewModel @Inject constructor(
     fun saveOrderInPreferences(order: Order) {
         val orderClientString: String? = gson.toJson(order)
         if (orderClientString != null) {
-            with(prefeHelper) { saveOrderForClient(orderClientString) }
+            with(iPreferenceHelper) { saveOrderForClient(orderClientString) }
         }
     }
 
     fun retrieveClientNumberFromPreferences() {
-        val number = if (prefeHelper.loadClientNumberFromPreferences() == -1) {
+        val number = if (iPreferenceHelper.loadClientNumberFromPreferences() == -1) {
             0
         } else {
-            prefeHelper.loadClientNumberFromPreferences()
+            iPreferenceHelper.loadClientNumberFromPreferences()
         }
         _myNumber.value = number
     }
 
     fun saveMyNumberInPreferences(myNumber: Int) {
-        prefeHelper.saveClientNumberInPreferences(myNumber)
+        iPreferenceHelper.saveClientNumberInPreferences(myNumber)
         _myNumber.value = myNumber
     }
 
     fun retrieveUserIdFromPreferences(): String {
-        return prefeHelper.fetchUserIdForClient()
+        return iPreferenceHelper.fetchUserIdForClient()
     }
 
     fun sayIfClientIsInAVisit(inAVisit: Boolean){
-        prefeHelper.setIfClientInAVisit(inAVisit)
+        iPreferenceHelper.setIfClientInAVisit(inAVisit)
 
     }
     fun downloadServiceV(userId: String) {
@@ -124,10 +112,10 @@ class ClientViewModel @Inject constructor(
 
         }
     }
+    @SuppressLint("NullSafeMutableLiveData")
     fun uploadMyClientToken(token : Token) {
-        Log.d(MainActivity.TAG,"uploadMyClientToken(token : Token).....called..." + token)
         viewModelScope.launch(Dispatchers.IO) {
-            _tokenUploaded.postValue( uploadClientToken(token)!!)
+            _tokenUploaded.postValue(uploadClientToken(token))
         }
     }
 }

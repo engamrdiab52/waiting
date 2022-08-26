@@ -4,8 +4,6 @@ import com.amrabdelhamiddiab.core.data.IDownloadService
 import com.amrabdelhamiddiab.core.data.IUploadService
 import com.amrabdelhamiddiab.core.data.login.*
 import com.amrabdelhamiddiab.core.usecases.login.*
-import com.amrabdelhamiddiab.waiting.framework.firebase.login.DeleteThisDayImpl
-import com.amrabdelhamiddiab.waiting.framework.firebase.login.RemoveClientTokenImpl
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides

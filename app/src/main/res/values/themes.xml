@@ -9,11 +9,7 @@
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/color_text_home</item>
-        <!-- Status bar color. -->
-        <!--   <item name="android:statusBarColor">?attr/colorPrimary</item>-->
-
-        <!-- Customize your theme here. -->
-    </style>
+      </style>
 
     <style name="Theme.Waiting.NoActionBar" parent="Theme.Waiting">
 
@@ -24,10 +20,6 @@
         <item name="windowNoTitle">true</item>
         <!-- Optional: set the status bar light and content dark. -->
         <item name="android:windowLightStatusBar">false</item>
-
-        <!--    <item name="android:windowTranslucentStatus">true</item>
-            <item name="android:windowTranslucentNavigation">true</item>
-       <item name="android:windowDrawsSystemBarBackgrounds">true</item>-->
     </style>
 
     <style name="Theme.Waiting.NoActionBar.Fragment" parent="Theme.Waiting">
@@ -45,10 +37,7 @@
         <item name="md_color_content">@color/color_button_home</item>
         <item name="md_color_button_text">@color/color_button_home</item>
         <item name="backgroundTint">@color/white</item>
-        <!--<item name="android:background">@drawable/background</item>-->
-        <!-- <item name="android:background">@color/white</item>-->
-        <!-- Optional: set the status bar light and content dark. -->
-        <item name="android:windowLightStatusBar">true</item>
+         <item name="android:windowLightStatusBar">true</item>
 
     </style>
 
@@ -58,9 +47,6 @@
     </style>
 
     <style name="CustomActionBar" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-        <!-- Support library compatibility -->
-        <!--here writing is by white color-->
-        <!--  <item name="android:background">@drawable/md_transparent</item>-->
         <item name="android:background">@color/white</item>
         <item name="windowActionBarOverlay">true</item>
         <item name="android:textColor">@color/black</item>
@@ -70,8 +56,4 @@
     <style name="Widget.MaterialComponents.Button.OutlinedButton.Waiting" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:textColor">@color/color_text_home</item>
     </style>
-
-   <!-- <style name="AppTheme.Custom" parent="Theme.Waiting.NoActionBar.Fragment">
-        <item name="colorAccent">@color/color_text_home</item>
-    </style>-->
 </resources>

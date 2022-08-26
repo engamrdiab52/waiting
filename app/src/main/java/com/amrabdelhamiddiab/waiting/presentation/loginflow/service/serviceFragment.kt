@@ -1,8 +1,6 @@
 package com.amrabdelhamiddiab.waiting.presentation.loginflow.service
 
 import android.Manifest
-import android.annotation.SuppressLint
-import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -31,7 +29,6 @@ import com.amrabdelhamiddiab.core.domain.Service
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentServiceBinding
-import com.amrabdelhamiddiab.waiting.framework.utilis.checkInternetConnection
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -50,17 +47,13 @@ class serviceFragment : Fragment() {
 
     private var passwordForDeleteAccount: String = ""
     private lateinit var binding: FragmentServiceBinding
-    var fromButton: Boolean = false
+    private var fromButton: Boolean = false
     private val viewModel by viewModels<ServiceViewModel>()
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        //  viewModel.downloadTokenV()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_service, container, false)
 
         permissionLauncher = registerForActivityResult(
@@ -90,16 +83,6 @@ class serviceFragment : Fragment() {
         navigationHeaderNameOfService =
             navigationHeader.findViewById(R.id.textView_name_of_service_nav_header)
 
-  /*      navigationHeaderTitle.text = myService.category
-        navigationHeaderNameOfService.text = myService.name_of_service
-
-        if (myService.period_per_each_service != 0) {
-            val text = myService.period_per_each_service
-            (getString(R.string.about)+" " + text +" " + getString(R.string.minuits_for_each_visit)).also { navigationHeaderPeriod.text = it }
-        } else {
-            navigationHeaderPeriod.text = "0"
-        }
-*/
         viewModel.notifyWhenServiceChange()
         viewModel.notifyWhenOrderChange()
         viewModel.notifyWhenListOfTokensChanged()
@@ -121,7 +104,7 @@ class serviceFragment : Fragment() {
         }
             if (it != null) {
                 val text = it.period_per_each_service
-                (getString(R.string.about)+" " + text +" " + getString(R.string.minuits_for_each_visit)).also { navigationHeaderPeriod.text = it }
+                (getString(R.string.about)+" " + text +" " + getString(R.string.minuits_for_each_visit)).also { it1 -> navigationHeaderPeriod.text = it1 }
             } else {
                 navigationHeaderPeriod.text = "0"
             }
@@ -320,14 +303,6 @@ class serviceFragment : Fragment() {
         }
     }
 
-    private fun displayNoInternerConnection() {
-        MaterialDialog(requireContext()).show {
-            cancelOnTouchOutside(true)
-            title(R.string.no_internet_title)
-            message(R.string.no_internet_message)
-        }
-    }
-
     override fun onResume() {
         super.onResume()
         navigationHeader.visibility = View.VISIBLE
@@ -347,15 +322,15 @@ class serviceFragment : Fragment() {
         AlertDialog.Builder(requireContext())
             .setTitle("Permission Denied")
             .setMessage("Permission is denied, Please allow Post Notification permissions from App Settings.")
-            .setPositiveButton("App Settings",
-                DialogInterface.OnClickListener { _, _ ->
-                    // send to app settings if permission is denied permanently
-                    val intent = Intent()
-                    intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                    val uri = Uri.fromParts("package",requireActivity().packageName, null)
-                    intent.data = uri
-                    startActivity(intent)
-                })
+            .setPositiveButton("App Settings"
+            ) { _, _ ->
+                // send to app settings if permission is denied permanently
+                val intent = Intent()
+                intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                val uri = Uri.fromParts("package", requireActivity().packageName, null)
+                intent.data = uri
+                startActivity(intent)
+            }
             .setNegativeButton("Cancel", null)
             .show()
     }

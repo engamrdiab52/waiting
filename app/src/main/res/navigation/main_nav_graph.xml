@@ -182,11 +182,6 @@
             app:launchSingleTop="true"
             app:popUpTo="@id/homeFragment"/>
         <action
-            android:id="@+id/action_homeFragment_to_scanOrPickQrCode"
-            app:destination="@id/scanOrPickQrCode"
-            app:launchSingleTop="true"
-            app:popUpTo="@id/homeFragment"/>
-        <action
             android:id="@+id/action_homeFragment_to_scanQrCodeFragment"
             app:destination="@id/scanQrCodeFragment"
             app:launchSingleTop="true"
@@ -211,7 +206,7 @@
     <fragment
         android:id="@+id/scanQrCodeFragment"
         android:name="com.amrabdelhamiddiab.waiting.presentation.loginflow.scanqr.ScanQrCodeFragment"
-        android:label="fragment_scan_qr_code"
+        android:label="@string/space"
         tools:layout="@layout/fragment_scan_qr_code" >
         <action
             android:id="@+id/action_scanQrCodeFragment_to_clientFragment"
@@ -225,24 +220,6 @@
             app:destination="@id/homeFragment"
             app:launchSingleTop="true"
             app:popUpTo="@id/scanQrCodeFragment"
-            app:popUpToInclusive="true"
-            />
-    </fragment>
-    <fragment
-        android:id="@+id/scanOrPickQrCode"
-        android:name="com.amrabdelhamiddiab.waiting.presentation.loginflow.scanorpickqrcode.ScanOrPickQrCode"
-        android:label="ScanOrPickQrCode"
-        tools:layout="@layout/fragment_scan_or_pick_qr_code">
-        <action
-            android:id="@+id/action_scanOrPickQrCode_to_scanQrCodeFragment"
-            app:destination="@id/scanQrCodeFragment"
-            app:launchSingleTop="true"
-            app:popUpTo="@id/scanOrPickQrCode"/>
-        <action
-            android:id="@+id/action_scanOrPickQrCode_to_clientFragment"
-            app:destination="@id/clientFragment"
-            app:launchSingleTop="true"
-            app:popUpTo="@id/scanOrPickQrCode"
             app:popUpToInclusive="true"
             />
     </fragment>

@@ -5,17 +5,14 @@ import android.speech.tts.TextToSpeech
 import android.speech.tts.TextToSpeech.OnInitListener
 import android.speech.tts.UtteranceProgressListener
 import android.speech.tts.Voice
-import android.util.Log
 import android.widget.Toast
-import com.amrabdelhamiddiab.waiting.MainActivity
-import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import java.util.*
 
 
 class TtsProviderImpl : TtsProviderFactory(), OnInitListener {
-    var tts: TextToSpeech? = null
+    private var tts: TextToSpeech? = null
     private lateinit var local: Locale
-    lateinit var toVoice2: String
+    private lateinit var toVoice2: String
     private var context2: Context? = null
     override fun init(context: Context?, toVoice: String) {
         context2 = context
@@ -35,7 +32,7 @@ class TtsProviderImpl : TtsProviderFactory(), OnInitListener {
         if (status == TextToSpeech.SUCCESS) {
             val result = tts?.setLanguage(local)
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                Toast.makeText(context2, "Languge Not Supported", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context2, "Language isn't Supported", Toast.LENGTH_SHORT).show()
             } else {
                 tts!!.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
                     override fun onStart(utteranceId: String?) {
@@ -50,9 +47,6 @@ class TtsProviderImpl : TtsProviderFactory(), OnInitListener {
                 })
                 tts!!.speak(toVoice2, TextToSpeech.QUEUE_FLUSH, null, "")
             }
-        } else {
-          //  Toast.makeText(context2, "Error...", Toast.LENGTH_SHORT).show()
-            Log.d(TAG, "ERROR................ override fun onInit(status: Int).....")
         }
     }
 

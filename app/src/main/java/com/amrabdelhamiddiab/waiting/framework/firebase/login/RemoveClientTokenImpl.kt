@@ -1,16 +1,11 @@
 package com.amrabdelhamiddiab.waiting.framework.firebase.login
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import com.amrabdelhamiddiab.core.data.IPreferenceHelper
-import com.amrabdelhamiddiab.core.data.login.IDeleteService
 import com.amrabdelhamiddiab.core.data.login.IRemoveClientToken
-import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.framework.utilis.checkInternetConnection
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.core.Tag
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -30,11 +25,9 @@ class RemoveClientTokenImpl @Inject constructor(
                     val ref = databaseReference.child("tokens").child(uid)
                     val tokenKey = preferenceHelper.retrieveClientTokenId()
                     if (tokenKey.isNotEmpty()) {
-                        Log.d(TAG,"suspend fun removeClientToken()................" +tokenKey)
                         ref.child(tokenKey).removeValue().await()
                         true
                     } else {
-                        Log.d(TAG,"suspend fun removeClientToken():............called ....false" )
                         false
                     }
                 }else {
