@@ -294,7 +294,6 @@ class serviceFragment : Fragment() {
             title(R.string.dialog_logout_title)
             message(R.string.dialog_logout_message)
             positiveButton(R.string.yes) {
-                Log.d(TAG, "Logged out ")
                 viewModel.signOut()
             }
             negativeButton(R.string.cancel) {

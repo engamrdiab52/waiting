@@ -39,15 +39,15 @@
     <string name="edit_my_number">Edit My Number</string>
     <string name="cancel">Cancel</string>
     <string name="add">Add</string>
-    <string name="are_you_sure">Are You Sure You Want To End Your Visit</string>
-    <string name="dialog_logout_message">Are You Sure You Want To Log Out</string>
-    <string name="dialog_delete_account_message">Are you sure you want to delete your account?</string>
+    <string name="are_you_sure">Are You Sure You Want To End Your Visit ?</string>
+    <string name="dialog_logout_message">Are You Sure You Want To Log Out ?</string>
+    <string name="dialog_delete_account_message">Are you sure you want to delete your account ?</string>
     <string name="edit_order">Edit Current</string>
     <string name="edit_service">Edit Service</string>
     <string name="current_serving_number">Current serving Number</string>
     <string name="qrcode_fake_title">QR CODE IS FAKE</string>
     <string name="no_internet_title">NO INTERNET</string>
-    <string name="no_internet_message">Please check your internet connection</string>
+    <string name="no_internet_message">Please check your internet connection !</string>
     <string name="dialog_logout_title">LOG OUT</string>
     <string name="dialog_delete_account_title">Delete account</string>
     <!--  <string name="pick_qr_code">Pick QR Code</string>-->
@@ -91,5 +91,7 @@
   <string name="client_order_bottom_sheet">Client Order</string>
     <string name="review_our_app">Review Our App</string>
     <string name="client_order">Client Order</string>
+    <string name="provide_all_fields">please fill all fields to save a new service</string>
+    <string name="save_to_gallery">Save To Gallery</string>
 
 </resources>

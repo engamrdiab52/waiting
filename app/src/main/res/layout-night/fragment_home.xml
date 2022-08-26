@@ -49,13 +49,13 @@
             android:text="@string/client"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="@color/color_text_home"
+            android:textColor="@color/color_button_home_bright"
             android:textSize="@dimen/_24ssp"
             android:textStyle="bold"
             android:typeface="serif"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout8"
             app:layout_constraintStart_toStartOf="parent"
-            app:strokeColor="@color/color_text_home"
+            app:strokeColor="@color/color_button_home_bright"
             app:strokeWidth="0dp" />
 
         <Button
@@ -70,13 +70,13 @@
             android:text="@string/service"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="@color/color_text_home"
+            android:textColor="@color/color_button_home_bright"
             android:textSize="@dimen/_24ssp"
             android:textStyle="bold"
             android:typeface="serif"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:strokeColor="@color/color_text_home"
+            app:strokeColor="@color/color_button_home_bright"
             app:strokeWidth="0dp" />
 
         <LinearLayout
@@ -97,7 +97,7 @@
                 android:layout_gravity="center_vertical|center_horizontal"
 
                 android:layout_weight="4"
-                android:background="@color/gray"
+                android:background="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:layout_editor_absoluteY="536dp" />
 
@@ -108,7 +108,7 @@
                 android:gravity="center_horizontal|center_vertical"
                 android:text="@string/or"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="@color/gray"
+                android:textColor="@color/white"
                 android:textStyle="bold"
                 android:typeface="serif" />
 
@@ -118,11 +118,9 @@
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:layout_marginStart="@dimen/_16sdp"
                 android:layout_weight="4"
-                android:background="@color/gray"
+                android:background="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:layout_editor_absoluteY="305dp" />
         </LinearLayout>
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

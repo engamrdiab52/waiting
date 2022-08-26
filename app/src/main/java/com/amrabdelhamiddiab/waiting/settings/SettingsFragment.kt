@@ -63,13 +63,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
                         requireActivity().recreate()
                     }
                 }
-
-                Toast.makeText(requireContext(), newValue.toString(), Toast.LENGTH_SHORT).show()
                 true
             }
-
-
-
         return super.onCreateView(inflater, container, savedInstanceState)
 
     }

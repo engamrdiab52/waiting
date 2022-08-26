@@ -34,10 +34,9 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="80dp"
             android:layout_marginEnd="32dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="8dp"
             android:layout_weight="3"
             android:clickable="true"
-            android:focusable="true"
             app:cardCornerRadius="16dp"
             app:cardElevation="4dp"
             app:layout_constraintBottom_toTopOf="@+id/textView2"
@@ -71,16 +70,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="32dp"
             android:gravity="start"
-
             android:text="@string/current_serving_number"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/color_text_home"
             app:layout_constraintBottom_toTopOf="@+id/button_end_this_day"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/card_view_service_increment_order" />
 
         <Button
             android:id="@+id/button_end_this_day"

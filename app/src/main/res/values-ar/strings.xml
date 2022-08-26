@@ -84,4 +84,6 @@
     <string name="client_order_bottom_sheet">رقم الزائر</string>
     <string name="review_our_app">قيم التطبيق</string>
     <string name="client_order">رقم العميل</string>
+    <string name="provide_all_fields">قم بملىء جميع الخانات لتتمكن من تسجيل خدمة جديدة</string>
+    <string name="save_to_gallery">حفظ فى الصور</string>
 </resources>
