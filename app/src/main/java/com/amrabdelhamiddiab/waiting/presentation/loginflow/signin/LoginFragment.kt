@@ -14,6 +14,7 @@ import com.amrabdelhamiddiab.waiting.MainActivity
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentLoginBinding
+import com.amrabdelhamiddiab.waiting.framework.utilis.toast
 import com.amrabdelhamiddiab.waiting.presentation.loginflow.LoginFlowViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
@@ -63,8 +64,7 @@ class LoginFragment : Fragment() {
                 val password = binding.editTextLoginPassword.text.toString()
                 viewModel.signIn(email, password)
             } else {
-                Toast.makeText(requireContext(), "** INVALID CREDENTIALS **", Toast.LENGTH_LONG)
-                    .show()
+                requireContext().toast(getString(R.string.invalid_credentials))
             }
         }
         binding.tvLoginForgetPasswordClickable.setOnClickListener {

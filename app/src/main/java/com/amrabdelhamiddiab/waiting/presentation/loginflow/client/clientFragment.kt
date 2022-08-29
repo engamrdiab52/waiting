@@ -21,6 +21,7 @@ import com.amrabdelhamiddiab.waiting.MyFirebaseMessagingService
 import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentClientBinding
 import com.amrabdelhamiddiab.waiting.framework.utilis.checkInternetConnection
+import com.amrabdelhamiddiab.waiting.framework.utilis.toast
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -52,7 +53,6 @@ class clientFragment : Fragment() {
         navigationHeaderNameOfService =
             navigationHeader.findViewById(R.id.textView_name_of_service_nav_header)
 
-
         val userId = viewModel.retrieveUserIdFromPreferences()
         viewModel.notifyWhenOrderChange(userId)
         viewModel.downloadServiceV(userId)
@@ -77,8 +77,8 @@ class clientFragment : Fragment() {
             }
         }
 
-        viewModel.tokenUploaded.observe(viewLifecycleOwner){
-            if (it == true){
+        viewModel.tokenUploaded.observe(viewLifecycleOwner) {
+            if (it == true) {
                 viewModel.sayIfClientIsInAVisit(true)
             }
         }
@@ -88,7 +88,9 @@ class clientFragment : Fragment() {
                 myService = it
                 navigationHeaderTitle.text = myService.category
                 val text = it.period_per_each_service
-                (getString(R.string.about)+" " + text +" " + getString(R.string.minuits_for_each_visit)).also { it1 -> navigationHeaderPeriod.text = it1 }
+                (getString(R.string.about) + " " + text + " " + getString(R.string.minuits_for_each_visit)).also { it1 ->
+                    navigationHeaderPeriod.text = it1
+                }
 
                 navigationHeaderNameOfService.text = myService.name_of_service
             } else {
@@ -134,7 +136,7 @@ class clientFragment : Fragment() {
                         }
                         true
                     }
-                  else -> false
+                    else -> false
                 }
             }
 
@@ -157,10 +159,16 @@ class clientFragment : Fragment() {
                     val myValueInt = myValue.toString().toInt()
                     if (myValueInt > orderNumber) {
                         viewModel.saveMyNumberInPreferences(myValue.toString().toInt())
-                        viewModel.uploadMyClientToken(Token(MyFirebaseMessagingService.token.toString(),myValueInt ) )
+                        viewModel.uploadMyClientToken(
+                            Token(
+                                MyFirebaseMessagingService.token.toString(),
+                                myValueInt
+                            )
+                        )
                     } else {
-                        Toast.makeText(requireContext(), getString(R.string.invalid_number), Toast.LENGTH_SHORT)
-                            .show()
+
+                        //    Toast.makeText(requireContext(), getString(R.string.invalid_number), Toast.LENGTH_SHORT).show()
+                        requireContext().toast(getString(R.string.invalid_number))
                     }
                 } else {
                     it.dismiss()

@@ -319,9 +319,10 @@ class serviceFragment : Fragment() {
 
     private fun showPermissionDeniedDialog() {
         AlertDialog.Builder(requireContext())
-            .setTitle("Permission Denied")
-            .setMessage("Permission is denied, Please allow Post Notification permissions from App Settings.")
-            .setPositiveButton("App Settings"
+            .setTitle(getString(R.string.denied))
+            .setMessage(getString(R.string.permission_denied))
+            .setPositiveButton(
+                getString(R.string.app_settings)
             ) { _, _ ->
                 // send to app settings if permission is denied permanently
                 val intent = Intent()
@@ -330,7 +331,7 @@ class serviceFragment : Fragment() {
                 intent.data = uri
                 startActivity(intent)
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(getString(R.string.cancel), null)
             .show()
     }
 

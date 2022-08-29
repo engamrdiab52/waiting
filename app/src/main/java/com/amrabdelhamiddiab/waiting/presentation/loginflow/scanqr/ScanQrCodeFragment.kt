@@ -28,6 +28,7 @@ import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentScanQrCodeBinding
 import com.amrabdelhamiddiab.waiting.framework.utilis.MyImageAnalyzer
+import com.amrabdelhamiddiab.waiting.framework.utilis.toast
 import com.google.common.util.concurrent.ListenableFuture
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.ExecutorService
@@ -70,8 +71,6 @@ class ScanQrCodeFragment : Fragment() {
     ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_scan_qr_code, container, false)
-        // Inflate the layout for this fragment
-        Log.d(TAG, "ScanQrCodeFragment called...................................")
         analyzer = MyImageAnalyzer(
             viewModel
         )
@@ -89,7 +88,7 @@ class ScanQrCodeFragment : Fragment() {
                 viewModel.saveUserIdInPreferences(userId)
                 findNavController().navigate(R.id.action_scanQrCodeFragment_to_clientFragment)
                  }else {
-                Toast.makeText(requireContext(), "Wrong QR CODE", Toast.LENGTH_SHORT).show()
+                requireContext().toast(getString(R.string.wrong_qrcode))
                 findNavController().navigate(R.id.action_scanQrCodeFragment_to_homeFragment)
             }
         }
@@ -102,13 +101,12 @@ class ScanQrCodeFragment : Fragment() {
 
     }
 
-
     private fun showPermissionDeniedDialog() {
         AlertDialog.Builder(requireContext())
-            .setTitle("Permission Denied")
-            .setMessage("Permission is denied, Please allow permissions from App Settings.")
+            .setTitle(getString(R.string.denied))
+            .setMessage(getString(R.string.permission_denied))
             .setPositiveButton(
-                "App Settings"
+                getString(R.string.app_settings)
             ) { _, _ ->
                 // send to app settings if permission is denied permanently
                 val intent = Intent()
@@ -117,10 +115,9 @@ class ScanQrCodeFragment : Fragment() {
                 intent.data = uri
                 startActivity(intent)
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(getString(R.string.cancel), null)
             .show()
     }
-
 
     private fun bindPreview(cameraProvider: ProcessCameraProvider) {
         val preview: Preview = Preview.Builder()

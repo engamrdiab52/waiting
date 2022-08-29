@@ -25,6 +25,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentScanQrServiceBinding
 import com.amrabdelhamiddiab.waiting.framework.utilis.MyImageAnalyzerService
+import com.amrabdelhamiddiab.waiting.framework.utilis.toast
 import com.google.common.util.concurrent.ListenableFuture
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -74,12 +75,11 @@ class ScanQrServiceFragment : Fragment() {
                 //show bottomSheet
 
             } else {
-                Toast.makeText(requireContext(), "Wrong QR Code", Toast.LENGTH_SHORT).show()
+                requireContext().toast(getString(R.string.wrong_qrcode))
             }
         }
         return binding.root
     }
-
 
     private fun startScanQrCode() {
         askForCameraPermission()
@@ -110,10 +110,10 @@ class ScanQrServiceFragment : Fragment() {
 
     private fun showPermissionDeniedDialog() {
         AlertDialog.Builder(requireContext())
-            .setTitle("Permission Denied")
-            .setMessage("Permission is denied, Please allow permissions from App Settings.")
+            .setTitle(getString(R.string.denied))
+            .setMessage(getString(R.string.permission_denied))
             .setPositiveButton(
-                "App Settings"
+                getString(R.string.app_settings)
             ) { _, _ ->
                 // send to app settings if permission is denied permanently
                 val intent = Intent()
@@ -122,7 +122,7 @@ class ScanQrServiceFragment : Fragment() {
                 intent.data = uri
                 startActivity(intent)
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(getString(R.string.cancel), null)
             .show()
     }
 

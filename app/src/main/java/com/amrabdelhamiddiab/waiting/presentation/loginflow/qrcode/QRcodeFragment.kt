@@ -25,6 +25,7 @@ import androidx.fragment.app.viewModels
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentQRcodeBinding
+import com.amrabdelhamiddiab.waiting.framework.utilis.toast
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,7 +40,7 @@ class QRcodeFragment : Fragment() {
     private lateinit var binding: FragmentQRcodeBinding
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
     private lateinit var bitmap: Bitmap
-    private var permissionGranted : Boolean =false
+    private var permissionGranted: Boolean = false
 
     private val viewModel by viewModels<QrCodeViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,11 +49,8 @@ class QRcodeFragment : Fragment() {
             ActivityResultContracts.RequestPermission()
         ) { isGranted ->
             if (isGranted) {
-                permissionGranted =true
-                // Do if the permission is granted
-                Toast.makeText(requireContext(), "permission Already granted", Toast.LENGTH_LONG)
-                    .show()
-
+                permissionGranted = true
+                requireContext().toast(getString(R.string.permission_already_granted))
             } else {
                 // Do otherwise
                 //   Toast.makeText(requireContext(), "permission Denied", Toast.LENGTH_LONG).show()
@@ -60,6 +58,7 @@ class QRcodeFragment : Fragment() {
             }
         }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -69,8 +68,7 @@ class QRcodeFragment : Fragment() {
             if (permissionGranted) {
                 // Permissions are already granted, do your stuff
                 saveImage(bitmap, requireActivity())
-                Toast.makeText(requireContext(), "Image saved in Gallery", Toast.LENGTH_LONG).show()
-
+                requireContext().toast(getString(R.string.image_saved_in_gallery))
             }
         }
         binding.buttonGenerateQr.setOnClickListener {
@@ -79,20 +77,19 @@ class QRcodeFragment : Fragment() {
 
         askForExternalStoragePermission()
         val userId = viewModel.userId
-        if ( userId.isNotEmpty()){
+        if (userId.isNotEmpty()) {
 
             val encoder = BarcodeEncoder()
             bitmap = encoder.encodeBitmap(userId, BarcodeFormat.QR_CODE, 400, 400)
-            Log.d(TAG, "USER ID:  $userId")
         }
-            // Inflate the layout for this fragment
-            return binding.root
+        // Inflate the layout for this fragment
+        return binding.root
     }
 
     private fun askForExternalStoragePermission() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q){
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             permissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        }else{
+        } else {
             permissionGranted = true
         }
 
@@ -100,9 +97,10 @@ class QRcodeFragment : Fragment() {
 
     private fun showPermissionDeniedDialog() {
         AlertDialog.Builder(requireContext())
-            .setTitle("Permission Denied")
-            .setMessage("Permission is denied, Please allow permissions from App Settings.")
-            .setPositiveButton("App Settings"
+            .setTitle(getString(R.string.denied))
+            .setMessage(getString(R.string.permission_denied))
+            .setPositiveButton(
+                getString(R.string.app_settings)
             ) { _, _ ->
                 // send to app settings if permission is denied permanently
                 val intent = Intent()
@@ -111,9 +109,10 @@ class QRcodeFragment : Fragment() {
                 intent.data = uri
                 startActivity(intent)
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(getString(R.string.cancel), null)
             .show()
     }
+
     private fun saveImage(
         bitmap: Bitmap,
         context: Context
@@ -124,7 +123,8 @@ class QRcodeFragment : Fragment() {
             values.put(MediaStore.Images.Media.IS_PENDING, true)
             // RELATIVE_PATH and IS_PENDING are introduced in API 29.
 
-            val uri: Uri? = context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+            val uri: Uri? =
+                context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
             if (uri != null) {
                 //here u don't access the file directly ,but through content resolver
                 saveImageToStream(bitmap, context.contentResolver.openOutputStream(uri))
@@ -132,7 +132,10 @@ class QRcodeFragment : Fragment() {
                 context.contentResolver.update(uri, values, null, null)
             }
         } else {
-            val directory = File(Environment.getExternalStorageDirectory().toString() + File.separator + "Waiting App")
+            val directory = File(
+                Environment.getExternalStorageDirectory()
+                    .toString() + File.separator + "Waiting App"
+            )
             // getExternalStorageDirectory is deprecated in API 29
 
             if (!directory.exists()) {
@@ -147,7 +150,8 @@ class QRcodeFragment : Fragment() {
             context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
         }
     }
-    private fun contentValues() : ContentValues {
+
+    private fun contentValues(): ContentValues {
         val values = ContentValues()
         values.put(MediaStore.Images.Media.MIME_TYPE, "image/png")
         values.put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis() / 1000)

@@ -235,4 +235,12 @@
         android:id="@+id/scanQrServiceFragment"
         android:name="com.amrabdelhamiddiab.waiting.presentation.loginflow.scanqrservice.ScanQrServiceFragment"
         android:label="ScanQrServiceFragment" />
+    <fragment
+        android:id="@+id/privacyFragment"
+        android:name="com.amrabdelhamiddiab.waiting.presentation.loginflow.PrivacyFragment"
+        android:label="@string/space" />
+    <fragment
+        android:id="@+id/termsFragment"
+        android:name="com.amrabdelhamiddiab.waiting.presentation.loginflow.TermsFragment"
+        android:label="@string/space" />
 </navigation>

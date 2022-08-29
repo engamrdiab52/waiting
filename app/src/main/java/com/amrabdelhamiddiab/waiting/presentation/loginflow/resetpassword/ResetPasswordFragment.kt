@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.amrabdelhamiddiab.waiting.MainActivity
 import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentResetPasswordBinding
+import com.amrabdelhamiddiab.waiting.framework.utilis.toast
 import com.amrabdelhamiddiab.waiting.presentation.loginflow.LoginFlowViewModel
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,8 +39,7 @@ class ResetPasswordFragment : Fragment() {
         }
         viewModel.passwordChanged.observe(viewLifecycleOwner) {
             if (it == true) {
-                Toast.makeText(requireContext(), "Email sent successfully", Toast.LENGTH_SHORT)
-                    .show()
+                requireContext().toast(getString(R.string.email_sent_successfully))
                 findNavController().navigate(R.id.action_resetPasswordFragment_to_loginFragment)
             }
         }
@@ -49,8 +49,7 @@ class ResetPasswordFragment : Fragment() {
                 val email = binding.editTextEmailResetPassword.text.toString()
                 viewModel.resetPassword(email)
             } else {
-                Toast.makeText(requireContext(), "** INVALID CREDENTIALS **", Toast.LENGTH_LONG)
-                    .show()
+                requireContext().toast(getString(R.string.invalid_credentials))
             }
         }
         // Inflate the layout for this fragment

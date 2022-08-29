@@ -22,7 +22,6 @@ class ScanOrPickQrCode : Fragment() {
     private lateinit var scanner: BarcodeScanner
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-// for activity result
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
@@ -39,7 +38,6 @@ class ScanOrPickQrCode : Fragment() {
                     }
                 }
             }
-
     }
 
     private fun getQrCodeValue(inputImage: InputImage) {
@@ -49,26 +47,9 @@ class ScanOrPickQrCode : Fragment() {
                     Barcode.TYPE_TEXT -> {
                         // Here i will continue to do the same as in scanQR CODE
                         viewModel.checkThisString(barcode.displayValue.toString())
-
                     }
                 }
             }
-        }.addOnFailureListener {
-            Log.d(TAG, "Failure")
-        }.addOnCanceledListener {
-            Log.d(TAG, "Canceled")
         }
     }
 }
-//*************************************************
-/*
-override fun onResume() {
-    super.onResume()
-    (requireActivity() as MainActivity).hideStatusBar()
-}
-
-    override fun onStop() {
-        (requireActivity() as MainActivity).showStatusBar()
-        super.onStop()
-    }
-}*/

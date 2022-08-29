@@ -1,14 +1,18 @@
 package com.amrabdelhamiddiab.waiting
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.ContactsContract
+import android.provider.Settings
 import android.util.Log
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.ShareActionProvider
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.*
 import androidx.drawerlayout.widget.DrawerLayout
@@ -18,12 +22,18 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
+import com.afollestad.materialdialogs.MaterialDialog
 import com.amrabdelhamiddiab.waiting.databinding.ActivityMainBinding
 import com.amrabdelhamiddiab.waiting.framework.utilis.LocaleHelper
+import com.amrabdelhamiddiab.waiting.framework.utilis.toast
 import com.amrabdelhamiddiab.waiting.presentation.loginflow.MyDrawerController
 import com.google.android.gms.ads.*
+import com.google.android.gms.tasks.RuntimeExecutionException
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.navigation.NavigationView
+import com.google.android.play.core.review.ReviewInfo
+import com.google.android.play.core.review.ReviewManager
+import com.google.android.play.core.review.ReviewManagerFactory
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -40,6 +50,8 @@ class MainActivity : AppCompatActivity(), MyDrawerController {
     private lateinit var toolbar: Toolbar
     private lateinit var appBarLayout: AppBarLayout
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private var reviewInfo: ReviewInfo? = null
+    private var manager: ReviewManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +67,7 @@ class MainActivity : AppCompatActivity(), MyDrawerController {
         binding.adView.loadAd(adRequest)
 
 //----------------------------------------
-         setContentView(binding.root)
+        setContentView(binding.root)
         //  createWaitingNotificationChannel()
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         val language = sharedPreferences.getString("language_list", "en")
@@ -75,6 +87,58 @@ class MainActivity : AppCompatActivity(), MyDrawerController {
         setSupportActionBar(toolbar)
 
         navigationView.setupWithNavController(navController)
+
+        navigationView.setNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.settingsFragment -> {
+                    NavigationUI.onNavDestinationSelected(it, navController)
+                    binding.drawerLayout.closeDrawer(GravityCompat.START, true)
+                    true
+                }
+                R.id.sendUsEmail -> {
+                    choiceSendUsEmail()
+                    binding.drawerLayout.closeDrawer(GravityCompat.START, true)
+                    true
+                }
+                R.id.reportIssue -> {
+                    choiceReportIssue()
+                    binding.drawerLayout.closeDrawer(GravityCompat.START, true)
+                    true
+                }
+                R.id.suggestFeature -> {
+                    suggestFeature()
+                    binding.drawerLayout.closeDrawer(GravityCompat.START, true)
+                    true
+                }
+                R.id.aboutWaiting -> {
+                    choiceAboutWaiting()
+                    binding.drawerLayout.closeDrawer(GravityCompat.START, true)
+                    true
+                }
+                R.id.rateApp -> {
+                    choiceRateApp()
+                    binding.drawerLayout.closeDrawer(GravityCompat.START, true)
+                    true
+                }
+                R.id.inviteFriends -> {
+                    choiceInviteFriends()
+                    binding.drawerLayout.closeDrawer(GravityCompat.START, true)
+                    true
+                }
+                R.id.privacyFragment -> {
+                    choiceTermsOfUse()
+                    NavigationUI.onNavDestinationSelected(it, navController)
+                    binding.drawerLayout.closeDrawer(GravityCompat.START, true)
+                    true
+                }
+                R.id.termsFragment -> {
+                    NavigationUI.onNavDestinationSelected(it, navController)
+                    binding.drawerLayout.closeDrawer(GravityCompat.START, true)
+                    true
+                }
+                else -> false
+            }
+        }
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
@@ -99,12 +163,128 @@ class MainActivity : AppCompatActivity(), MyDrawerController {
             getSharedPreferences("sharedPrefToken", Context.MODE_PRIVATE)
     }
 
+    private fun choiceTermsOfUse() {
+        this.toast("termsOfUse")
+
+    }
+
+
+    private fun choiceRateApp() {
+        this.toast("rateApp")
+        activityReviewInfo()
+        startReviewFlow()
+    }
+
+    private fun activityReviewInfo() {
+        manager = ReviewManagerFactory.create(this)
+        val request = manager?.requestReviewFlow()
+        request?.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                // We got the ReviewInfo object
+                reviewInfo = task.result
+                this.toast(reviewInfo?.describeContents().toString())
+            } else {
+                // There was some problem, log or handle the error code.
+                val reviewErrorCode = (task.exception as RuntimeExecutionException).stackTrace
+                Log.d(TAG, "******************" + reviewErrorCode.toString())
+            }
+        }
+    }
+
+    private fun startReviewFlow() {
+        if (reviewInfo != null) {
+            val flow = manager?.launchReviewFlow(this, reviewInfo!!)
+            flow?.addOnCompleteListener {
+                this.toast(it.result.toString())
+            }
+        }
+    }
+
+    private fun choiceAboutWaiting() {
+        MaterialDialog(this).show {
+            title(R.string.about_waiting)
+            message(R.string.about_eaiting_description)
+        }
+    }
+
+    private fun choiceInviteFriends() {
+        val url = "https://play.google.com/store/apps/details?id=com.amrabdelhamiddiab.bags"
+        val urlOfApp = getString(R.string.checkout_app) + "  0" + url
+        val shareIntent = Intent(Intent.ACTION_SEND)
+        shareIntent.putExtra(Intent.EXTRA_TEXT, urlOfApp).type = "text/plain"
+        startActivity(Intent.createChooser(shareIntent, "Share to "))
+    }
+
+
+    private fun suggestFeature() {
+        val subject = "Waiting ${getVersionName()}"
+        val title = "Suggest a feature "
+        val body ="\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n ${ getHardWareInformation()}"
+        val mailIntent = Intent(Intent.ACTION_SEND)
+            .putExtra(Intent.EXTRA_SUBJECT, subject)
+            .putExtra(Intent.EXTRA_TITLE, title)
+            .putExtra(Intent.EXTRA_TEXT, body)
+            .putExtra(Intent.EXTRA_EMAIL, arrayOf("engamrdiab52@gmail.com"))
+        mailIntent.type = "text/plain"
+        startActivity(Intent.createChooser(mailIntent, "Send by "))
+    }
+
+    private fun getVersionName(): String {
+        return packageManager
+            .getPackageInfo(packageName, 0).versionName
+    }
+
+
+    private fun getHardWareInformation(): String {
+          return "Brand: ${Build.BRAND} \n\n" +
+                "Model: ${Build.MODEL} \n\n" +
+                "ID: ${Build.ID} \n\n" +
+                "SDK: ${Build.VERSION.SDK_INT} \n\n" +
+                "Manufacture: ${Build.MANUFACTURER} \n\n" +
+                "Brand: ${Build.BRAND} \n\n" +
+                "User: ${Build.USER} \n\n" +
+                "Type: ${Build.TYPE} \n\n" +
+                "Base: ${Build.VERSION_CODES.BASE} \n\n" +
+                "Incremental: ${Build.VERSION.INCREMENTAL} \n\n" +
+                "Board: ${Build.BOARD} \n\n" +
+                "Host: ${Build.HOST} \n\n" +
+                "FingerPrint: ${Build.FINGERPRINT} \n\n" +
+                "Version Code: ${Build.VERSION.RELEASE}"
+    }
+
+    private fun choiceReportIssue() {
+
+        val subject = "Waiting ${getVersionName()}"
+        val title = "Report an Issue "
+        val body ="\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n ${ getHardWareInformation()}"
+        val mailIntent = Intent(Intent.ACTION_SEND)
+            .putExtra(Intent.EXTRA_SUBJECT, subject)
+            .putExtra(Intent.EXTRA_TITLE, title)
+            .putExtra(Intent.EXTRA_TEXT, body)
+            .putExtra(Intent.EXTRA_EMAIL, arrayOf("engamrdiab52@gmail.com"))
+        mailIntent.type = "text/plain"
+        startActivity(Intent.createChooser(mailIntent, "Send by "))
+    }
+
+    private fun choiceSendUsEmail() {
+        val subject = "Waiting ${getVersionName()}"
+        val title = "Contact Us "
+        val body ="\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n ${ getHardWareInformation()}"
+        val mailIntent = Intent(Intent.ACTION_SEND)
+            .putExtra(Intent.EXTRA_SUBJECT, subject)
+            .putExtra(Intent.EXTRA_TITLE, title)
+            .putExtra(Intent.EXTRA_TEXT, body)
+            .putExtra(Intent.EXTRA_EMAIL, arrayOf("engamrdiab52@gmail.com"))
+        mailIntent.type = "text/plain"
+        startActivity(Intent.createChooser(mailIntent, "Send by "))
+    }
+
     override fun onSupportNavigateUp(): Boolean {
         return NavigationUI.navigateUp(navController, appBarConfiguration)
     }
 
     @Deprecated("Deprecated in Java")
-    override fun  onBackPressed() {
+    override fun onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
         } else super.onBackPressed()
@@ -118,7 +298,7 @@ class MainActivity : AppCompatActivity(), MyDrawerController {
     override fun setDrawerUnlocked() {
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
         toolbar.visibility = View.VISIBLE
-     }
+    }
 
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(LocaleHelper.onAttach(base))
@@ -141,6 +321,7 @@ class MainActivity : AppCompatActivity(), MyDrawerController {
         super.onDestroy()
 
     }
+
     companion object {
         const val TAG = "MainActivity"
     }

@@ -25,6 +25,8 @@ import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentHomeBinding
 import com.amrabdelhamiddiab.waiting.framework.utilis.checkInternetConnection
+import com.amrabdelhamiddiab.waiting.framework.utilis.showCustomToast
+import com.amrabdelhamiddiab.waiting.framework.utilis.toast
 import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
@@ -175,7 +177,6 @@ class HomeFragment : Fragment() {
                 horizontalPadding = false
             )
             autoDismissEnabled
-
             cornerRadius(16F)
         }
         requireContext()
@@ -203,15 +204,3 @@ class HomeFragment : Fragment() {
 
 
 }
-
-
-/*    override fun onResume() {
-        super.onResume()
-        (requireActivity() as MainActivity ).hideStatusBar()
-    }
-
-    override fun onStop() {
-        (requireActivity() as MainActivity ).showStatusBar()
-        super.onStop()
-    }
-}*/

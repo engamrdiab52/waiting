@@ -16,6 +16,7 @@ import com.amrabdelhamiddiab.waiting.MainActivity
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentSignupBinding
+import com.amrabdelhamiddiab.waiting.framework.utilis.toast
 import com.amrabdelhamiddiab.waiting.presentation.loginflow.LoginFlowViewModel
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,8 +46,7 @@ class SignupFragment : Fragment() {
 
         viewModel.emailVerificationSent.observe(viewLifecycleOwner) {
             if (it == true) {
-                Toast.makeText(requireContext(), "Please Verify Your Email", Toast.LENGTH_LONG)
-                    .show()
+                requireContext().toast(getString(R.string.please_verifiy_your_email))
                 findNavController().navigate(R.id.action_signupFragment_to_loginFragment)
             }
         }
@@ -93,8 +93,7 @@ class SignupFragment : Fragment() {
                 val email = binding.edtTxtSignupEmail.text.toString()
                 viewModel.createUser(email, password)
             } else {
-                Toast.makeText(requireContext(), "** INVALID CREDENTIALS **", Toast.LENGTH_LONG)
-                    .show()
+                requireContext().toast(getString(R.string.invalid_credentials))
             }
         }
         // Inflate the layout for this fragment
@@ -149,6 +148,7 @@ class SignupFragment : Fragment() {
                 }
             }.check()
     }
+
     override fun onResume() {
         super.onResume()
         (activity as MainActivity).setDrawerLocked()

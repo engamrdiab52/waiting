@@ -88,10 +88,31 @@
     <string name="app_id" translatable="false">ca-app-pub-4551978188781875~8904166344</string>
     <string name="banner_ad_unit_id_test" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
     <string name="banner_ad_unit_id" translatable="false">ca-app-pub-4551978188781875/4000706911</string>
-  <string name="client_order_bottom_sheet">Client Order</string>
+    <string name="client_order_bottom_sheet">Client Order</string>
     <string name="review_our_app">Review Our App</string>
     <string name="client_order">Client Order</string>
     <string name="provide_all_fields">please fill all fields to save a new service</string>
     <string name="save_to_gallery">Save To Gallery</string>
-
+    <string name="permission_already_granted">permission Already granted</string>
+    <string name="image_saved_in_gallery">Image saved in Gallery</string>
+    <string name="permission_denied">Permission is denied, Please allow permissions from App Settings.</string>
+    <string name="denied">Permission Denied</string>
+    <string name="app_settings">App Settings</string>
+    <string name="invalid_credentials">Invalid Credentials</string>
+    <string name="email_sent_successfully">Email sent successfully</string>
+    <string name="wrong_qrcode">Wrong QR Code</string>
+    <string name="please_verifiy_your_email">Please Verify Your Email</string>
+    <string name="rate_app">Rate the app</string>
+    <string name="contact_us">CONTACT US</string>
+    <string name="report_issue">Report an issue</string>
+    <string name="suggest_a_feature">Suggest a feature</string>
+    <string name="waiting" translatable="false">WAITING</string>
+    <string name="about_waiting">About Waiting</string>
+    <string name="send_us_email">Send Us an Email</string>
+    <string name="invite_friends">Invite friends to Waiting</string>
+    <string name="terms_use">Terms of use</string>
+    <string name="current_version_1_0_0">Current Version 1.0.0</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="about_eaiting_description">It is a system to eliminate the problem of long waiting that we suffer, whether by standing in line or sitting in a crowded place\nYou will track your number in the reservation through the application, You will also receive a notification when it is your turn telling you to prepare to be at the place of receiving the service\n </string>
+    <string name="checkout_app">Check out Waiting app. It is a system to eliminate the problem of long waiting that we suffer, You can download it here:</string>
 </resources>

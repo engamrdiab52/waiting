@@ -86,4 +86,26 @@
     <string name="client_order">رقم العميل</string>
     <string name="provide_all_fields">قم بملىء جميع الخانات لتتمكن من تسجيل خدمة جديدة</string>
     <string name="save_to_gallery">حفظ فى الصور</string>
+    <string name="permission_already_granted">تم ألقبول من قبل</string>
+    <string name="image_saved_in_gallery">تم الحفظ فى ألبوم الصور</string>
+    <string name="permission_denied">تم رفض الإذن، من فضلك اذهب الى الأوضاع لقبول الإذن</string>
+    <string name="denied">تم رفض الإذن</string>
+    <string name="app_settings">إعدادات التطبيقات</string>
+    <string name="invalid_credentials">بيانات غير صالحة</string>
+    <string name="email_sent_successfully">تم إرسال الميل بنجاح</string>
+    <string name="wrong_qrcode">رمز الاستجابة السريعة خاطئ</string>
+    <string name="please_verifiy_your_email">يرجى التحقق من بريدك الإلكتروني</string>
+    <string name="rate_app">قيم التطبيق</string>
+    <string name="contact_us">تواصل معنا</string>
+    <string name="report_issue">بلغ عن خطأ</string>
+    <string name="suggest_a_feature">إقترح ميزة جديدة</string>
+    <string name="waiting">ويتينج</string>
+    <string name="about_waiting">حول التطبيق</string>
+    <string name="send_us_email">راسلنا بالبريد الألكترونى</string>
+    <string name="invite_friends">شارك التطبيق</string>
+    <string name="terms_use">شروط الإستخدام</string>
+    <string name="current_version_1_0_0">"الإصدار الحالى  1.0.0 "</string>
+    <string name="privacy_policy">سياسة الخصوصية</string>
+    <string name="about_eaiting_description">هو نظام للقضاء على مشكلة طول الإنتظار سواء كنت واقفاً فى طابور أو جالس فى مكان مزدحم.  سوف تتابع رقمك فى الحجز من خلال التطبيق، وسيصلك إشعار حين يقترب دورك، بأن تستعد بالتواجد فى مكان تلقى الخدمة.</string>
+    <string name="checkout_app">قوللى رأيك فى تطبيق ويتينج،هو نظام للقضاء على مشكلة اللإنتظار، تقدر تحمل التطبيق من هنا:</string>
 </resources>

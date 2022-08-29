@@ -80,7 +80,6 @@ class MyFirebaseMessagingService :
       if (soundEnabled){
           playCustomSound()
       }
-
     }
 
     private fun playCustomSound() {

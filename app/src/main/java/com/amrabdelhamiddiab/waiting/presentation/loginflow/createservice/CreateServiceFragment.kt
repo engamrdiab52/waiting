@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.amrabdelhamiddiab.core.domain.Service
 import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentCreateServiceBinding
+import com.amrabdelhamiddiab.waiting.framework.utilis.toast
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -38,8 +39,8 @@ class CreateServiceFragment : Fragment() {
         }
 
 
-        viewModel.serviceCreated.observe(viewLifecycleOwner){
-            if (it == true){
+        viewModel.serviceCreated.observe(viewLifecycleOwner) {
+            if (it == true) {
                 binding.editTextCategory.text?.clear()
                 binding.editTextNameOfService.text?.clear()
                 binding.editTextPeriodOfEachService.text?.clear()
@@ -47,17 +48,16 @@ class CreateServiceFragment : Fragment() {
             }
         }
         binding.buttonSave.setOnClickListener {
-                val category: String = binding.editTextCategory.text.toString()
-                val serviceName = binding.editTextNameOfService.text.toString()
-                val text = binding.editTextPeriodOfEachService.text.toString()
-            if (category.isNotEmpty() && serviceName.isNotEmpty() && text.isNotEmpty()){
+            val category: String = binding.editTextCategory.text.toString()
+            val serviceName = binding.editTextNameOfService.text.toString()
+            val text = binding.editTextPeriodOfEachService.text.toString()
+            if (category.isNotEmpty() && serviceName.isNotEmpty() && text.isNotEmpty()) {
                 val timePeriod: Int = text.toInt()
                 val service = Service(category, serviceName, "", timePeriod)
                 viewModel.uploadServiceV(service)
-            }else {
-                Toast.makeText(requireContext(), "please fill all fields to save a new service", Toast.LENGTH_LONG).show()
+            } else {
+                requireContext().toast(getString(R.string.provide_all_fields))
             }
-
         }
         return binding.root
     }
