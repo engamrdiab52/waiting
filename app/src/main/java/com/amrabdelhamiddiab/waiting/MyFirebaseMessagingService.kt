@@ -4,6 +4,7 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.BitmapFactory
+import androidx.annotation.Keep
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.preference.PreferenceManager
@@ -13,18 +14,18 @@ import com.amrabdelhamiddiab.waiting.framework.utilis.WaitingApplication.Compani
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
-
+@Keep
 class MyFirebaseMessagingService :
     FirebaseMessagingService() {
     override fun onNewToken(newToken: String) {
         super.onNewToken(newToken)
         token = newToken
-      }
+    }
 
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
-         val notificationData = message.data
+        val notificationData = message.data
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
         val notificationSoundEnabled = sharedPreferences.getBoolean("notification_enable", true)
         val speakNumbersEnabled = sharedPreferences.getBoolean("notification_speak_number", true)
@@ -42,8 +43,8 @@ class MyFirebaseMessagingService :
     }
 
     //here i can pass the importance dependence on a condition on the value i eil receive from sender (service)
-    private fun createNotification(message: RemoteMessage, soundEnabled:Boolean) {
-         //Create the Intent
+    private fun createNotification(message: RemoteMessage, soundEnabled: Boolean) {
+        //Create the Intent
         val intent = Intent(applicationContext, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         //Create Pending Intent
@@ -77,13 +78,13 @@ class MyFirebaseMessagingService :
         val notification = notificationBuilder.build()
         NotificationManagerCompat.from(applicationContext).notify(NOTIFICATION_ID, notification)
         //   playNotificationSound(applicationContext)
-      if (soundEnabled){
-          playCustomSound()
-      }
+        if (soundEnabled) {
+            playCustomSound()
+        }
     }
 
     private fun playCustomSound() {
-            playResource()
+        playResource()
     }
 
     private fun playResource() {

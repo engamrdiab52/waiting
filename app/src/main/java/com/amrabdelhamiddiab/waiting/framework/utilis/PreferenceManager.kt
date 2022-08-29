@@ -6,7 +6,7 @@ import com.amrabdelhamiddiab.core.data.IPreferenceHelper
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class PreferenceManager @Inject constructor(@ApplicationContext context: Context) :
+ class PreferenceManager @Inject constructor(@ApplicationContext context: Context) :
     IPreferenceHelper {
     companion object {
         //CLIENT

@@ -225,10 +225,6 @@ class serviceFragment : Fragment() {
                         findNavController().navigate(R.id.action_serviceFragment_to_createServiceFragment)
                         true
                     }
-                  /*  R.id.menu_scan_qr_code -> {
-                        findNavController().navigate(R.id.action_serviceFragment_to_scanQrServiceFragment)
-                   true
-                    }*/
 
                     else -> false
                 }

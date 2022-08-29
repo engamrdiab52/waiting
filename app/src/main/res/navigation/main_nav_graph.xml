@@ -134,15 +134,6 @@
             app:popEnterAnim="@anim/from_right"
             app:popExitAnim="@anim/to_left"
             app:popUpTo="@id/serviceFragment" />
-        <action
-            android:id="@+id/action_serviceFragment_to_scanQrServiceFragment"
-            app:destination="@id/scanQrServiceFragment"
-            app:enterAnim="@anim/from_left"
-            app:exitAnim="@anim/to_right"
-            app:launchSingleTop="true"
-            app:popEnterAnim="@anim/from_right"
-            app:popExitAnim="@anim/to_left"
-            app:popUpTo="@id/serviceFragment"/>
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
@@ -195,7 +186,7 @@
             android:id="@+id/action_createServiceFragment_to_serviceFragment"
             app:destination="@id/serviceFragment"
             app:launchSingleTop="true"
-            app:popUpTo="@id/homeFragment"
+            app:popUpTo="@id/createServiceFragment"
             app:popUpToInclusive="true"/>
     </fragment>
     <fragment
