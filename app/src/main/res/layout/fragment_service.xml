@@ -45,24 +45,33 @@
             app:layout_constraintTop_toTopOf="parent"
             app:strokeWidth="2dp">
 
-            <FrameLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="@dimen/_36sdp">
 
                 <TextView
                     android:id="@+id/text_view_current_number"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="bottom|center"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:gravity="center"
                     android:paddingBottom="8dp"
                     android:text="0"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
                     android:textColor="@color/color_text_home"
                     android:textSize="90sp"
-                    android:visibility="visible" />
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.22000003" />
 
-            </FrameLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
         <TextView

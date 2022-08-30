@@ -36,7 +36,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class serviceFragment : Fragment() {
 
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
-    private var permissionGranted : Boolean =false
+    private var permissionGranted: Boolean = false
 
     private lateinit var navigationView: NavigationView
     private lateinit var navigationHeader: View
@@ -55,14 +55,22 @@ class serviceFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_service, container, false)
+        val resourceNameEmail = com.amrabdelhamiddiab.waiting.R.id.edit_text_login_email
+        val resourceNamePassword = com.amrabdelhamiddiab.waiting.R.id.edit_text_login_password
 
+        Log.d(TAG,"ResourceName email::::::::::" +resourceNameEmail.toString())
+        Log.d(TAG,"ResourceName password::::::::::" +resourceNamePassword.toString())
         permissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { isGranted ->
             if (isGranted) {
-                permissionGranted =true
+                permissionGranted = true
                 // Do if the permission is granted
-                Toast.makeText(requireContext(), "permission Post Notification Already granted", Toast.LENGTH_LONG)
+                Toast.makeText(
+                    requireContext(),
+                    "permission Post Notification Already granted",
+                    Toast.LENGTH_LONG
+                )
                     .show()
 
             } else {
@@ -74,14 +82,6 @@ class serviceFragment : Fragment() {
 
 
         askForPostNotificationPermission()
-
-        navigationView = requireActivity().findViewById(R.id.navigation_view)
-        navigationHeader = navigationView.getHeaderView(0)
-        navigationHeaderTitle = navigationHeader.findViewById(R.id.textView_category_nav_header)
-        navigationHeaderPeriod =
-            navigationHeader.findViewById(R.id.text_view_peiod_for_each_visitor_nav_header)
-        navigationHeaderNameOfService =
-            navigationHeader.findViewById(R.id.textView_name_of_service_nav_header)
 
         viewModel.notifyWhenServiceChange()
         viewModel.notifyWhenOrderChange()
@@ -96,15 +96,20 @@ class serviceFragment : Fragment() {
             }
         }
         viewModel.service.observe(viewLifecycleOwner) {
-            Log.d(TAG, "//////////////////////////??????????????????"+ it?.name_of_service.toString())
+            Log.d(
+                TAG,
+                "//////////////////////////??????????????????" + it?.name_of_service.toString()
+            )
             if (it != null) {
                 myService = it
-            navigationHeaderTitle.text = myService.category
-            navigationHeaderNameOfService.text = myService.name_of_service
-        }
+                navigationHeaderTitle.text = myService.category
+                navigationHeaderNameOfService.text = myService.name_of_service
+            }
             if (it != null) {
                 val text = it.period_per_each_service
-                (getString(R.string.about)+" " + text +" " + getString(R.string.minuits_for_each_visit)).also { it1 -> navigationHeaderPeriod.text = it1 }
+                (getString(R.string.about) + " " + text + " " + getString(R.string.minuits_for_each_visit)).also { it1 ->
+                    navigationHeaderPeriod.text = it1
+                }
             } else {
                 navigationHeaderPeriod.text = "0"
             }
@@ -120,10 +125,10 @@ class serviceFragment : Fragment() {
                     val listOfTokens = viewModel.listOfDownloadedTokens.value
                     if (!listOfTokens.isNullOrEmpty()) {
                         listOfTokens.forEach { token ->
-                            if (token.visitorNumber == it.order.toInt()){
+                            if (token.visitorNumber == it.order.toInt()) {
                                 PushNotification(
                                     NotificationData(
-                                        getString( R.string.current_serving_number) ,
+                                        getString(R.string.current_serving_number),
                                         it.order.toString()
                                     ),
                                     token.token
@@ -187,10 +192,20 @@ class serviceFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        navigationView = requireActivity().findViewById(R.id.navigation_view)
+        navigationHeader = navigationView.getHeaderView(0)
+        navigationHeaderTitle = navigationHeader.findViewById(R.id.textView_category_nav_header)
+        navigationHeaderPeriod =
+            navigationHeader.findViewById(R.id.text_view_peiod_for_each_visitor_nav_header)
+        navigationHeaderNameOfService =
+            navigationHeader.findViewById(R.id.textView_name_of_service_nav_header)
+    }
     private fun askForPostNotificationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-        }else{
+        } else {
             permissionGranted = true
         }
     }
@@ -232,6 +247,7 @@ class serviceFragment : Fragment() {
 
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
+
     private fun displayDialogDeleteAccount() {
         var myValue: CharSequence = ""
         MaterialDialog(requireContext()).show {

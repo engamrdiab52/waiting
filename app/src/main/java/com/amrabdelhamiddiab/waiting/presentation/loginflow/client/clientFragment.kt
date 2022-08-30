@@ -44,14 +44,13 @@ class clientFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_client, container, false)
-
-        navigationView = requireActivity().findViewById(R.id.navigation_view)
+      /*  navigationView = requireActivity().findViewById(R.id.navigation_view)
         navigationHeader = navigationView.getHeaderView(0)
         navigationHeaderTitle = navigationHeader.findViewById(R.id.textView_category_nav_header)
         navigationHeaderPeriod =
             navigationHeader.findViewById(R.id.text_view_peiod_for_each_visitor_nav_header)
         navigationHeaderNameOfService =
-            navigationHeader.findViewById(R.id.textView_name_of_service_nav_header)
+            navigationHeader.findViewById(R.id.textView_name_of_service_nav_header)*/
 
         val userId = viewModel.retrieveUserIdFromPreferences()
         viewModel.notifyWhenOrderChange(userId)
@@ -114,6 +113,17 @@ class clientFragment : Fragment() {
             }
         }
         return binding.root
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        navigationView = requireActivity().findViewById(R.id.navigation_view)
+        navigationHeader = navigationView.getHeaderView(0)
+        navigationHeaderTitle = navigationHeader.findViewById(R.id.textView_category_nav_header)
+        navigationHeaderPeriod =
+            navigationHeader.findViewById(R.id.text_view_peiod_for_each_visitor_nav_header)
+        navigationHeaderNameOfService =
+            navigationHeader.findViewById(R.id.textView_name_of_service_nav_header)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
