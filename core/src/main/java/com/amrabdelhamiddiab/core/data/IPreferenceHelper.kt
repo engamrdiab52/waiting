@@ -18,6 +18,13 @@ interface IPreferenceHelper {
     //in an visit
     fun setIfClientInAVisit(inAVisit: Boolean)
     fun getIfClientInAVisit() : Boolean
+
+    fun getReviewViewed(): Boolean
+    fun setReviewViewed(reviewStatus: Boolean)
+
+    fun saveSignInMethode(signInMethode: String)
+    fun loadSignInMethode(): String
+
     // client token id
     fun saveClientTokenId(tokenId:String)
     fun retrieveClientTokenId(): String

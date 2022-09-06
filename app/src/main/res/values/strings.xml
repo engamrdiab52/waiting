@@ -42,6 +42,7 @@
     <string name="are_you_sure">Are You Sure You Want To End Your Visit ?</string>
     <string name="dialog_logout_message">Are You Sure You Want To Log Out ?</string>
     <string name="dialog_delete_account_message">Are you sure you want to delete your account ?</string>
+    <string name="dialog_end_day_service">Are you sure you want to End This Day ?</string>
     <string name="edit_order">Edit Current</string>
     <string name="edit_service">Edit Service</string>
     <string name="current_serving_number">Current serving Number</string>

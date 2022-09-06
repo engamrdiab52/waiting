@@ -106,6 +106,15 @@ class ClientViewModel @Inject constructor(
         iPreferenceHelper.setIfClientInAVisit(inAVisit)
 
     }
+
+    fun sayIfReviewDone(): Boolean{
+        return iPreferenceHelper.getReviewViewed()
+    }
+
+    fun setReviewDoneStatus(status: Boolean){
+        iPreferenceHelper.setReviewViewed(status)
+    }
+
     fun downloadServiceV(userId: String) {
         viewModelScope.launch(Dispatchers.IO) {
             _service.postValue(downloadService(userId))

@@ -16,6 +16,8 @@ import javax.inject.Inject
         const val SERVICE_FOR_CLIENT = "serviceForClient"
         const val CLIENT_IN_A_VISIT = "clientInAVisit"
         const val TOKEN_REF_ID = "deviceTokenReferenceId"
+        const val REVIEW_VIEWED ="reviewViewed"
+        const val SIGN_IN_METHODE = "signInMethode"
     }
 
     private val PREFS_NAME = "PHARMACYPreferences"
@@ -64,7 +66,23 @@ import javax.inject.Inject
         return preferences[CLIENT_IN_A_VISIT] ?: false
     }
 
-    override fun saveClientTokenId(tokenId: String) {
+     override fun getReviewViewed(): Boolean {
+         return preferences[REVIEW_VIEWED]?: false
+     }
+
+     override fun setReviewViewed(reviewStatus: Boolean) {
+         preferences[REVIEW_VIEWED] = reviewStatus
+     }
+
+     override fun saveSignInMethode(signInMethode: String) {
+         preferences[SIGN_IN_METHODE] = signInMethode
+     }
+
+     override fun loadSignInMethode(): String {
+         return preferences[SIGN_IN_METHODE] ?: ""
+     }
+
+     override fun saveClientTokenId(tokenId: String) {
         preferences[TOKEN_REF_ID] = tokenId
     }
 

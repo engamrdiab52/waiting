@@ -73,7 +73,11 @@ class HomeViewModel @Inject constructor(
 
     fun userLoggedIn() {
         if (auth.currentUser != null) {
-            isEmailVerified()
+            when(preHelper.loadSignInMethode()){
+                "email" -> {isEmailVerified()}
+                "google"-> {downloadServiceV()}
+                else -> {_emailVerified.value = false}
+            }
         } else {
             _emailVerified.value = false
         }

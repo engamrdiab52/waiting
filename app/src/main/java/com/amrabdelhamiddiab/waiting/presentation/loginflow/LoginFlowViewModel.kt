@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.amrabdelhamiddiab.core.data.IPreferenceHelper
 import com.amrabdelhamiddiab.core.domain.Order
 import com.amrabdelhamiddiab.core.domain.Service
 import com.amrabdelhamiddiab.core.usecases.login.*
@@ -22,7 +23,8 @@ class LoginFlowViewModel @Inject constructor(
     private val resetUserPassword: ResetUserPassword,
     private val emailVerifiedState: EmailVerifiedState,
     private val firebaseAuth: FirebaseAuth,
-    private val downloadService: DownloadService
+    private val downloadService: DownloadService,
+    private val iPreferenceHelper: IPreferenceHelper
 
 ) : ViewModel() {
 
@@ -46,6 +48,11 @@ class LoginFlowViewModel @Inject constructor(
 
     private val _service = SingleLiveEvent<Service?>()
     val service: LiveData<Service?> get() = _service
+
+    val preferenceHelper get() = iPreferenceHelper
+    fun retrieveFirebaseAuth(): FirebaseAuth {
+        return FirebaseAuth.getInstance()
+    }
 
     fun signIn(email: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -87,6 +94,7 @@ class LoginFlowViewModel @Inject constructor(
             _emailVerified.postValue(emailVerifiedState())
         }
     }
+
     fun downloadServiceV() {
         viewModelScope.launch(Dispatchers.IO) {
             _service.postValue(firebaseAuth.currentUser?.let { downloadService(it.uid) })

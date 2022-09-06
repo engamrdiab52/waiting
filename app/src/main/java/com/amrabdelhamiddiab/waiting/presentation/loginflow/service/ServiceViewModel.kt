@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.amrabdelhamiddiab.core.data.IPreferenceHelper
 import com.amrabdelhamiddiab.core.domain.Order
 import com.amrabdelhamiddiab.core.domain.PushNotification
 import com.amrabdelhamiddiab.core.domain.Service
@@ -35,7 +36,8 @@ class ServiceViewModel @Inject constructor(
     private val fcmService: FcmService,
     private val gson: Gson,
     private val databaseReference: DatabaseReference,
-    private val deleteThisDay: DeleteThisDay
+    private val deleteThisDay: DeleteThisDay,
+    private val iPreferenceHelper: IPreferenceHelper
 ) : ViewModel() {
 
     private val _orderValue = SingleLiveEvent<Order?>()
@@ -45,6 +47,12 @@ class ServiceViewModel @Inject constructor(
         get() {
             return auth.currentUser?.uid ?: ""
         }
+    val preferenceHelper: IPreferenceHelper
+        get() {
+            return iPreferenceHelper
+        }
+    val firebaseAuth :FirebaseAuth
+    get() = auth
 
     private val _tokenDownloaded = SingleLiveEvent<Token?>()
     val tokenDownloaded: LiveData<Token?> get() = _tokenDownloaded
@@ -87,6 +95,14 @@ class ServiceViewModel @Inject constructor(
             _downloading.postValue(false)
         }
     }
+
+    fun signOutFromGoogle() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _downloading.postValue(true)
+            _userSignedOut.postValue(true)
+            _downloading.postValue(false)
+        }
+    }
     //******************************
 
     fun downloadServiceV() {
@@ -123,12 +139,18 @@ class ServiceViewModel @Inject constructor(
     @SuppressLint("NullSafeMutableLiveData")
     fun deleteAccountV(password: String) {
         viewModelScope.launch(Dispatchers.IO) {
-             _downloading.postValue(true)
+            _downloading.postValue(true)
             _userDeleted.postValue(deleteAccount(password))
             _downloading.postValue(false)
         }
     }
-
+    fun deleteAccountFromGoogle() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _downloading.postValue(true)
+            _userDeleted.postValue(true)
+            _downloading.postValue(false)
+        }
+    }
     @SuppressLint("NullSafeMutableLiveData")
     fun deleteServiceV() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -147,9 +169,9 @@ class ServiceViewModel @Inject constructor(
                 //i don't need live data here
                 val response = fcmService.postNotification(pushNotification)
                 if (response.isSuccessful) {
-                    Log.d(TAG,"Response: ${gson.toJson(response.body())}")
+                    Log.d(TAG, "Response: ${gson.toJson(response.body())}")
                 } else {
-                    Log.e(TAG,response.raw().message())
+                    Log.e(TAG, response.raw().message())
                 }
             } catch (e: Exception) {
                 Log.e(TAG, e.toString())
@@ -219,6 +241,14 @@ class ServiceViewModel @Inject constructor(
             databaseReference.child("tokens").child(uid)
                 .addValueEventListener(listOfTokensListener)
         }
+    }
+
+    fun sayIfReviewDone(): Boolean {
+        return iPreferenceHelper.getReviewViewed()
+    }
+
+    fun setReviewDoneStatus(status: Boolean) {
+        iPreferenceHelper.setReviewViewed(status)
     }
 
     fun notifyWhenOrderChange() {

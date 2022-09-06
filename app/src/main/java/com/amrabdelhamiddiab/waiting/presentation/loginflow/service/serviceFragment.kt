@@ -23,13 +23,26 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
+import com.amrabdelhamiddiab.core.data.IPreferenceHelper
 import com.amrabdelhamiddiab.core.domain.NotificationData
 import com.amrabdelhamiddiab.core.domain.PushNotification
 import com.amrabdelhamiddiab.core.domain.Service
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentServiceBinding
+import com.amrabdelhamiddiab.waiting.framework.utilis.checkInternetConnection
+import com.amrabdelhamiddiab.waiting.framework.utilis.toast
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.android.material.navigation.NavigationView
+import com.google.android.play.core.review.ReviewManagerFactory
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthProvider
+import com.google.firebase.auth.GithubAuthProvider
+import com.google.firebase.auth.GoogleAuthProvider
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -43,6 +56,10 @@ class serviceFragment : Fragment() {
     private lateinit var navigationHeaderTitle: TextView
     private lateinit var navigationHeaderNameOfService: TextView
     private lateinit var navigationHeaderPeriod: TextView
+    private lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var iPreferenceHelper: IPreferenceHelper
+
     private var myService: Service = Service("", "", "", 0)
 
     private var passwordForDeleteAccount: String = ""
@@ -50,16 +67,44 @@ class serviceFragment : Fragment() {
     private var fromButton: Boolean = false
     private val viewModel by viewModels<ServiceViewModel>()
 
+    private val launcher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            Log.d(TAG, "onActivityResult: Google SignIn intent Result")
+            val accountTask = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+            if (accountTask.isSuccessful) {
+                Log.d(TAG, "onActivityResult: accountTask.isSuccessful")
+                try {
+                    val account = accountTask.getResult(ApiException::class.java)
+                    if (account != null) {
+                        // Initialize auth credential
+                        firebaseAuthWithGoogleAccount(account)
+                    }
+                } catch (e: Exception) {
+                    Log.d(TAG, "onActivityResult: ${e.message}")
+                }
+            } else {
+                Log.d(TAG, "onActivityResult: accountTask.isNOTSuccessful: ")
+            }
+        }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        //Initialize Google Sign in
+        val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+        googleSignInClient = GoogleSignIn.getClient(requireContext(), googleSignInOptions)
+        firebaseAuth = viewModel.firebaseAuth
+        //    checkUser()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_service, container, false)
-        val resourceNameEmail = com.amrabdelhamiddiab.waiting.R.id.edit_text_login_email
-        val resourceNamePassword = com.amrabdelhamiddiab.waiting.R.id.edit_text_login_password
-
-        Log.d(TAG,"ResourceName email::::::::::" +resourceNameEmail.toString())
-        Log.d(TAG,"ResourceName password::::::::::" +resourceNamePassword.toString())
+        iPreferenceHelper = viewModel.preferenceHelper
         permissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { isGranted ->
@@ -149,6 +194,7 @@ class serviceFragment : Fragment() {
         //*****************************
         viewModel.userSignedOut.observe(viewLifecycleOwner) {
             if (it == true) {
+                iPreferenceHelper.saveSignInMethode("")
                 findNavController().navigate(R.id.action_serviceFragment_to_homeFragment)
             }
         }
@@ -172,22 +218,34 @@ class serviceFragment : Fragment() {
         }
 
         binding.buttonEndThisDay.setOnClickListener {
-            viewModel.deleteThisDayV()
+            displayDialogAreYouSure()
         }
 
         viewModel.userDeleted.observe(viewLifecycleOwner) {
             if (it == true) {
+                requireContext().toast("Account Deleted")
+                iPreferenceHelper.saveSignInMethode("")
                 findNavController().navigate(R.id.action_serviceFragment_to_homeFragment)
             }
         }
         viewModel.serviceDeleted.observe(viewLifecycleOwner) {
             if (it == true) {
-                if (passwordForDeleteAccount.isNotEmpty()) {
-                    viewModel.deleteAccountV(passwordForDeleteAccount)
+                when (viewModel.preferenceHelper.loadSignInMethode()) {
+                    "email" -> {
+                        if (passwordForDeleteAccount.isNotEmpty()) {
+                            viewModel.deleteAccountV(passwordForDeleteAccount)
+
+                        }
+                    }
+                    "google" -> {
+                        firebaseAuth.currentUser?.delete()?.addOnCompleteListener {
+                            viewModel.deleteAccountFromGoogle()
+                        }
+                    }
+                    else -> requireContext().toast("Error in Delete")
                 }
             }
         }
-
         //***********************************************************************************
         return binding.root
     }
@@ -202,6 +260,7 @@ class serviceFragment : Fragment() {
         navigationHeaderNameOfService =
             navigationHeader.findViewById(R.id.textView_name_of_service_nav_header)
     }
+
     private fun askForPostNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
@@ -225,7 +284,16 @@ class serviceFragment : Fragment() {
                         true
                     }
                     R.id.menu_delete_account -> {
-                        displayDialogDeleteAccount()
+
+                        when (viewModel.preferenceHelper.loadSignInMethode()) {
+                            "email" -> {
+                                displayDialogDeleteAccount()
+                            }
+                            "google" -> {
+                                displayDialogDeleteAccountFromGoogle()
+                            }
+                            else -> requireContext().toast("Error in Sign out")
+                        }
                         true
                     }
                     R.id.menu_qr_code -> {
@@ -263,10 +331,60 @@ class serviceFragment : Fragment() {
             //*********************************
             positiveButton(R.string.delete_account) {
                 if (myValue.isNotEmpty()) {
+
                     viewModel.deleteServiceV()
                     passwordForDeleteAccount = myValue.toString()
                 } else {
                     it.dismiss()
+                }
+            }
+            negativeButton(R.string.cancel) {
+                it.dismiss()
+            }
+        }
+    }
+
+    private fun displayDialogAreYouSure() {
+        MaterialDialog(requireContext()).show {
+            title(R.string.end_the_day)
+            message(R.string.dialog_end_day_service)
+            positiveButton(R.string.yes) {
+                viewModel.deleteThisDayV()
+                if (!viewModel.sayIfReviewDone()) {
+                    val reviewManager = ReviewManagerFactory.create(requireContext())
+                    val request = reviewManager.requestReviewFlow()
+                    request.addOnCompleteListener { task ->
+                        try {
+                            if (task.isSuccessful) {
+                                // We got the ReviewInfo object
+                                val reviewInfo = task.result
+                                if (reviewInfo != null) {
+                                    val flow = reviewManager.launchReviewFlow(
+                                        requireActivity(),
+                                        reviewInfo
+                                    )
+                                    flow.addOnCompleteListener {
+                                        //here i will put logic to not ask again
+                                        Log.d(
+                                            TAG,
+                                            viewModel.sayIfReviewDone().toString()
+                                        )
+                                        viewModel.setReviewDoneStatus(false)
+                                    }
+                                }
+                            } else {
+
+                                val reviewErrorCode = task.exception?.message
+                                Log.d(
+                                    TAG,
+                                    "++++++++++++++" + reviewErrorCode.toString()
+                                )
+                            }
+
+                        } catch (ex: Exception) {
+                            Log.d(TAG, ex.message.toString())
+                        }
+                    }
                 }
             }
             negativeButton(R.string.cancel) {
@@ -306,7 +424,25 @@ class serviceFragment : Fragment() {
             title(R.string.dialog_logout_title)
             message(R.string.dialog_logout_message)
             positiveButton(R.string.yes) {
-                viewModel.signOut()
+                when (viewModel.preferenceHelper.loadSignInMethode()) {
+                    "email" -> {
+                        viewModel.signOut()
+                    }
+                    "google" -> {
+                        val googleSignInClient =
+                            GoogleSignIn.getClient(
+                                requireContext(),
+                                GoogleSignInOptions.DEFAULT_SIGN_IN
+                            )
+                        googleSignInClient.signOut().addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                viewModel.firebaseAuth.signOut()
+                                viewModel.signOutFromGoogle()
+                            }
+                        }
+                    }
+                    else -> requireContext().toast("Error in Sign out")
+                }
             }
             negativeButton(R.string.cancel) {
                 it.dismiss()
@@ -314,10 +450,56 @@ class serviceFragment : Fragment() {
         }
     }
 
+    //here i will customize it
+    private fun displayDialogDeleteAccountFromGoogle() {
+        MaterialDialog(requireContext()).show {
+            title(R.string.dialog_delete_account_title)
+            message(R.string.dialog_delete_account_message)
+            positiveButton(R.string.delete_account) {
+                deleteAccountFromGoogle()
+
+            }
+            negativeButton(R.string.cancel) {
+                it.dismiss()
+            }
+        }
+    }
+
+
+    private fun deleteAccountFromGoogle() {
+        Log.d(TAG, "onCreate: begin google sign in")
+        val intent = googleSignInClient.signInIntent
+        //startActivityForResult(intent, RC_SIGN_IN)
+        launcher.launch(intent)
+    }
+
+    private fun firebaseAuthWithGoogleAccount(account: GoogleSignInAccount?) {
+        Log.d(TAG, "firebaseAuthWithGoogleAccount: begin firebase auth with google account")
+
+        val credentials = GoogleAuthProvider.getCredential(account!!.idToken, null)
+        firebaseAuth.signInWithCredential(credentials).addOnSuccessListener { authResult ->
+            //login success
+
+            viewModel.deleteServiceV()
+        }
+            .addOnFailureListener { e ->
+                //login failed
+                Log.d(TAG, "firebaseAuthWithGoogleAccount: LoggedIn Failed due to ${e.message}")
+                Toast.makeText(
+                    requireContext(),
+                    "LoggedIn Failed due to ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+    }
+
     override fun onResume() {
         super.onResume()
         navigationHeader.visibility = View.VISIBLE
         viewModel.downloadServiceV()
+        if (!checkInternetConnection(requireActivity().applicationContext)) {
+            displayNoInternetConnection()
+        }
     }
 
     override fun onStop() {
@@ -347,5 +529,11 @@ class serviceFragment : Fragment() {
             .show()
     }
 
-
+    private fun displayNoInternetConnection() {
+        MaterialDialog(requireContext()).show {
+            cancelOnTouchOutside(true)
+            title(R.string.no_internet_title)
+            message(R.string.no_internet_message)
+        }
+    }
 }

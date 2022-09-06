@@ -16,7 +16,7 @@
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout-land/fragment_client.xml" value="0.21516754850088182" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout-land/fragment_home.xml" value="0.2956204379562044" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout-land/fragment_service.xml" value="0.21516754850088182" />
-        <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout-night/activity_main.xml" value="0.24547101449275363" />
+        <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout-night/activity_main.xml" value="0.1" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout-night/bottomsheet_custom_view.xml" value="0.24003623188405798" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout-night/fragment_client.xml" value="0.1" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout-night/fragment_home.xml" value="0.24003623188405798" />
@@ -24,7 +24,7 @@
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout-night/nav_header_main.xml" value="0.24547101449275363" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/bottomsheet_custom_view.xml" value="0.264" />
-        <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/bottomshhet_custom_view_client_order.xml" value="0.1" />
+        <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/bottomshhet_custom_view_client_order.xml" value="0.264" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/custom_toast_layout.xml" value="0.24682971014492755" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/fragment_client.xml" value="0.24010416666666667" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/fragment_create_service.xml" value="0.264" />
@@ -42,6 +42,7 @@
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/fragment_signup.xml" value="0.2" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/fragment_terms.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/fragment_u_i.xml" value="0.12360688956433637" />
+        <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/layout_google_delete_account_custom_dialog.xml" value="0.253125" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/nav_header_main.xml" value="0.24547101449275363" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/notification_layout.xml" value="0.1" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/temp1.xml" value="0.16799999999999998" />

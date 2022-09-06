@@ -2,6 +2,7 @@ package com.amrabdelhamiddiab.waiting.framework.firebase.login
 
 import android.content.Context
 import android.widget.Toast
+import com.amrabdelhamiddiab.core.data.IPreferenceHelper
 import com.amrabdelhamiddiab.core.data.login.ISignInUser
 import com.amrabdelhamiddiab.waiting.framework.utilis.checkInternetConnection
 import com.google.firebase.auth.FirebaseAuth
@@ -13,12 +14,16 @@ import javax.inject.Inject
 
 class SignInUserImpl @Inject constructor(
     private val mAuth: FirebaseAuth,
+    private val iPreferenceHelper: IPreferenceHelper,
     @ApplicationContext private val context: Context
 ) : ISignInUser {
     override suspend fun signInUser(email: String, password: String): Boolean {
         return if (checkInternetConnection(context)) {
             try {
                 val authResult = mAuth.signInWithEmailAndPassword(email, password).await()
+                if (authResult != null) {
+                    iPreferenceHelper.saveSignInMethode("email")
+                }
                 authResult != null
             } catch (ex: Exception) {
                 withContext(Dispatchers.Main) {

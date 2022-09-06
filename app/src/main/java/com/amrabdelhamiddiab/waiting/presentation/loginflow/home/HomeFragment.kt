@@ -170,7 +170,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun showBottomSheet() {
-        val dialog = MaterialDialog(requireContext(), BottomSheet(WRAP_CONTENT)).show {
+        val dialog = MaterialDialog(requireContext() , BottomSheet(WRAP_CONTENT)).show {
             customView(
                 R.layout.bottomsheet_custom_view,
                 scrollable = false,

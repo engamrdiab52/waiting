@@ -32,9 +32,6 @@
                     android:id="@+id/aboutWaiting"
                     android:title="@string/about_waiting" />
                 <item
-                    android:id="@+id/rateApp"
-                    android:title="@string/rate_app" />
-                <item
                     android:id="@+id/inviteFriends"
                     android:title="@string/invite_friends" />
                 <item

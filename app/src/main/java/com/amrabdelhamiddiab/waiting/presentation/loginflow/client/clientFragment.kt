@@ -2,9 +2,9 @@ package com.amrabdelhamiddiab.waiting.presentation.loginflow.client
 
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import android.view.*
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
@@ -17,12 +17,14 @@ import com.afollestad.materialdialogs.input.input
 import com.amrabdelhamiddiab.core.domain.Order
 import com.amrabdelhamiddiab.core.domain.Service
 import com.amrabdelhamiddiab.core.domain.Token
+import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.MyFirebaseMessagingService
 import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentClientBinding
 import com.amrabdelhamiddiab.waiting.framework.utilis.checkInternetConnection
 import com.amrabdelhamiddiab.waiting.framework.utilis.toast
 import com.google.android.material.navigation.NavigationView
+import com.google.android.play.core.review.ReviewManagerFactory
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -44,14 +46,6 @@ class clientFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_client, container, false)
-      /*  navigationView = requireActivity().findViewById(R.id.navigation_view)
-        navigationHeader = navigationView.getHeaderView(0)
-        navigationHeaderTitle = navigationHeader.findViewById(R.id.textView_category_nav_header)
-        navigationHeaderPeriod =
-            navigationHeader.findViewById(R.id.text_view_peiod_for_each_visitor_nav_header)
-        navigationHeaderNameOfService =
-            navigationHeader.findViewById(R.id.textView_name_of_service_nav_header)*/
-
         val userId = viewModel.retrieveUserIdFromPreferences()
         viewModel.notifyWhenOrderChange(userId)
         viewModel.downloadServiceV(userId)
@@ -198,12 +192,50 @@ class clientFragment : Fragment() {
                 viewModel.saveMyNumberInPreferences(0)
                 viewModel.sayIfClientIsInAVisit(false)
                 viewModel.removeClientTokenV()
+
+                if (!viewModel.sayIfReviewDone()) {
+                    val reviewManager = ReviewManagerFactory.create(requireContext())
+                    val request = reviewManager.requestReviewFlow()
+                    request.addOnCompleteListener { task ->
+                        try {
+                            if (task.isSuccessful) {
+                                // We got the ReviewInfo object
+                                val reviewInfo = task.result
+                                if (reviewInfo != null) {
+                                    val flow = reviewManager.launchReviewFlow(
+                                        requireActivity(),
+                                        reviewInfo
+                                    )
+                                    flow.addOnCompleteListener {
+                                        //here i will put logic to not ask again
+                                        Log.d(
+                                            TAG,
+                                            viewModel.sayIfReviewDone().toString()
+                                        )
+                                        viewModel.setReviewDoneStatus(false)
+                                    }
+                                }
+                            } else {
+
+                                val reviewErrorCode = task.exception?.message
+                                Log.d(
+                                    TAG,
+                                    "++++++++++++++" + reviewErrorCode.toString()
+                                )
+                            }
+
+                        } catch (ex: Exception) {
+                            Log.d(TAG, ex.message.toString())
+                        }
+                    }
+                }
             }
             negativeButton(R.string.cancel) {
                 it.dismiss()
             }
         }
     }
+
 
     private fun displayDialogWrongQrcode() {
         MaterialDialog(requireContext()).show {
@@ -227,7 +259,12 @@ class clientFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         navigationHeader.visibility = View.VISIBLE
+        if (! checkInternetConnection(requireActivity().applicationContext)) {
+            displayNoInternetConnection()
+        }
     }
+
+
 
     override fun onStop() {
         navigationHeader.visibility = View.GONE
@@ -236,4 +273,5 @@ class clientFragment : Fragment() {
         navigationHeaderNameOfService.text = ""
         super.onStop()
     }
+
 }
