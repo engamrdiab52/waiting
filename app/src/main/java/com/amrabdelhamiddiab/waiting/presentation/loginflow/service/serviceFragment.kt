@@ -32,6 +32,12 @@ import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentServiceBinding
 import com.amrabdelhamiddiab.waiting.framework.utilis.checkInternetConnection
 import com.amrabdelhamiddiab.waiting.framework.utilis.toast
+import com.facebook.AccessToken
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -39,10 +45,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.material.navigation.NavigationView
 import com.google.android.play.core.review.ReviewManagerFactory
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthProvider
-import com.google.firebase.auth.GithubAuthProvider
-import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -59,6 +62,7 @@ class serviceFragment : Fragment() {
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var iPreferenceHelper: IPreferenceHelper
+    private lateinit var callbackManager: CallbackManager
 
     private var myService: Service = Service("", "", "", 0)
 
@@ -89,14 +93,34 @@ class serviceFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //Firebase
+        firebaseAuth = viewModel.firebaseAuth
         //Initialize Google Sign in
         val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
         googleSignInClient = GoogleSignIn.getClient(requireContext(), googleSignInOptions)
-        firebaseAuth = viewModel.firebaseAuth
-        //    checkUser()
+
+
+        //Initialize facebook login
+        callbackManager = CallbackManager.Factory.create()
+
+        LoginManager.getInstance().registerCallback(callbackManager, object :
+            FacebookCallback<LoginResult> {
+            override fun onSuccess(result: LoginResult) {
+                Log.d(TAG, "-----------------------facebook:onSuccess:$result")
+                handleFacebookAccessToken(result.accessToken)
+            }
+
+            override fun onCancel() {
+                Log.d(TAG, "*****************************facebook:onCancel")
+            }
+
+            override fun onError(error: FacebookException) {
+                Log.d(TAG, "///////////////////////////facebook:onError", error)
+            }
+        })
     }
 
     override fun onCreateView(
@@ -242,6 +266,11 @@ class serviceFragment : Fragment() {
                             viewModel.deleteAccountFromGoogle()
                         }
                     }
+                    "facebook" -> {
+                        firebaseAuth.currentUser?.delete()?.addOnCompleteListener {
+                            viewModel.deleteAccountFromFacebook()
+                        }
+                    }
                     else -> requireContext().toast("Error in Delete")
                 }
             }
@@ -292,6 +321,9 @@ class serviceFragment : Fragment() {
                             "google" -> {
                                 displayDialogDeleteAccountFromGoogle()
                             }
+                            "facebook" -> {
+                                displayDialogDeleteAccountFromFacebook()
+                            }
                             else -> requireContext().toast("Error in Sign out")
                         }
                         true
@@ -315,6 +347,7 @@ class serviceFragment : Fragment() {
 
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
+
 
     private fun displayDialogDeleteAccount() {
         var myValue: CharSequence = ""
@@ -441,6 +474,14 @@ class serviceFragment : Fragment() {
                             }
                         }
                     }
+                    "facebook"->{
+                        if (firebaseAuth.currentUser != null){
+                            firebaseAuth.signOut()
+                            LoginManager.getInstance().logOut()
+                            viewModel.signOutFromFacebook()
+                        }
+                        //need to know how to sign out from facebook
+                    }
                     else -> requireContext().toast("Error in Sign out")
                 }
             }
@@ -465,6 +506,19 @@ class serviceFragment : Fragment() {
         }
     }
 
+    private fun displayDialogDeleteAccountFromFacebook() {
+        MaterialDialog(requireContext()).show {
+            title(R.string.dialog_delete_account_title)
+            message(R.string.dialog_delete_account_message)
+            positiveButton(R.string.delete_account) {
+                deleteAccountFromFacebook()
+
+            }
+            negativeButton(R.string.cancel) {
+                it.dismiss()
+            }
+        }
+    }
 
     private fun deleteAccountFromGoogle() {
         Log.d(TAG, "onCreate: begin google sign in")
@@ -473,13 +527,21 @@ class serviceFragment : Fragment() {
         launcher.launch(intent)
     }
 
+    private fun deleteAccountFromFacebook() {
+            //reInter Again
+        LoginManager.getInstance().logInWithReadPermissions(
+            requireActivity(),
+            callbackManager,
+            listOf("email", "public_profile")
+        )
+    }
+
     private fun firebaseAuthWithGoogleAccount(account: GoogleSignInAccount?) {
         Log.d(TAG, "firebaseAuthWithGoogleAccount: begin firebase auth with google account")
 
         val credentials = GoogleAuthProvider.getCredential(account!!.idToken, null)
         firebaseAuth.signInWithCredential(credentials).addOnSuccessListener { authResult ->
             //login success
-
             viewModel.deleteServiceV()
         }
             .addOnFailureListener { e ->
@@ -490,6 +552,28 @@ class serviceFragment : Fragment() {
                     "LoggedIn Failed due to ${e.message}",
                     Toast.LENGTH_SHORT
                 ).show()
+            }
+    }
+
+    private fun handleFacebookAccessToken(token: AccessToken) {
+        Log.d(TAG, "handleFacebookAccessToken:$token")
+
+        val credential = FacebookAuthProvider.getCredential(token.token)
+
+        firebaseAuth.signInWithCredential(credential)
+            .addOnCompleteListener(requireActivity()) { task ->
+                if (task.isSuccessful) {
+                    //login success
+                    viewModel.deleteServiceV()
+                    // Sign in success, update UI with the signed-in user's information
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w(TAG, "signInWithCredential:failure", task.exception)
+                    Toast.makeText(
+                        requireContext(), "Authentication failed.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
     }
 
@@ -509,6 +593,7 @@ class serviceFragment : Fragment() {
         navigationHeaderNameOfService.text = ""
         super.onStop()
     }
+
 
 
     private fun showPermissionDeniedDialog() {

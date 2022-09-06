@@ -87,6 +87,7 @@
             android:weightSum="10"
             app:layout_constraintBottom_toTopOf="@+id/button_service"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent">
 
             <View
@@ -114,7 +115,6 @@
                 android:layout_width="0dp"
                 android:layout_height="@dimen/_2sdp"
                 android:layout_gravity="center_vertical|center_horizontal"
-                android:layout_marginStart="@dimen/_16sdp"
                 android:layout_weight="4"
                 android:background="@color/gray"
                 app:layout_constraintStart_toStartOf="parent"

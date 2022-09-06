@@ -49,6 +49,8 @@ class LoginFlowViewModel @Inject constructor(
     private val _service = SingleLiveEvent<Service?>()
     val service: LiveData<Service?> get() = _service
 
+    val mAuth get() = firebaseAuth
+
     val preferenceHelper get() = iPreferenceHelper
     fun retrieveFirebaseAuth(): FirebaseAuth {
         return FirebaseAuth.getInstance()

@@ -13,20 +13,23 @@ import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import com.amrabdelhamiddiab.core.data.IPreferenceHelper
+import com.amrabdelhamiddiab.waiting.FacebookAuthActivity
 import com.amrabdelhamiddiab.waiting.MainActivity
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
-import com.amrabdelhamiddiab.waiting.ProfileActivity
 import com.amrabdelhamiddiab.waiting.R
 import com.amrabdelhamiddiab.waiting.databinding.FragmentLoginBinding
 import com.amrabdelhamiddiab.waiting.framework.utilis.toast
 import com.amrabdelhamiddiab.waiting.presentation.loginflow.LoginFlowViewModel
+import com.facebook.*
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GithubAuthProvider
 import com.google.firebase.auth.GoogleAuthProvider
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,7 +44,9 @@ class LoginFragment : Fragment() {
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var iPreferenceHelper: IPreferenceHelper
+    private lateinit var callbackManager: CallbackManager
 
+    //Google Sign in
     private val launcher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             Log.d(TAG, "onActivityResult: Google SignIn intent Result")
@@ -57,22 +62,45 @@ class LoginFragment : Fragment() {
                 } catch (e: Exception) {
                     Log.d(TAG, "onActivityResult: ${e.message}")
                 }
-            }else {
+            } else {
                 Log.d(TAG, "onActivityResult: accountTask.isNOTSuccessful: ")
             }
         }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //Firebase Generally
+        firebaseAuth = viewModel.mAuth
+
         //Initialize Google Sign in
         val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
         googleSignInClient = GoogleSignIn.getClient(requireContext(), googleSignInOptions)
-        firebaseAuth = viewModel.retrieveFirebaseAuth()
-        //    checkUser()
+
+        //--------------------------------------------------------
+
+        //Initialize facebook login
+        callbackManager = CallbackManager.Factory.create()
+
+        LoginManager.getInstance().registerCallback(callbackManager, object :
+            FacebookCallback<LoginResult> {
+            override fun onSuccess(result: LoginResult) {
+                Log.d(TAG, "-----------------------facebook:onSuccess:$result")
+                handleFacebookAccessToken(result.accessToken)
+            }
+
+            override fun onCancel() {
+                Log.d(TAG, "*****************************facebook:onCancel")
+            }
+
+            override fun onError(error: FacebookException) {
+                Log.d(TAG, "///////////////////////////facebook:onError", error)
+            }
+        })
+        //-----------------------------------------------
+
     }
 
     override fun onCreateView(
@@ -81,22 +109,68 @@ class LoginFragment : Fragment() {
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
 
+        //when u don't use facebook button use this:
+        //  LoginManager.getInstance().logInWithReadPermissions(requireActivity(), listOf("public_profile"))
+        //Facebook
+
+        //     binding.loginButtonFacebook.setPermissions( listOf("email", "public_profile") )
+
+        /*  binding.loginButtonFacebook.registerCallback(callbackManager, object :
+              FacebookCallback<LoginResult> {
+              override fun onSuccess(result: LoginResult) {
+                  Log.d(TAG, "-----------------------facebook:onSuccess:$result")
+                  handleFacebookAccessToken(result.accessToken)
+              }
+
+              override fun onCancel() {
+                  Log.d(TAG, "*****************************facebook:onCancel")
+              }
+
+              override fun onError(error: FacebookException) {
+                  Log.d(TAG, "///////////////////////////facebook:onError", error)
+              }
+          })*/
+
+        /*  binding.loginButtonFacebook.setOnClickListener {
+              val intent = Intent(requireContext(), FacebookAuthActivity::class.java)
+              startActivity(intent)
+          }*/
+        binding.buttonFacebookLogin.setOnClickListener {
+            LoginManager.getInstance().logInWithReadPermissions(
+                requireActivity(),
+                callbackManager,
+                listOf("email", "public_profile")
+            )
+        }
+        binding.googleSignInButton.setOnClickListener {
+            Log.d(TAG, "onCreate: begin google sign in")
+            val intent = googleSignInClient.signInIntent
+            //startActivityForResult(intent, RC_SIGN_IN)
+            launcher.launch(intent)
+        }
         iPreferenceHelper = viewModel.preferenceHelper
         viewModel.downloading.observe(viewLifecycleOwner) {
             if (it) {
-                binding.loadingIndecatorLogin.visibility = View.VISIBLE
+                binding.progressCircular.visibility = View.VISIBLE
             } else {
-                binding.loadingIndecatorLogin.visibility = View.GONE
+                binding.progressCircular.visibility = View.GONE
             }
         }
         viewModel.userSignedIn.observe(viewLifecycleOwner) {
             if (it == true) {
-                when(iPreferenceHelper.loadSignInMethode()){
-                    "email" -> {viewModel.isEmailVerified()}
-                    "google" ->{viewModel.downloadServiceV()}
+                when (iPreferenceHelper.loadSignInMethode()) {
+                    "email" -> {
+                        viewModel.isEmailVerified()
+                    }
+                    "google" -> {
+                        viewModel.downloadServiceV()
+                    }
+                    "facebook"->{
+                        viewModel.downloadServiceV()
+                    }
                     else -> requireContext().toast("Error in Sign in")
                 }
-            }else {
+            } else {
                 requireContext().toast("Error in Sign in")
             }
         }
@@ -113,14 +187,6 @@ class LoginFragment : Fragment() {
                 viewModel.downloadServiceV()
             }
         }
-//configure the google sign in
-        binding.googleSignInButton.setOnClickListener {
-            Log.d(TAG, "onCreate: begin google sign in")
-            val intent = googleSignInClient.signInIntent
-            //startActivityForResult(intent, RC_SIGN_IN)
-            launcher.launch(intent)
-        }
-
         binding.buttonLogin.setOnClickListener {
             validateEmailField()
             validatePasswordField()
@@ -143,7 +209,35 @@ class LoginFragment : Fragment() {
         // Inflate the layout for this fragment
         return binding.root
     }
+        //Facebook
+    private fun handleFacebookAccessToken(token: AccessToken) {
+        Log.d(TAG, "handleFacebookAccessToken:$token")
 
+        val credential = FacebookAuthProvider.getCredential(token.token)
+
+        firebaseAuth.signInWithCredential(credential)
+            .addOnCompleteListener(requireActivity()) { task ->
+                if (task.isSuccessful) {
+                    //login success
+                    iPreferenceHelper.saveSignInMethode("facebook")
+                    viewModel.downloadServiceV()
+
+
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(TAG, "signInWithCredential:success")
+                    val user = firebaseAuth.currentUser
+                    Log.d(TAG, "handleFacebookAccessToken: ${user?.email}")
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w(TAG, "signInWithCredential:failure", task.exception)
+                    Toast.makeText(
+                        requireContext(), "Authentication failed.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+    }
+        //Google
     private fun firebaseAuthWithGoogleAccount(account: GoogleSignInAccount?) {
         Log.d(TAG, "firebaseAuthWithGoogleAccount: begin firebase auth with google account")
 
@@ -190,21 +284,7 @@ class LoginFragment : Fragment() {
                 ).show()
             }
     }
-
-    /* private fun checkUser() {
- //check if user loggedin or not
-         val firebaseUser = firebaseAuth.currentUser
-         if (firebaseUser != null) {
-             viewModel.downloadServiceV()
-             //user is already logged in
-             *//*val intent = Intent(requireContext(), ProfileActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(intent)
-            requireActivity().finish()
-            Log.d(MainActivity.TAG, "checkUser: user already logged in ${firebaseUser.email}")*//*
-        }
-    }*/
-
+        //Email
     private fun validateEmailField() {
         binding.editTextLoginEmail.validator().nonEmpty().validEmail().addErrorCallback {
             validEmail = false
@@ -215,7 +295,7 @@ class LoginFragment : Fragment() {
             binding.textLayoutLoginEmail.error = null
         }.check()
     }
-
+        //Email
     private fun validatePasswordField() {
         binding.editTextLoginPassword.validator().nonEmpty().addErrorCallback {
             validPassword = false

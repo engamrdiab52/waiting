@@ -22,6 +22,7 @@
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout-night/fragment_home.xml" value="0.24003623188405798" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout-night/fragment_service.xml" value="0.24547101449275363" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout-night/nav_header_main.xml" value="0.24547101449275363" />
+        <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/activity_facebook.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/bottomsheet_custom_view.xml" value="0.264" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/bottomshhet_custom_view_client_order.xml" value="0.264" />
@@ -30,7 +31,7 @@
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/fragment_create_service.xml" value="0.264" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/fragment_delete_account.xml" value="0.24547101449275363" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/fragment_home.xml" value="0.24547101449275363" />
-        <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/fragment_login.xml" value="0.24547101449275363" />
+        <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/fragment_login.xml" value="0.264" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/fragment_privacy.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/fragment_q_rcode.xml" value="0.24547101449275363" />
         <entry key="..\:/Users/Amr/android studio projects/waiting/app/src/main/res/layout/fragment_qr_code_client.xml" value="0.1" />

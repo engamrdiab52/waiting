@@ -76,6 +76,7 @@ class HomeViewModel @Inject constructor(
             when(preHelper.loadSignInMethode()){
                 "email" -> {isEmailVerified()}
                 "google"-> {downloadServiceV()}
+                "facebook"->{downloadServiceV()}
                 else -> {_emailVerified.value = false}
             }
         } else {

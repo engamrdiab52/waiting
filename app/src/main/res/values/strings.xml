@@ -116,4 +116,11 @@
     <string name="privacy_policy">Privacy Policy</string>
     <string name="about_eaiting_description">It is a system to eliminate the problem of long waiting that we suffer, whether by standing in line or sitting in a crowded place\nYou will track your number in the reservation through the application, You will also receive a notification when it is your turn telling you to prepare to be at the place of receiving the service\n </string>
     <string name="checkout_app">Check out Waiting app. It is a system to eliminate the problem of long waiting that we suffer, You can download it here:</string>
+
+
+    <string name="facebook_app_id" translatable="false">398471205736906</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb1234</string>
+    <string name="facebook_client_token" translatable="false">1d02ed1debc0f95fd6fde6789c1d6c06</string>
+
+
 </resources>

@@ -103,6 +103,13 @@ class ServiceViewModel @Inject constructor(
             _downloading.postValue(false)
         }
     }
+    fun signOutFromFacebook() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _downloading.postValue(true)
+            _userSignedOut.postValue(true)
+            _downloading.postValue(false)
+        }
+    }
     //******************************
 
     fun downloadServiceV() {
@@ -145,6 +152,13 @@ class ServiceViewModel @Inject constructor(
         }
     }
     fun deleteAccountFromGoogle() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _downloading.postValue(true)
+            _userDeleted.postValue(true)
+            _downloading.postValue(false)
+        }
+    }
+    fun deleteAccountFromFacebook() {
         viewModelScope.launch(Dispatchers.IO) {
             _downloading.postValue(true)
             _userDeleted.postValue(true)
