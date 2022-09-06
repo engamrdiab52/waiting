@@ -1,6 +1,5 @@
 package com.amrabdelhamiddiab.waiting.presentation.loginflow.signin
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import com.amrabdelhamiddiab.core.data.IPreferenceHelper
-import com.amrabdelhamiddiab.waiting.FacebookAuthActivity
 import com.amrabdelhamiddiab.waiting.MainActivity
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.R
@@ -49,10 +47,8 @@ class LoginFragment : Fragment() {
     //Google Sign in
     private val launcher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            Log.d(TAG, "onActivityResult: Google SignIn intent Result")
             val accountTask = GoogleSignIn.getSignedInAccountFromIntent(result.data)
             if (accountTask.isSuccessful) {
-                Log.d(TAG, "onActivityResult: accountTask.isSuccessful")
                 try {
                     val account = accountTask.getResult(ApiException::class.java)
                     if (account != null) {
@@ -92,11 +88,11 @@ class LoginFragment : Fragment() {
             }
 
             override fun onCancel() {
-                Log.d(TAG, "*****************************facebook:onCancel")
+                Log.d(TAG, "facebook:onCancel")
             }
 
             override fun onError(error: FacebookException) {
-                Log.d(TAG, "///////////////////////////facebook:onError", error)
+                Log.d(TAG, "facebook:onError", error)
             }
         })
         //-----------------------------------------------
@@ -108,33 +104,6 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
-
-        //when u don't use facebook button use this:
-        //  LoginManager.getInstance().logInWithReadPermissions(requireActivity(), listOf("public_profile"))
-        //Facebook
-
-        //     binding.loginButtonFacebook.setPermissions( listOf("email", "public_profile") )
-
-        /*  binding.loginButtonFacebook.registerCallback(callbackManager, object :
-              FacebookCallback<LoginResult> {
-              override fun onSuccess(result: LoginResult) {
-                  Log.d(TAG, "-----------------------facebook:onSuccess:$result")
-                  handleFacebookAccessToken(result.accessToken)
-              }
-
-              override fun onCancel() {
-                  Log.d(TAG, "*****************************facebook:onCancel")
-              }
-
-              override fun onError(error: FacebookException) {
-                  Log.d(TAG, "///////////////////////////facebook:onError", error)
-              }
-          })*/
-
-        /*  binding.loginButtonFacebook.setOnClickListener {
-              val intent = Intent(requireContext(), FacebookAuthActivity::class.java)
-              startActivity(intent)
-          }*/
         binding.buttonFacebookLogin.setOnClickListener {
             LoginManager.getInstance().logInWithReadPermissions(
                 requireActivity(),
@@ -143,7 +112,6 @@ class LoginFragment : Fragment() {
             )
         }
         binding.googleSignInButton.setOnClickListener {
-            Log.d(TAG, "onCreate: begin google sign in")
             val intent = googleSignInClient.signInIntent
             //startActivityForResult(intent, RC_SIGN_IN)
             launcher.launch(intent)
@@ -204,9 +172,6 @@ class LoginFragment : Fragment() {
         binding.tvLoginSignupClickable.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_signupFragment)
         }
-        // Inflate the layout for this fragment
-        Log.d(TAG, FirebaseAuth.getInstance().currentUser?.email.toString())
-        // Inflate the layout for this fragment
         return binding.root
     }
         //Facebook
@@ -221,15 +186,7 @@ class LoginFragment : Fragment() {
                     //login success
                     iPreferenceHelper.saveSignInMethode("facebook")
                     viewModel.downloadServiceV()
-
-
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "signInWithCredential:success")
-                    val user = firebaseAuth.currentUser
-                    Log.d(TAG, "handleFacebookAccessToken: ${user?.email}")
                 } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w(TAG, "signInWithCredential:failure", task.exception)
                     Toast.makeText(
                         requireContext(), "Authentication failed.",
                         Toast.LENGTH_SHORT
@@ -239,47 +196,27 @@ class LoginFragment : Fragment() {
     }
         //Google
     private fun firebaseAuthWithGoogleAccount(account: GoogleSignInAccount?) {
-        Log.d(TAG, "firebaseAuthWithGoogleAccount: begin firebase auth with google account")
-
         val credentials = GoogleAuthProvider.getCredential(account!!.idToken, null)
         firebaseAuth.signInWithCredential(credentials).addOnSuccessListener { authResult ->
             //login success
             iPreferenceHelper.saveSignInMethode("google")
             viewModel.downloadServiceV()
-            Log.d(TAG, "firebaseAuthWithGoogleAccount: LoggedIn")
-
-            //get loggedIn user
-            val firebaseUser = firebaseAuth.currentUser
-
-            //get user info
-            val uid = firebaseUser!!.uid
-            val email = firebaseUser.email
-            Log.d(TAG, "firebaseAuthWithGoogleAccount: Uid = $uid")
-            Log.d(TAG, "firebaseAuthWithGoogleAccount: Email = $email")
 
             //check if user new or existing
             if (authResult.additionalUserInfo!!.isNewUser) {
                 //user is new -account created
-                Log.d(TAG, "firebaseAuthWithGoogleAccount: Account Created... \n$email")
-                Toast.makeText(requireContext(), "Account created...\n$email", Toast.LENGTH_SHORT)
+                Log.d(TAG, "firebaseAuthWithGoogleAccount: Account Created...")
+                Toast.makeText(requireContext(), "Account created", Toast.LENGTH_SHORT)
                     .show()
             } else {
-                //existing user -- logged in
-                Log.d(TAG, "firebaseAuthWithGoogleAccount: Existing User... \n$email")
-                Toast.makeText(requireContext(), "Logged in...\n$email", Toast.LENGTH_SHORT).show()
+
+                Toast.makeText(requireContext(), "Logged in", Toast.LENGTH_SHORT).show()
             }
-            /*  // start profile activity
-              val intent = Intent(requireContext(), ProfileActivity::class.java)
-              intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-              startActivity(intent)
-              requireActivity().finish()*/
         }
             .addOnFailureListener { e ->
-                //login failed
-                Log.d(TAG, "firebaseAuthWithGoogleAccount: LoggedIn Failed due to ${e.message}")
                 Toast.makeText(
                     requireContext(),
-                    "LoggedIn Failed due to ${e.message}",
+                    "LoggedIn Failed",
                     Toast.LENGTH_SHORT
                 ).show()
             }

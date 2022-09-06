@@ -73,10 +73,8 @@ class serviceFragment : Fragment() {
 
     private val launcher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            Log.d(TAG, "onActivityResult: Google SignIn intent Result")
             val accountTask = GoogleSignIn.getSignedInAccountFromIntent(result.data)
             if (accountTask.isSuccessful) {
-                Log.d(TAG, "onActivityResult: accountTask.isSuccessful")
                 try {
                     val account = accountTask.getResult(ApiException::class.java)
                     if (account != null) {
@@ -109,16 +107,15 @@ class serviceFragment : Fragment() {
         LoginManager.getInstance().registerCallback(callbackManager, object :
             FacebookCallback<LoginResult> {
             override fun onSuccess(result: LoginResult) {
-                Log.d(TAG, "-----------------------facebook:onSuccess:$result")
                 handleFacebookAccessToken(result.accessToken)
             }
 
             override fun onCancel() {
-                Log.d(TAG, "*****************************facebook:onCancel")
+                Log.d(TAG, "facebook:onCancel")
             }
 
             override fun onError(error: FacebookException) {
-                Log.d(TAG, "///////////////////////////facebook:onError", error)
+                Log.d(TAG, "facebook:onError", error)
             }
         })
     }
@@ -165,10 +162,6 @@ class serviceFragment : Fragment() {
             }
         }
         viewModel.service.observe(viewLifecycleOwner) {
-            Log.d(
-                TAG,
-                "//////////////////////////??????????????????" + it?.name_of_service.toString()
-            )
             if (it != null) {
                 myService = it
                 navigationHeaderTitle.text = myService.category
@@ -537,8 +530,6 @@ class serviceFragment : Fragment() {
     }
 
     private fun firebaseAuthWithGoogleAccount(account: GoogleSignInAccount?) {
-        Log.d(TAG, "firebaseAuthWithGoogleAccount: begin firebase auth with google account")
-
         val credentials = GoogleAuthProvider.getCredential(account!!.idToken, null)
         firebaseAuth.signInWithCredential(credentials).addOnSuccessListener { authResult ->
             //login success
@@ -546,18 +537,15 @@ class serviceFragment : Fragment() {
         }
             .addOnFailureListener { e ->
                 //login failed
-                Log.d(TAG, "firebaseAuthWithGoogleAccount: LoggedIn Failed due to ${e.message}")
                 Toast.makeText(
                     requireContext(),
-                    "LoggedIn Failed due to ${e.message}",
+                    "LoggedIn Failed",
                     Toast.LENGTH_SHORT
                 ).show()
             }
     }
 
     private fun handleFacebookAccessToken(token: AccessToken) {
-        Log.d(TAG, "handleFacebookAccessToken:$token")
-
         val credential = FacebookAuthProvider.getCredential(token.token)
 
         firebaseAuth.signInWithCredential(credential)
@@ -567,10 +555,8 @@ class serviceFragment : Fragment() {
                     viewModel.deleteServiceV()
                     // Sign in success, update UI with the signed-in user's information
                 } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w(TAG, "signInWithCredential:failure", task.exception)
                     Toast.makeText(
-                        requireContext(), "Authentication failed.",
+                        requireContext(), "Authentication failed",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
