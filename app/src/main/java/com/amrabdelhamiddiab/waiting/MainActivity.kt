@@ -2,8 +2,11 @@ package com.amrabdelhamiddiab.waiting
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.pm.PackageManager.GET_SIGNATURES
 import android.os.Build
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
@@ -25,6 +28,8 @@ import com.google.android.gms.ads.*
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 
 
 @Suppress("DEPRECATION")
@@ -52,6 +57,26 @@ class MainActivity : AppCompatActivity(), MyDrawerController {
         )
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
+
+
+
+        //*****************************************
+        try {
+            val info = packageManager.getPackageInfo(
+                "com.amrabdelhamiddiab.waiting",
+                GET_SIGNATURES
+            )
+            for (signature in info.signatures) {
+                val md: MessageDigest = MessageDigest.getInstance("SHA")
+                md.update(signature.toByteArray())
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT))
+            }
+        } catch (e: PackageManager.NameNotFoundException) {
+        } catch (e: NoSuchAlgorithmException) {
+        }
+        //****************************************
+
+
 
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         val language = sharedPreferences.getString("language_list", "en")

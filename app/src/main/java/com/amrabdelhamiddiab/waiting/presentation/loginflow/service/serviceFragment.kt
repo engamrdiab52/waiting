@@ -24,6 +24,10 @@ import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import com.amrabdelhamiddiab.core.data.IPreferenceHelper
+import com.amrabdelhamiddiab.core.domain.Constants.EMAIL
+import com.amrabdelhamiddiab.core.domain.Constants.FACEBOOK
+import com.amrabdelhamiddiab.core.domain.Constants.GOOGLE
+import com.amrabdelhamiddiab.core.domain.Constants.PUBLIC_PROFILE
 import com.amrabdelhamiddiab.core.domain.NotificationData
 import com.amrabdelhamiddiab.core.domain.PushNotification
 import com.amrabdelhamiddiab.core.domain.Service
@@ -248,18 +252,18 @@ class serviceFragment : Fragment() {
         viewModel.serviceDeleted.observe(viewLifecycleOwner) {
             if (it == true) {
                 when (viewModel.preferenceHelper.loadSignInMethode()) {
-                    "email" -> {
+                    EMAIL -> {
                         if (passwordForDeleteAccount.isNotEmpty()) {
                             viewModel.deleteAccountV(passwordForDeleteAccount)
 
                         }
                     }
-                    "google" -> {
+                    GOOGLE -> {
                         firebaseAuth.currentUser?.delete()?.addOnCompleteListener {
                             viewModel.deleteAccountFromGoogle()
                         }
                     }
-                    "facebook" -> {
+                    FACEBOOK -> {
                         firebaseAuth.currentUser?.delete()?.addOnCompleteListener {
                             viewModel.deleteAccountFromFacebook()
                         }
@@ -308,13 +312,13 @@ class serviceFragment : Fragment() {
                     R.id.menu_delete_account -> {
 
                         when (viewModel.preferenceHelper.loadSignInMethode()) {
-                            "email" -> {
+                            EMAIL -> {
                                 displayDialogDeleteAccount()
                             }
-                            "google" -> {
+                            GOOGLE -> {
                                 displayDialogDeleteAccountFromGoogle()
                             }
-                            "facebook" -> {
+                            FACEBOOK -> {
                                 displayDialogDeleteAccountFromFacebook()
                             }
                             else -> requireContext().toast("Error in Sign out")
@@ -451,10 +455,10 @@ class serviceFragment : Fragment() {
             message(R.string.dialog_logout_message)
             positiveButton(R.string.yes) {
                 when (viewModel.preferenceHelper.loadSignInMethode()) {
-                    "email" -> {
+                    EMAIL -> {
                         viewModel.signOut()
                     }
-                    "google" -> {
+                    GOOGLE -> {
                         val googleSignInClient =
                             GoogleSignIn.getClient(
                                 requireContext(),
@@ -467,7 +471,7 @@ class serviceFragment : Fragment() {
                             }
                         }
                     }
-                    "facebook"->{
+                    FACEBOOK->{
                         if (firebaseAuth.currentUser != null){
                             firebaseAuth.signOut()
                             LoginManager.getInstance().logOut()
@@ -525,7 +529,7 @@ class serviceFragment : Fragment() {
         LoginManager.getInstance().logInWithReadPermissions(
             requireActivity(),
             callbackManager,
-            listOf("email", "public_profile")
+            listOf(EMAIL, PUBLIC_PROFILE)
         )
     }
 

@@ -120,7 +120,8 @@
 
     <string name="facebook_app_id" translatable="false">398471205736906</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb1234</string>
-    <string name="facebook_client_token" translatable="false">1d02ed1debc0f95fd6fde6789c1d6c06</string>
+ <!--   <string name="facebook_client_token" translatable="false">1d02ed1debc0f95fd6fde6789c1d6c06</string>-->
+    <string name="facebook_client_token" translatable="false">6f116ad1f844b49562e5908f926b4ae5</string>
 
 
 </resources>

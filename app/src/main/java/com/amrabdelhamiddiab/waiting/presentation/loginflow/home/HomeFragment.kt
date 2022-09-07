@@ -112,9 +112,6 @@ class HomeFragment : Fragment() {
                 Barcode.FORMAT_QR_CODE
             ).build()
         scanner = BarcodeScanning.getClient(options)
-
-
-
         return binding.root
     }
 

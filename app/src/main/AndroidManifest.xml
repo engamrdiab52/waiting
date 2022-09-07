@@ -26,12 +26,6 @@
         android:roundIcon="@mipmap/ic_launcher_waiting_circle"
         android:theme="@style/Theme.Waiting"
         tools:targetApi="s">
-        <activity
-            android:name=".FacebookAuthActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ProfileActivity"
-            android:exported="false" />
         <!--
         commented out to enable re generation of tokens evey install
                 <meta-data

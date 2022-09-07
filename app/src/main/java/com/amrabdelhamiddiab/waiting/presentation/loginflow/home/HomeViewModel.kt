@@ -5,6 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amrabdelhamiddiab.core.data.IPreferenceHelper
+import com.amrabdelhamiddiab.core.domain.Constants.EMAIL
+import com.amrabdelhamiddiab.core.domain.Constants.FACEBOOK
+import com.amrabdelhamiddiab.core.domain.Constants.GOOGLE
 import com.amrabdelhamiddiab.core.domain.Service
 import com.amrabdelhamiddiab.core.usecases.login.DownloadService
 import com.amrabdelhamiddiab.core.usecases.login.EmailVerifiedState
@@ -74,9 +77,9 @@ class HomeViewModel @Inject constructor(
     fun userLoggedIn() {
         if (auth.currentUser != null) {
             when(preHelper.loadSignInMethode()){
-                "email" -> {isEmailVerified()}
-                "google"-> {downloadServiceV()}
-                "facebook"->{downloadServiceV()}
+                EMAIL -> {isEmailVerified()}
+                GOOGLE-> {downloadServiceV()}
+                FACEBOOK->{downloadServiceV()}
                 else -> {_emailVerified.value = false}
             }
         } else {

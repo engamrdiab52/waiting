@@ -12,6 +12,10 @@ import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import com.amrabdelhamiddiab.core.data.IPreferenceHelper
+import com.amrabdelhamiddiab.core.domain.Constants.EMAIL
+import com.amrabdelhamiddiab.core.domain.Constants.FACEBOOK
+import com.amrabdelhamiddiab.core.domain.Constants.GOOGLE
+import com.amrabdelhamiddiab.core.domain.Constants.PUBLIC_PROFILE
 import com.amrabdelhamiddiab.waiting.MainActivity
 import com.amrabdelhamiddiab.waiting.MainActivity.Companion.TAG
 import com.amrabdelhamiddiab.waiting.R
@@ -108,7 +112,7 @@ class LoginFragment : Fragment() {
             LoginManager.getInstance().logInWithReadPermissions(
                 requireActivity(),
                 callbackManager,
-                listOf("email", "public_profile")
+                listOf(EMAIL, PUBLIC_PROFILE)
             )
         }
         binding.googleSignInButton.setOnClickListener {
@@ -127,13 +131,13 @@ class LoginFragment : Fragment() {
         viewModel.userSignedIn.observe(viewLifecycleOwner) {
             if (it == true) {
                 when (iPreferenceHelper.loadSignInMethode()) {
-                    "email" -> {
+                    EMAIL -> {
                         viewModel.isEmailVerified()
                     }
-                    "google" -> {
+                    GOOGLE -> {
                         viewModel.downloadServiceV()
                     }
-                    "facebook"->{
+                    FACEBOOK->{
                         viewModel.downloadServiceV()
                     }
                     else -> requireContext().toast("Error in Sign in")
@@ -151,7 +155,7 @@ class LoginFragment : Fragment() {
         }
         viewModel.emailVerified.observe(viewLifecycleOwner) {
             if (it == true) {
-                iPreferenceHelper.saveSignInMethode("email")
+                iPreferenceHelper.saveSignInMethode(EMAIL)
                 viewModel.downloadServiceV()
             }
         }
@@ -184,7 +188,7 @@ class LoginFragment : Fragment() {
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
                     //login success
-                    iPreferenceHelper.saveSignInMethode("facebook")
+                    iPreferenceHelper.saveSignInMethode(FACEBOOK)
                     viewModel.downloadServiceV()
                 } else {
                     Toast.makeText(
@@ -199,7 +203,7 @@ class LoginFragment : Fragment() {
         val credentials = GoogleAuthProvider.getCredential(account!!.idToken, null)
         firebaseAuth.signInWithCredential(credentials).addOnSuccessListener { authResult ->
             //login success
-            iPreferenceHelper.saveSignInMethode("google")
+            iPreferenceHelper.saveSignInMethode(GOOGLE)
             viewModel.downloadServiceV()
 
             //check if user new or existing
